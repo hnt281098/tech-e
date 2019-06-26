@@ -10,14 +10,7 @@
         <div class="row">
             <div class="page-header">
                 <div class="d-flex align-items-center">
-                    <h2 class="page-header-title">Forms Basic</h2>
-                    <div>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#">Components</a></li>
-                            <li class="breadcrumb-item active">Forms Basic</li>
-                        </ul>
-                    </div>
+                    <h2 class="page-header-title">Thêm người dùng</h2>  
                 </div>
             </div>
         </div>
@@ -26,26 +19,84 @@
             <div class="col-12">
                 <!-- Form -->
                 <div class="widget has-shadow">
-                    <div class="widget-header bordered no-actions d-flex align-items-center">
-                        <h4>All Elements</h4>
-                    </div>
                     <div class="widget-body">
                         <form class="form-horizontal">
                             <div class="form-group row d-flex align-items-center mb-5">
-                                <label class="col-lg-3 form-control-label">Normal</label>
+                                <label class="col-lg-3 form-control-label">Email</label>
                                 <div class="col-lg-9">
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row d-flex align-items-center mb-5">
-                                <label class="col-lg-3 form-control-label">Help Text</label>
+                                <label class="col-lg-3 form-control-label">Mật khẩu</label>
                                 <div class="col-lg-9">
                                     <input type="text" class="form-control">
-                                    <small>
-                                        Input with help text.
-                                    </small>
                                 </div>
                             </div>
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                <label class="col-lg-3 form-control-label">Họ tên</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                <label class="col-lg-3 form-control-label">Ngày sinh</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                <label class="col-lg-3 form-control-label">Giới tính</label>
+                                <div class="col-sm-9">
+                                    <div class="mb-3">
+                                        <div class="styled-radio">
+                                            <input type="radio" name="radio" id="rad-1">
+                                            <label for="rad-1">Nam</label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="styled-radio">
+                                            <input type="radio" name="radio" id="rad-2" checked>
+                                            <label for="rad-2">Nữ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-5">
+                                <label class="col-lg-3 form-control-label">Vai trò</label>
+                                <div class="col-lg-9 select mb-3">
+                                    <select name="account" class="custom-select form-control">
+                                        <option>option 1</option>
+                                        <option>option 2</option>
+                                        <option>option 3</option>
+                                        <option>option 4</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row d-flex align-items-center mb-5">
+                                <label class="col-lg-3 form-control-label">Trạng thái</label>
+                                <div class="col-sm-9">
+                                    <div class="mb-3">
+                                        <div class="styled-radio">
+                                            <input type="radio" name="radio" id="rad-1">
+                                            <label for="rad-1">Hoạt động</label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="styled-radio">
+                                            <input type="radio" name="radio" id="rad-2" checked>
+                                            <label for="rad-2">Không hoạt động</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
                             <div class="form-group row d-flex align-items-center mb-5">
                                 <label class="col-lg-3 form-control-label">Placeholder</label>
                                 <div class="col-lg-9">
@@ -102,18 +153,7 @@
                                             <label for="rad-2">Checked</label>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="radio-disabled styled-radio">
-                                            <input type="radio" name="radio" id="rad-disabled" disabled>
-                                            <label for="rad-disabled">Disabled</label>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="radio-disabled styled-radio">
-                                            <input type="radio" name="radio-d" id="rad-4" checked disabled>
-                                            <label for="rad-4">Checked and Disabled</label>
-                                        </div>
-                                    </div>
+                                    
 
                                 </div>
                             </div>
