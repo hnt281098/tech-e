@@ -46,7 +46,7 @@
 							    <input type="password" name="password" required>
 							    <span class="highlight"></span>
 							    <span class="bar"></span>
-							    <label>Password</label>
+							    <label>Mật khẩu</label>
                             </div>
                             <div class="row">
                                 <div class="col text-left">
@@ -77,3 +77,9 @@
         </div>
         <!-- End Container -->    
     </body>
+
+    <!-- Begin Vendor Js -->
+    <?= $this->Html->script(array(
+        '../backend/template/vendors/js/base/jquery.min',
+        '../backend/template/vendors/js/base/core.min',
+    )); ?>

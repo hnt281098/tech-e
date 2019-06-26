@@ -65,12 +65,6 @@ class UsersTable extends Table
             ->allowEmptyString('user_code');
 
         $validator
-            ->scalar('full_name')
-            ->maxLength('full_name', 255)
-            ->requirePresence('full_name', 'add')
-            ->allowEmptyString('full_name', false);
-
-        $validator
             ->email('email')
             ->requirePresence('email', 'add')
             ->allowEmptyString('email', false);

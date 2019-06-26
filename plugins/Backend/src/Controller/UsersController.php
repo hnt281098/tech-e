@@ -32,6 +32,9 @@ class UsersController extends AppController
 
             $user['Role'] = $this->Roles->get($user['role_id'])->name;
             unset($user['role_id']);
+            unset($user['avatar']);
+            unset($user['facebook']);
+            unset($user['instagram']);
         }
         $this->set(compact('users'));
     }
@@ -61,35 +64,46 @@ class UsersController extends AppController
     {
         $this->response->type('json');
         $this->response->withStatus(200);
-
         if ($this->request->is('post')) {
             $user = $this->Users->newEntity();
             $data = $this->request->getData();
             $check = $this->CheckInputs->execute($data, ['password', 'email', 'role_id']);
 
             if (!$check) {
-                $this->Flash->error(__($this->CheckInputs->getMessage()));
+                log::info("THIEU");
+                $this->response->withStatus(500);
+                $response = [
+                    'message' => 'Not enough required data',
+                ];
+                $this->response->body(json_encode($response));
 
-                return $this->redirect(['action' => 'add']);
+                return $this->response;
             }
+
             $user = $this->Users->patchEntity($user, $data);
+            log::info("1");
 
             if ($this->Users->save($user)) {
+                log::info("2");
                 $user->user_code = "USER" . $user->id;
 
                 if ($this->Users->save($user)) {
-                    $this->Flash->success(__('The user has been saved.'));
-
-                    return $this->redirect(['action' => 'viewDetail', $user->id]);
+                    $this->response->body(json_encode(['success' => true]));
+                    
+                    return $this->response;
                 }
             }
+            log::info("SDAD");
+            log::info($user->errors());
+            $this->response->withStatus(500);
+            $response = [
+                'message' => 'Can not save',
+            ];
+            $this->response->body(json_encode($response));
 
-            $this->Flash->error(__('User can not be saved'));
+            return $this->response;
         }
-        $roles = $this->Users->Roles->find('list', [
-            'keyField' => 'name',
-            'valueField' => 'id',
-            'limit' => 200]);
+        $roles = $this->Users->Roles->find()->select(['id', 'name']);
 
         $view = new \Cake\View\View();
         $view->setLayout(false);

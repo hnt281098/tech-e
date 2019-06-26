@@ -1,10 +1,8 @@
 <?php
     echo $this->Html->script(array(
-    	// <!-- Jquery Library 2.1 JavaScript-->
-	    '../backend/template/vendors/js/base/jquery.min',
-	    // <!-- Popper JavaScript-->
-	    '../backend/template/vendors/js/base/core.min',
-	    // <!-- Bootstrap Core JavaScript-->
+		// <!-- Bootstrap Core JavaScript-->
+		'../backend/template/vendors/js/base/jquery.min',
+        '../backend/template/vendors/js/base/core.min',
 	    '../backend/template/vendors/js/app/app.min',
 	    // <!-- Material Design Lite JavaScript-->
 	    // '../template/js/material.min',
@@ -25,7 +23,8 @@
 	    // // <!-- SmoothScroll Plugin JavaScript-->
 	    // '../template/js/smoothscroll.min',
 	    // // <!--Custom JavaScript for Klinik ../template-->
-	    // '../template/js/custom'
+		// '../template/js/custom'
+		'../backend/template/js/components/datepicker/datepicker',
 	));
 ?>
 <script>

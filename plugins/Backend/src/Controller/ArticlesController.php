@@ -52,6 +52,8 @@ class ArticlesController extends AppController
             unset($article['status_id']);
             unset($article['user_id']);
             unset($article['category_id']);
+            unset($article['image']);
+            unset($article['category_id']);
         }
 
         $this->set(compact('articles'));

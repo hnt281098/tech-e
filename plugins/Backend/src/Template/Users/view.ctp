@@ -4,12 +4,8 @@
 
         <?= $this->element('header'); ?>
         <?= $this->element('left-bar'); ?>
-        
-
-
 
         <div id="content" class="content-inner">
-            
             <div class="container-fluid">
                 <!-- Begin Page Header-->
                 <div class="row">
@@ -45,7 +41,7 @@
                                                 $fields = array_keys($users[0]->toArray());
                                                 foreach ($fields as $field) {
                                                     ?>
-                                                    <th class="col-md-2"><?= str_replace('_', ' ', ucwords($field)) ?></th>
+                                                    <th><?= str_replace('_', ' ', ucwords($field)) ?></th>
                                                 <?php } ?>
                                             </tr>
                                         </thead>
@@ -53,13 +49,13 @@
                                             <?php foreach ($users as $user) : ?>
                                                 <tr>
                                                     <?php foreach ($fields as $field) : ?>
-                                                        <?php if ($field == "Status") : ?>
+                                                        <?php if ($field == "status") : ?>
                                                             <td>
-                                                                <?php if ($user["Status"] == 1) { ?>
+                                                                <?php if ($user["status"] == 1) : ?>
                                                                     <span><span class="badge-text badge-text-small info">Active</span></span></td>
-                                                            <?php } else { ?>
+                                                            <?php else : ?>
                                                                 <span><span class="badge-text badge-text-small danger">Inactive</span></span></td>
-                                                            <?php } ?>
+                                                            <?php endif; ?>
                                                             </td>
                                                         <?php else : ?>
                                                             <td><?= $user[$field] ?></td>
@@ -353,13 +349,35 @@
             </div>
             <!-- End Offcanvas Sidebar -->
         </div>
+
     </div>
     <!-- End Page Content -->
+    <!-- Begin Auto Close Modal -->
+    <div id="delay-modal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div id="hihi" class="sa-icon sa-success animate" style="display: block;">
+                        <span class="sa-line sa-tip animateSuccessTip"></span>
+                        <span class="sa-line sa-long animateSuccessLong"></span>
+                        <div class="sa-placeholder"></div>
+                        <div class="sa-fix"></div>
+                    </div>
+                    <div class="section-title mt-5 mb-2">
+                        <h2 class="text-gradient-01">Hello!</h2>
+                    </div>
+                    <p class="mb-5">And GoodBye :)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Auto Close Modal -->
     </div>
     <!-- Begin Vendor Js -->
     <?= $this->Html->script(array(
         '../backend/template/vendors/js/base/jquery.min',
         '../backend/template/vendors/js/base/core.min',
+
         '../backend/template/vendors/js/datatables/datatables.min',
         '../backend/template/vendors/js/datatables/dataTables.buttons.min',
         '../backend/template/vendors/js/datatables/jszip.min',
@@ -367,8 +385,14 @@
         '../backend/template/vendors/js/datatables/pdfmake.min.js',
         '../backend/template/vendors/js/datatables/vfs_fonts.js',
         '../backend/template/vendors/js/datatables/buttons.print.min',
-        '../backend/template/vendors/js/nicescroll/nicescroll.min',
         '../backend/template/js/components/tables/tables',
+        '../backend/template/vendors/js/nicescroll/nicescroll.min',
+        '../backend/template/vendors/js/datepicker/moment.min',
+        '../backend/template/vendors/js/datepicker/daterangepicker',
+        
+        
+        
+        
     ));
     ?>
 
@@ -406,14 +430,54 @@
                 cache: false,
 
                 success: function(response) {
-                 
-                    console.log(response);
                     $('#content').html(response.html);
+                    var selections = "";
+
+                    for (i = 0; i < response.roles.length; i++) {
+                        name = response.roles[i].name;
+                        name = name.charAt(0).toUpperCase() + name.slice(1);
+                        selections = selections + ' <option value=' + response.roles[i].id + '>' + name + '</option>'
+                    }
+                    $('#role').html(selections);
+                },
+                error: function(response) {
+                    alert("Add fail, try again please");
+                }
+            });
+        }
+
+        function submitAddButton(form) {
+            var formData = $(form).serializeArray();
+            var inputs = [];
+            formData.forEach(function(v, i){
+                inputs[v.name] = v.value;
+            });
+            $.ajax({
+                url: 'add',
+                dataType: 'json',
+                type: 'POST',
+                data : {
+                    email : inputs['email'],
+                    password : inputs['password'],
+                    facebook : inputs['facebook'],
+                    instagram : inputs['instagram'],
+                    fullname : inputs['fullname'],
+                    birthday : inputs['birthday'],
+                    gender : inputs['gender'],
+                    role_id : inputs['role_id'],
+                    status : inputs['status'],
+                },
+                cache: false,
+
+                success: function(response) {
+                    alert("SDA");
+                    //$('#showModal').click();
+                    // $('#addUserForm').trigger("reset");
 
                 },
                 error: function(response) {
-                    alert("Delete fail");
-                }
+                    alert("Add fail, try again please");
+                },
             });
         }
     </script>
