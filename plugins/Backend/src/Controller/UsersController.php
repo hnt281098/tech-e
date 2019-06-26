@@ -3,6 +3,7 @@ namespace Backend\Controller;
 
 use Backend\Controller\AppController;
 use Cake\Log\Log;
+use Cake\View\View;
 
 class UsersController extends AppController
 {
@@ -58,9 +59,11 @@ class UsersController extends AppController
      */
     public function add()
     {
-        $user = $this->Users->newEntity();
+        $this->response->type('json');
+        $this->response->withStatus(200);
 
         if ($this->request->is('post')) {
+            $user = $this->Users->newEntity();
             $data = $this->request->getData();
             $check = $this->CheckInputs->execute($data, ['password', 'email', 'role_id']);
 
@@ -83,8 +86,22 @@ class UsersController extends AppController
 
             $this->Flash->error(__('User can not be saved'));
         }
-        $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles'));
+        $roles = $this->Users->Roles->find('list', [
+            'keyField' => 'name',
+            'valueField' => 'id',
+            'limit' => 200]);
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $html = $view->render('Backend.Users/add_user');
+        
+        $response = [
+            'html' => $html,
+            'roles' => $roles,
+        ];
+        $this->response->body(json_encode($response));
+
+        return $this->response;
     }
 
     /**
@@ -129,7 +146,7 @@ class UsersController extends AppController
         $id = $this->request->data('id');
         $user = $this->Users->get($id);
         $this->response->type('json');
-        $this->response->body(json_encode(['succcess' => true]));
+        $this->response->body(json_encode(['succcess' => '<h1>ewfhuwe<>']));
         $this->response->withStatus(200);
 
         if ($this->Users->delete($user)) {
