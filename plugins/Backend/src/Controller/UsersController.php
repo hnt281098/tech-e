@@ -67,6 +67,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->newEntity();
             $data = $this->request->getData();
+            log::info($data);
             $check = $this->CheckInputs->execute($data, ['password', 'email', 'role_id']);
 
             if (!$check) {
@@ -88,7 +89,7 @@ class UsersController extends AppController
                 $user->user_code = "USER" . $user->id;
 
                 if ($this->Users->save($user)) {
-                    $this->response->body(json_encode(['success' => true]));
+                    $this->response->body(json_encode(['success' => 'true']));
                     
                     return $this->response;
                 }

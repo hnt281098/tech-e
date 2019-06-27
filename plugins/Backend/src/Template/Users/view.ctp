@@ -389,10 +389,6 @@
         '../backend/template/vendors/js/nicescroll/nicescroll.min',
         '../backend/template/vendors/js/datepicker/moment.min',
         '../backend/template/vendors/js/datepicker/daterangepicker',
-        
-        
-        
-        
     ));
     ?>
 
@@ -470,8 +466,8 @@
                 cache: false,
 
                 success: function(response) {
-                    alert("SDA");
-                    //$('#showModal').click();
+                    alert("User created");
+                   // $('#showModal').click();
                     // $('#addUserForm').trigger("reset");
 
                 },

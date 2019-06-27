@@ -1,8 +1,7 @@
 <?php
     echo $this->Html->script(array(
 		// <!-- Bootstrap Core JavaScript-->
-		'../backend/template/vendors/js/base/jquery.min',
-        '../backend/template/vendors/js/base/core.min',
+
 	    '../backend/template/vendors/js/app/app.min',
 	    // <!-- Material Design Lite JavaScript-->
 	    // '../template/js/material.min',
