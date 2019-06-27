@@ -21,7 +21,11 @@ use Cake\Routing\Router;
             <div class='col-lg-8 text-center'>
                 <div class='theme-material-card'>
                     <div class='theme-img blog-picture'>
-                        <?= $this->Html->image($image[0]); ?>
+                        <?php if(!empty($image[0])){
+                            echo $this->Html->image($image[0]);
+                        }else{
+                            echo $this->Html->image('news-default.jpg');
+                        } ?>
                     </div>
                     <h2 class='blog-ttl'><?= $value['title'] ?></h2>
                     <ul class='blog-detail'>
@@ -40,7 +44,11 @@ use Cake\Routing\Router;
                                     <?php foreach($image as $img){ ?>
                                         <div class='col-md-4'>
                                             <div class='theme-img'>
-                                                <?= $this->Html->image($img); ?>
+                                                <?php if(!empty($img)){
+                                                    echo $this->Html->image($img);
+                                                }else{
+                                                    echo $this->Html->image('news-default.jpg');
+                                                } ?>
                                             </div>
                                         </div>
                                     <?php } ?>

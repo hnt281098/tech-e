@@ -67,7 +67,7 @@ class UsersTable extends Table
         $validator
             ->scalar('full_name')
             ->maxLength('full_name', 255)
-            ->requirePresence('full_name', 'add')
+            // ->requirePresence('full_name', 'add')
             ->allowEmptyString('full_name', false);
 
         $validator
@@ -87,7 +87,7 @@ class UsersTable extends Table
             ->allowEmptyString('address');
 
         $validator
-            ->requirePresence('status', 'add')
+            // ->requirePresence('status', 'add')
             ->allowEmptyString('status', false);
 
         $validator

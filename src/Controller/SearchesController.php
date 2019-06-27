@@ -12,6 +12,12 @@ use App\Controller\AppController;
  */
 class SearchesController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow();
+    }
+    
     public function topSearches()
     {
         $data = $this->Searches->find('all', 

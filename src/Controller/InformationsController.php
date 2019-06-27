@@ -12,6 +12,11 @@ use App\Controller\AppController;
  */
 class InformationsController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow();
+    }
 
     public function about()
     {

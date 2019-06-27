@@ -13,6 +13,12 @@ use Cake\I18n\Time;
  */
 class UsersController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow();
+    }
+
     public function login()
     {
         
@@ -22,7 +28,18 @@ class UsersController extends AppController
 
     }
 
-    public function myProfile(){
+    public function myProfile()
+    {
+        if(!empty($this->Auth->user())){
+            $user = $this->Auth->user();
+            $this->loadModel('Articles');
+
+            $data['user'] = $user;
+            $data['amountArticle'] = $this->Articles->findAllByUserId($user['id'])->count();
+            $data['amountView'] = $this->Articles->findAllByUserId($user['id'])->sumOf('view');
+
+            $this->set('data', $data);
+        }
         
     }
 

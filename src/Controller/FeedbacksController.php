@@ -16,12 +16,14 @@ class FeedbacksController extends AppController
     public function initialize()
     {
         parent::initialize();
+        $this->Auth->allow();
     }
     
     public function sendFeedback()
     {
         if ($this->request->is('post')) {
-            // if(!empty($this->Auth->user())){
+            if(!empty($this->Auth->user())){
+                $user = $this->Auth->user();
                 $content = $this->request->getData('content');
                 if(!empty($content)){
                     $date = Time::now();
@@ -30,7 +32,7 @@ class FeedbacksController extends AppController
                     $feedback = $this->Feedbacks->patchEntity(
                         $feedback, 
                         [
-                            'user_id'=>2,
+                            'user_id'=>$user['id'],
                             'content'=>$content,
                             'feedback_date'=>$date
                         ]
@@ -40,9 +42,9 @@ class FeedbacksController extends AppController
                         $this->redirect(['controller'=>'informations', 'action'=>'about']);
                     }
                 }
-            // }else{
-            //     $this->redirect(['controller' => 'users', 'action'=>'login', 'plugin' => 'backend']);
-            // }
+            }else{
+                $this->redirect(['controller' => 'users', 'action'=>'login', 'plugin' => 'backend']);
+            }
         }
     }
 }

@@ -47,28 +47,6 @@ class AppController extends BaseController
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-        $this->loadComponent('Auth', [
-            'authenticate' => [
-                'Form' => [
-                    'fields' => [
-                        'username' => 'email',
-                        'password' => 'password'
-                    ],
-                    'passwordHasher' => [
-                        'className' => 'Default'
-                    ]
-                ]
-            ],
-            'loginAction' => [
-                'controller' => 'Users',
-                'action' => 'login'
-            ],
-             // If unauthorized, return them to page they were just on
-            'unauthorizedRedirect' => false,
-            'checkAuthIn' => 'Controller.initialize',
-        ]);
-        $this->Session = $this->request->getSession();
-        $this->Auth->allow(['login', 'logout', 'register']);
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
@@ -93,14 +71,6 @@ class AppController extends BaseController
                     }
                 }
             }
-    }
-
-    public function beforeRender(Event $event)
-    {
-        if (!empty($this->Auth->user())) {
-            $currentUser = $this->Auth->user();
-            $this->set(compact('currentUser'));
-        }
     }
 
     public function checkPermission($role)
