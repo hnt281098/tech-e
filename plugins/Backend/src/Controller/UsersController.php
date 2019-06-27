@@ -3,6 +3,7 @@ namespace Backend\Controller;
 
 use Backend\Controller\AppController;
 use Cake\Log\Log;
+use Cake\I18n\Time;
 
 class UsersController extends AppController
 {
@@ -200,40 +201,41 @@ class UsersController extends AppController
 
     public function register()
     {
-        $user = $this->Users->newEntity();
+        if($this->request->is('post')){
+            $email = $this->request->getData('email');
+            $password = $this->request->getData('password');
+            $fullname = $this->request->getData('fullname');
+            $gender = $this->request->getData('gender');
+            $birthday = Time::now();
+            // $strBirthday = explode('/', $this->request->getData('birthday'));
+            // $birthday->month((int)$strBirthday[0])->day((int)$strBirthday[1])->year((int)$strBirthday[2]);
 
-        if ($this->request->is('post')) {
-            $data = $this->request->getData();
-            $check = $this->CheckInputs->execute($data, ['password', 'email']);
+            $user = $this->Users->newEntity();
+            $user = $this->Users->patchEntity(
+                $user,
+                [
+                    'email'=>$email,
+                    'password'=>$password,
+                    'fullname'=>$fullname,
+                    'gender'=>$gender,
+                    'birthday'=>$birthday,
+                    'avatar'=>'avatar-default.jpg',
+                    'role_id'=>3,
+                    'status'=>1,
+                ]
+            );
 
-            if (!$check) {
-                $this->Flash->error(__($this->CheckInputs->getMessage()));
-
-                return $this->redirect(['action' => 'add']);
+            if($this->Users->save($user)){
+                $this->redirect(['action'=>'login']);
             }
-            $user = $this->Users->patchEntity($user, $data);
-            $user->role_id = 3;
-            $user->status = 0;
-
-            if ($this->Users->save($user)) {
-                $user->user_code = "USER" . $user->id;
-
-
-                if ($this->Users->save($user)) {
-                    $this->Flash->success(__('Register successful.'));
-
-                    return $this->redirect(['action' => 'viewDetail', $user->id]);
-                }
-            }
-            $this->Flash->error(__('User can not be saved'));
         }
-        $this->set(compact('user'));
     }
 
     public function uploadAvatar()
     {
-        $name = $this->request->query('name');
-        $tmp_name = $this->request->query('tmp_name');
+        $temp = $this->request->getData('temp');
+        $name = $temp['name'];
+        $tmp_name = $temp['tmp_name'];
         $location = '../upload/' . $name;
         $uploadStatus = true;
         $filetype = pathinfo($location, PATHINFO_EXTENSION);
@@ -250,6 +252,22 @@ class UsersController extends AppController
                 $data = $location;
             }else{
                 $data = 0;
+            }
+        }
+
+        $this->set('data', $data);
+    }
+
+    public function checkEmail()
+    {
+        $email = $this->request->query('email');
+        $list = $this->Users->find('all')->toArray();
+        $data = true;
+
+        foreach ($list as $user) {
+            if($user['email'] == $email){
+                $data = false;
+                break;
             }
         }
 

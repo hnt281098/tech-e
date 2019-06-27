@@ -1,7 +1,7 @@
 <?php
     echo $this->Html->script(array(
     	// <!-- Jquery Library 2.1 JavaScript-->
-	    '../backend/template/vendors/js/base/jquery.min',
+	    // '../backend/template/vendors/js/base/jquery.min',
 	    // <!-- Popper JavaScript-->
 	    '../backend/template/vendors/js/base/core.min',
 	    // <!-- Bootstrap Core JavaScript-->

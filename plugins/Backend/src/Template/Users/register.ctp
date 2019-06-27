@@ -31,67 +31,69 @@
                     <!-- Begin Form -->
                     <div class="authentication-form mx-auto">
                         <div class="logo-centered">
-                            <a href="db-default.html">
+                            <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin' => false]) ?>">
                                 <?= $this->Html->image('Backend.logo.png', ["alt" => "logo"]); ?>   
                             </a>
                         </div>
                         <h3>Welcome to TechE-Magazine !!!</h3>
-                        <form method="post" enctype="multipart/form-data">
-                            <img src="" id="img" width="90" height="90">
-                            <label for="avatar" class="btn btn-info mr-1 mb-2">Tải ảnh lên</label>
+                        <!-- <form method="post" action="google.com" enctype="multipart/form-data"> -->
+                        <?= $this->Form->create('register', ['url'=>['controller'=>'users', 'action'=>'register'], 'enctype'=>'multipart/form-data']) ?>
+                            <!-- <img src="" id="img" width="90" height="90"> -->
+                            <!-- <label onclick="uploadAvatar()" class="btn btn-info mr-1 mb-2">Tải ảnh lên</label> -->
                             <div class="group material-input">
                                 <input name="avatar" type="file" id="avatar" class="inputfile">
                             </div>
                             <div class="group material-input">
-                                <input name="email" type="text" required>
+                                <!-- <input name="email" type="text" required> -->
+                                <?= $this->Form->text('email', ['required', 'pattern'=>'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$', 'id'=>'email']) ?>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
-                                <label>Email</label>
+                                <label id="notiEmail">Email</label>
                             </div>
                             <div class="group material-input">
-                                <input name="fullname" type="text" required>
+                                <?= $this->Form->text('fullname', ['required']) ?>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label>Họ tên</label>
                             </div>
                             <div class="group material-input">
                                 <select name="gender" class="custom-select form-control">
-                                    <option value="1">Nam</option>
-                                    <option value="0">Nữ</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
                                 </select>
                             </div>
                             <div class="group material-input">
-                                <input name="birthday" type="text" class="form-control" id="date" placeholder="Select value">
+                                <?= $this->Form->text('birthday', ['class'=>['form-control'], 'id'=>'date', 'required']) ?>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label>Ngày sinh</label>
                             </div>
                             <div class="group material-input">
-                                <input name="password" type="password" required>
+                                <?= $this->Form->password('password', ['required']) ?>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label>Mật khẩu</label>
                             </div>
                             <div class="group material-input">
-                                <input type="password" required>
+                                <?= $this->Form->password('rePassword', ['required']) ?>
                                 <span class="highlight"></span>
                                 <span class="bar"></span>
                                 <label>Xác nhận mật khẩu</label>
                             </div>
-                        </form>
-                        <div class="row">
-                            <div class="col text-left">
-                                <div class="styled-checkbox">
-                                    <input type="checkbox" name="agree" id="agree">
-                                    <label for="agree">Tôi đồng ý với <a href="<?= Router::url(['controller'=>'informations', 'action'=>'termsConditions', 'plugin' => false]) ?>">điều khoản và điều kiện</a></label>
+                            <div class="row">
+                                <div class="col text-left">
+                                    <div class="styled-checkbox">
+                                        <input type="checkbox" name="agree" id="agree">
+                                        <label for="agree">Tôi đồng ý với <a href="<?= Router::url(['controller'=>'informations', 'action'=>'termsConditions', 'plugin' => false]) ?>">điều khoản và điều kiện</a></label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="sign-btn text-center">
-                            <a href="db-default.html" class="btn btn-lg btn-gradient-01">
-                                Tạo tài khoản
-                            </a>
-                        </div>
+                            <div class="sign-btn text-center">
+                                <?= $this->Form->button('Tạo tài khoản', ['class'=>'btn btn-lg btn-gradient-01']) ?>
+                            </div>
+                        <?= $this->Form->end() ?>
+                        
+                        
                         <div class="register">
                             Bạn đã có tài khoản?
                             <br>
@@ -106,28 +108,3 @@
         </div>
         <!-- End Container --> 
     </body>
-    <script>
-        
-            function uploadAvatar(){
-                var fd = new FormData();
-                var files = $('#avatar')[0].files[0];
-                fd.append('file', files);
-                var temp = fd.get('file');
-                alert(temp['tmp_name']);
-
-                // $.ajax({
-                //     url: '<?= Router::url(['controller'=>'users', 'action'=>'uploadAvatar']) ?>',
-                //     type: 'GET',
-                //     data: { 
-                //         name: name,
-                //         tmp_name: tmp_name,
-                //     },
-                //     success: function(response){
-                //         $('#img').attr('src', response);
-                //     },
-                //     error: function(response){
-                //         alert('Không thể upload file...');
-                //     }
-                // });
-            };
-        </script>

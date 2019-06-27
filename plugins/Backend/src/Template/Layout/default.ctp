@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- Google Fonts -->
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script>
         WebFont.load({
             google: {"families":["Montserrat:400,500,600,700","Noto+Sans:400,700"]},
@@ -17,7 +18,7 @@
             }
         });
         </script>
-        <style>
+        <!-- <style>
             .inputfile {
                 width: 0.1px;
                 height: 0.1px;
@@ -27,15 +28,15 @@
                 z-index: -1;
             }
 
-            /*.inputfile + label {
+            .inputfile + label {
                 font-size: 1.25em;
                 font-weight: 700;
                 display: inline-block;
                 cursor: pointer;
             }
 
-            .inputfile:focus + label,*/
-        </style>
+            .inputfile:focus + label,
+        </style> -->
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="template/img/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="template/img/favicon-32x32.png">
