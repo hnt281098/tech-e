@@ -34,7 +34,7 @@ use Cake\Routing\Router;
                             <a href="<?= Router::url(['controller'=>'users', 'action'=>'login', 'plugin'=>'Backend']) ?>"><i class="fa fa-sign-in"></i> Đăng nhập</a>
                         </li>
                         <li class="mdl-menu__item">
-                            <a href="<?= Router::url(['controller'=>'users', 'action'=>'register']) ?>"><i class="fa fa-user-o"></i> Đăng kí</a>
+                            <a href="<?= Router::url(['controller'=>'users', 'action'=>'register', 'plugin' => 'Backend']) ?>"><i class="fa fa-user-o"></i> Đăng kí</a>
                         </li>
                         <li class="mdl-menu__item">
                             <a href="/news_website/informations/about"><i class="fa fa-sign-out"></i> Đăng xuất</a>
@@ -62,7 +62,7 @@ use Cake\Routing\Router;
                 <div class="tbl-row">
                     <!-- Start Header Logo Section -->
                     <div class="tbl-cell hdr-logo">
-                        <a href='<?= Router::url(['controller'=>'pages', 'action'=>'index']) ?>'>
+                        <a href='<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>false]) ?>'>
                             <?= $this->Html->image($value['logo']); ?>
                         </a>
                     </div><!-- End Header Logo Section -->
@@ -71,7 +71,7 @@ use Cake\Routing\Router;
                             <ul class='menu'>
                                 <?php foreach ($cateLv1 as $valueLv1) { ?>
                                     <li>
-                                        <a href="<?= Router::url(['controller'=>'articles', 'action'=>'articlesBy', 'by'=>'category', 'id'=>$valueLv1['id']]) ?>"
+                                        <a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>$valueLv1['id']]) ?>"
                                             id='menu-home' 
                                             class='mdl-button mdl-js-button mdl-js-ripple-effect'>
                                                 <?= $valueLv1['name'] ?>
@@ -81,7 +81,7 @@ use Cake\Routing\Router;
                                             <?php foreach($cateLv2 as $valueLv2){
                                                 if($valueLv2['parent_id'] == $valueLv1['id']){ ?>
                                                     <li>
-                                                        <a href='<?= Router::url(['controller'=>'articles', 'action'=>'articlesBy','by'=>'category' , 'id'=>$valueLv2['id']]) ?>'><?= $valueLv2['name'] ?></a>
+                                                        <a href='<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>$valueLv2['id']]) ?>'><?= $valueLv2['name'] ?></a>
                                                     </li>
                                                 <?php }
                                             } ?>

@@ -14,105 +14,6 @@ use Cake\Log\Log;
  */
 class CommentsController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Users', 'Articles']
-        ];
-        $comments = $this->paginate($this->Comments);
-
-        $this->set(compact('comments'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Comment id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $comment = $this->Comments->get($id, [
-            'contain' => ['Users', 'Articles']
-        ]);
-
-        $this->set('comment', $comment);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $comment = $this->Comments->newEntity();
-        if ($this->request->is('post')) {
-            $comment = $this->Comments->patchEntity($comment, $this->request->getData());
-            if ($this->Comments->save($comment)) {
-                $this->Flash->success(__('The comment has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The comment could not be saved. Please, try again.'));
-        }
-        $users = $this->Comments->Users->find('list', ['limit' => 200]);
-        $articles = $this->Comments->Articles->find('list', ['limit' => 200]);
-        $this->set(compact('comment', 'users', 'articles'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Comment id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $comment = $this->Comments->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $comment = $this->Comments->patchEntity($comment, $this->request->getData());
-            if ($this->Comments->save($comment)) {
-                $this->Flash->success(__('The comment has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The comment could not be saved. Please, try again.'));
-        }
-        $users = $this->Comments->Users->find('list', ['limit' => 200]);
-        $articles = $this->Comments->Articles->find('list', ['limit' => 200]);
-        $this->set(compact('comment', 'users', 'articles'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Comment id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $comment = $this->Comments->get($id);
-        if ($this->Comments->delete($comment)) {
-            $this->Flash->success(__('The comment has been deleted.'));
-        } else {
-            $this->Flash->error(__('The comment could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
     public function writeComment($articleid = null)
     {
         if(!empty($articleid)){
@@ -143,24 +44,26 @@ class CommentsController extends AppController
         }
     }
 
-    public function viewByArticle ()
+    public function commentList ()
     {
-        $pageNumber = $this->request->query('pageNumber');
+        $commentPage = $this->request->query('commentPage');
         $articleId = $this->request->query('articleId');
-        $comments = $this->Comments->find()->where(['article_id' => $articleId])->order(['id' => 'DESC'])->toArray();
-        $amount = count($comments);
-
-        $this->response->type('json');
-        $this->response->withStatus(200);
+        $comments = $this->Comments->find(
+            'all',
+            [
+                'conditions'=>['article_id' => $articleId],
+                'order' => ['comment_date'=>'desc', 'Comments.id'=>'desc'],
+                'contain' => 'Users'
+            ]
+        )->toArray();
 
         $result = [];
 
         foreach ($comments as $key => $comment) {
-            if ($key > (($pageNumber-1))*5 && $key < ($pageNumber*5+1)) {
+            if (($key >= ($commentPage-1)*5) && ($key <= ($commentPage*5-1))) {
                 $result[] = $comment;
             }
         }
-        $this->response->body(json_encode($result));
-        return $this->response;
+        $this->set('data', $result);
     }
 }

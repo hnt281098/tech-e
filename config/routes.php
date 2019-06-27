@@ -48,9 +48,14 @@ Router::defaultRouteClass(DashedRoute::class);
 // Tạo router users
 Router::scope('/users', ['controller'=>'users'], function(RouteBuilder $routes){
 	$routes->connect('/login', ['action'=>'login', 'plugin' => 'backend']);
-	$routes->connect('/register', ['action'=>'register']);
+	$routes->connect('/register', ['action'=>'register', 'plugin' => 'backend']);
 	$routes->connect('/forgot-password', ['action'=>'forgotPassword']);
 	$routes->connect('/my-profile', ['action'=>'myProfile']);
+	$routes->connect(
+		'/articles-by-user/:id',
+		['action'=>'articlesByUser'],
+		['pass'=>['id']]
+	);
 	$routes->connect(
 		'/user-details/:id', 
 		['action'=>'userDetails'],
@@ -78,31 +83,30 @@ Router::scope('/articles', ['controller'=>'articles'], function(RouteBuilder $ro
 		['pass'=>['standard', 'id']]
 	);
 	$routes->connect('/articles-most-view', ['action'=>'articlesMostView']);
+	$routes->connect('/list', ['action'=>'articlesList']);
 	$routes->connect(
 		'/details/:id',
 		['action'=>'articlesDetails'],
 		['pass'=>['id'], 'id'=>'[0-9]+']
 	);
-	$routes->connect(
-		'/search/:tag', 
-		['action'=>'articlesSearch'],
-		['pass'=>['tag']]
-	);
-	$routes->connect(
-		'/by/:by/:id', 
-		['action'=>'articlesBy'],
-		['pass'=>['by', 'id']]
-	);
+	$routes->connect('/search', ['action'=>'articlesSearch']);
+	$routes->connect('/by', ['action'=>'articlesBy']);
 });
 
 //Tạo router categories
 Router::scope('/categories', ['controller'=>'categories'], function(RouteBuilder $routes){
 	$routes->connect('/categories-list', ['action'=>'categoriesList']);
+	$routes->connect(
+		'/articles-by-category/:id',
+		['action'=>'articlesByCategory'],
+		['pass'=>['id']]
+	);
 });
 
 //Tạo router searches
 Router::scope('/searches', ['controller'=>'searches'], function(RouteBuilder $routes){
 	$routes->connect('/top-searches', ['action'=>'topSearches']);
+	$routes->connect('/', ['action'=>'search']);
 });
 
 //Tạo router comments
@@ -112,7 +116,7 @@ Router::scope('/comments', ['controller'=>'comments'], function(RouteBuilder $ro
 		['action'=>'writeComment'],
 		['pass'=>['articleid']]
 	);
-	$routes->connect('/viewByArticle', ['action' => 'viewByArticle']);
+	$routes->connect('/commentList', ['action' => 'commentList']);
 });
 
 //Tạo router feedbacks

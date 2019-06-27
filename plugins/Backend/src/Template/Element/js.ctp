@@ -26,6 +26,9 @@
 	    // '../template/js/smoothscroll.min',
 	    // // <!--Custom JavaScript for Klinik ../template-->
 	    // '../template/js/custom'
+	    '../backend/template/vendors/js/datepicker/moment.min',
+	    '../backend/template/vendors/js/datepicker/daterangepicker',
+	    '../backend/template/js/components/datepicker/datepicker',
 	));
 ?>
 <script>

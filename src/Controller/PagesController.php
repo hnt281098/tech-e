@@ -70,19 +70,8 @@ class PagesController extends AppController
     public function index()
     {
         $this->loadModel('Articles');
-        $this->loadModel('Users');
-        $this->paginate = [
-            'limit'=>10,
-            'conditions'=>['status_id'=>1],
-            'order'=>['posting_date'=>'desc', 'id'=>'desc']
-        ];
-        $data['articlesList'] = $this->paginate($this->Articles);
-        $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['status_id'=>1]])->count();
+        $amountArticles = $this->Articles->find('all', ['conditions'=>['status_id'=>1]])->count();
 
-        $data['userList'] = $this->Users->find(
-            'all',
-            ['fields'=>['id', 'fullname', 'avatar']]
-         );
-        $this->set('data', $data);
+        $this->set('amountArticles', $amountArticles);
     }
 }

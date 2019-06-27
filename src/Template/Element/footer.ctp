@@ -53,7 +53,7 @@
                                             foreach ($cateLv1 as $value2){
                                     ?>
                                                 <li>
-                                                    <a href="<?= Router::url(['controller'=>'articles', 'action'=>'articlesBy', 'by'=>'category', 'id'=>$value2['id']]) ?>">
+                                                    <a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>$value2['id']]) ?>">
                                                         <?= $value2['name'] ?>
                                                     </a>
                                                 </li>

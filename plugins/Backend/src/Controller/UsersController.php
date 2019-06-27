@@ -229,4 +229,30 @@ class UsersController extends AppController
         }
         $this->set(compact('user'));
     }
+
+    public function uploadAvatar()
+    {
+        $name = $this->request->query('name');
+        $tmp_name = $this->request->query('tmp_name');
+        $location = '../upload/' . $name;
+        $uploadStatus = true;
+        $filetype = pathinfo($location, PATHINFO_EXTENSION);
+        $valid_extensions = ['jpg', 'jpeg', 'png'];
+
+        if(!in_array(strtolower($filetype), $valid_extensions)){
+            $uploadStatus = false;
+        }
+
+        if(empty($uploadStatus)){
+            $data = 0;
+        }else{
+            if(move_uploaded_file($tmp_name, $location)){
+                $data = $location;
+            }else{
+                $data = 0;
+            }
+        }
+
+        $this->set('data', $data);
+    }
 }

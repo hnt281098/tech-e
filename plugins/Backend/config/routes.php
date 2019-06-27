@@ -55,6 +55,7 @@ Router::plugin(
             $routes->connect('/delete', ['action' => 'delete', '[method]' => 'DELETE']);
             $routes->connect('/register', ['action' => 'register', '[method]' => 'POST']);
             $routes->connect('/logout', ['action' => 'logout']);
+            $routes->connect('/uploadAvatar', ['action' => 'uploadAvatar']);
         });
 
         $routes->scope('/permissions', ['controller' => 'Permissions'], function(RouteBuilder $routes) {

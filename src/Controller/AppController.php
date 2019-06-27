@@ -50,24 +50,6 @@ class AppController extends Controller
         ]);
 
         $this->loadComponent('Flash');
-        // $this->loadComponent('Auth', [
-        //     'authenticate' => [
-        //         'Form' => [
-        //             'fields' => [
-        //                 'username' => 'username',
-        //                 'password' => 'password'
-        //             ],
-        //             'userModel'=>'Users'
-        //         ]
-        //     ],
-        //     'loginAction' => [
-        //         'controller' => 'users',
-        //         'action' => 'login'
-        //     ],
-        //     'authError' => 'Lỗi?',
-        // ]);
-        // $this->Session = $this->request->getSession();
-        // $this->Auth->allow(['login', 'logout', 'register']);
 
         $this->loadModel('Informations');
         $this->loadModel('Categories');
@@ -79,13 +61,4 @@ class AppController extends Controller
         $this->set('cateLv1', $cateLv1);
         $this->set('cateLv2', $cateLv2);
     }
-
-    // public function beforeFilter(Event $event)
-    // {
-    //     parent::beforeFilter($event);
-    //     if (!empty($this->Auth->user())){
-    //         $this->Auth->allow();
-    //         return $this->redirect(['controller' => 'pages', 'action' => 'index']);
-    //     }
-    // }
 }
