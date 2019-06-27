@@ -64,10 +64,10 @@ class UsersController extends AppController
     {
         $this->response->type('json');
         $this->response->withStatus(200);
+        
         if ($this->request->is('post')) {
             $user = $this->Users->newEntity();
             $data = $this->request->getData();
-            log::info($data);
             $check = $this->CheckInputs->execute($data, ['password', 'email', 'role_id']);
 
             if (!$check) {
@@ -82,10 +82,8 @@ class UsersController extends AppController
             }
 
             $user = $this->Users->patchEntity($user, $data);
-            log::info("1");
 
             if ($this->Users->save($user)) {
-                log::info("2");
                 $user->user_code = "USER" . $user->id;
 
                 if ($this->Users->save($user)) {
@@ -94,8 +92,7 @@ class UsersController extends AppController
                     return $this->response;
                 }
             }
-            log::info("SDAD");
-            log::info($user->errors());
+
             $this->response->withStatus(500);
             $response = [
                 'message' => 'Can not save',

@@ -7,6 +7,7 @@
 		'../backend/template/css/owl-carousel/owl.carousel.min',
 		'../backend/template/css/owl-carousel/owl.theme.min',
 		'../backend/template/css/datatables/datatables.min',
+		'../backend/template/icons/lineawesome/css/line-awesome',
 		'../backend/template/css/thai',
 	));
 ?>

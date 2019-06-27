@@ -60,11 +60,7 @@
                         <div class="form-group row mb-5">
                             <label class="col-lg-3 form-control-label">Vai trò</label>
                             <div class="col-lg-9 select mb-3">
-                                <select name="account" class="custom-select form-control">
-                                    <option>option 1</option>
-                                    <option>option 2</option>
-                                    <option>option 3</option>
-                                    <option>option 4</option>
+                                <select name="role_id" class="custom-select form-control">
                                 </select>
                             </div>
                         </div>

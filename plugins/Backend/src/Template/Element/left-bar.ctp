@@ -71,7 +71,7 @@
                         </ul>
                         <span class="heading">Pages</span>
                         <ul class="list-unstyled">
-                            <a href="/tech-e/backend/users/view" ><i class="la la-user"></i><span>Quản lý người dùng</span></a>
+                            <a href="/tech-e/backend/users/view" ><i class="la la-users"></i><span>Quản lý người dùng</span></a>
                             
                             
                             <a method ="GET" href="/tech-e/backend/articles/view?article_status_id=1" ><i class="la la-file-text"></i><span>Quản lý bài đăng</span></a>

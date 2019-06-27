@@ -345,20 +345,28 @@
         </div>
         <!-- Begin Vendor Js -->
 
-        <?= $this->Html->script(array(
-                '../backend/template/vendors/js/base/jquery.min',
-                '../backend/template/vendors/js/base/core.min',
-                '../backend/template/vendors/js/datatables/datatables.min',
-                '../backend/template/vendors/js/datatables/dataTables.buttons.min',
-                '../backend/template/vendors/js/datatables/jszip.min',
-                '../backend/template/vendors/js/datatables/buttons.html5.min',
-                '../backend/template/vendors/js/datatables/pdfmake.min.js',
-                '../backend/template/vendors/js/datatables/vfs_fonts.js',
-                '../backend/template/vendors/js/datatables/buttons.print.min',
-                '../backend/template/vendors/js/nicescroll/nicescroll.min',
-                '../backend/template/js/components/tables/tables',
-            ));
-        ?>
+    <?= $this->Html->script(array(
+        '../backend/template/vendors/js/base/jquery.min',
+        '../backend/template/vendors/js/base/core.min',
+
+        '../backend/template/vendors/js/datatables/datatables.min',
+        '../backend/template/vendors/js/datatables/dataTables.buttons.min',
+        '../backend/template/vendors/js/datatables/jszip.min',
+        '../backend/template/vendors/js/datatables/buttons.html5.min',
+        '../backend/template/vendors/js/datatables/pdfmake.min',
+        '../backend/template/vendors/js/datatables/vfs_fonts',
+        '../backend/template/vendors/js/datatables/buttons.print.min',
+        '../backend/template/vendors/js/nicescroll/nicescroll.min',
+        '../backend/template/vendors/js/datepicker/moment.min',
+        '../backend/template/vendors/js/datepicker/daterangepicker',
+
+        '../backend/template/vendors/js/app/app.min',
+        '../backend/template/js/components/tables/tables',
+
+
+        '../backend/template/js/components/datepicker/datepicker',
+    ));
+    ?>
 
         <script> 
             function submitDelete (articleId, r) {

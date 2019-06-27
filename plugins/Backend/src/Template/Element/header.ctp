@@ -1,3 +1,5 @@
+// <?php use Cake\Log\Log; 
+// log::info($this->webroot); ?>
 <header class="header">
                 <nav class="navbar fixed-top">         
                     <!-- Begin Search Box-->
@@ -17,7 +19,7 @@
                                     <?= $this->Html->image("Backend.logo.png", ["alt"=>"logo", "class"=>"logo-small"]); ?>
                                 </div>
                                 <div class="brand-image brand-small">
-                                    <?= $this->Html->image("Backend.logo.png", ["alt"=>"logo", "class"=>"logo-small"]); ?>
+                                    <?= $this->Html->image("Backend.logo.png", ["alt"=>"logo", "class"=>"logo-small"]);  ?>
                                 </div>
                             </a>
                             <!-- Toggle Button -->
@@ -47,7 +49,7 @@
                                     <li>
                                         <a href="#">
                                             <div class="message-icon">
-                                                <i class="la la-user"></i>
+                                                <i class="la la-users"></i>
                                             </div>
                                             <div class="message-body">
                                                 <div class="message-body-heading">
@@ -69,35 +71,6 @@
                                                 <span class="date">7 hours ago</span>
                                             </div>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="message-icon">
-                                                <i class="la la-history"></i>
-                                            </div>
-                                            <div class="message-body">
-                                                <div class="message-body-heading">
-                                                    Server rebooted
-                                                </div>
-                                                <span class="date">7 hours ago</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="message-icon">
-                                                <i class="la la-twitter"></i>
-                                            </div>
-                                            <div class="message-body">
-                                                <div class="message-body-heading">
-                                                    You have 3 new followers
-                                                </div>
-                                                <span class="date">10 hours ago</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a rel="nofollow" href="#" class="dropdown-item all-notifications text-center">View All Notifications</a>
                                     </li>
                                 </ul>
                             </li>
