@@ -62,7 +62,7 @@
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
                                                     <td class="td-actions">
-                                                        <a href="#"><i class="la la-edit edit"></i></a>
+                                                        <a onclick="updateUser(<?= $user['id'] ?>)"><i class="la la-edit edit"></i></a>
                                                         <a onclick="submitDelete(<?= $user['id'] ?>, this)"><i class="la la-close delete"></i></a>
                                                     </td>
                                                 </tr>
@@ -170,9 +170,6 @@
         }
 
         function addUser() {
-            // alert('adsfasdef');
-            // document.getElementById('addUser').style.display = "block";
-            // document.getElementById('content').style.display = "none";
             $.ajax({
                 url: 'add',
                 dataType: 'json',
@@ -191,7 +188,7 @@
                     $('#role').html(selections);
                 },
                 error: function(response) {
-                    alert("Add fail, try again please");
+                    alert("Can not load form!");
                 }
             });
         }
@@ -227,6 +224,87 @@
                     alert("Add fail, try again please");
                 },
 
+            });
+        }
+
+        function updateUser(userId) {
+            $.ajax({
+                url: 'update',
+                dataType: 'json',
+                type: 'GET',
+                cache: false,
+                data: {
+                    id : userId
+                },
+                success: function(response) {
+                    $('#content').html(response.html);
+                    var selections = "";
+
+                    for (i = 0; i < response.roles.length; i++) {
+                        name = response.roles[i].name;
+                        name = name.charAt(0).toUpperCase() + name.slice(1);
+                        selections = selections + ' <option value=' + response.roles[i].id + '>' + name + '</option>'
+                    }
+                    $('#role').html(selections);
+                    // console.log
+                    $('#email').val(response.user[0].email);
+                    $('#password').hide();
+                    $('#passLabel').hide();
+                    $('#facebook').val(response.user[0].facebook);
+                    $('#instagram').val(response.user[0].instagram);
+                    $('#fullname').val(response.user[0].fullname);
+
+                    if (response.user[0].gender == "Nam") {
+                        $('#radMale').prop('checked', true);
+                    }        
+                    else {
+                        $('#radFemale').prop('checked', true);
+                    }  
+
+                    if (response.user[0].status == 1) {
+                        $('#radActive').prop('checked', true);
+                    }        
+                    else {
+                        $('#radInactive').prop('checked', true);
+                    } 
+                },
+                error: function(response) {
+                    alert("Can not load form!");
+                }
+            });
+        }
+
+
+        function submitUpdateButton(form) {
+            var formData = $(form).serializeArray();
+            var inputs = [];
+            formData.forEach(function(v, i){
+                inputs[v.name] = v.value;
+            });
+            $.ajax({
+                url: 'update',
+                dataType: 'json',
+                type: 'POST',
+                data : {
+                    email : inputs['email'],
+                    password : inputs['password'],
+                    facebook : inputs['facebook'],
+                    instagram : inputs['instagram'],
+                    fullname : inputs['fullname'],
+                    birthday : inputs['birthday'],
+                    gender : inputs['gender'],
+                    role_id : inputs['role_id'],
+                    status : inputs['status'],
+                },
+                cache: false,
+
+                success: function(response) {
+                    // $('#showModal').click();
+                    alert("Add success.")
+                },
+                error: function(response) {
+                    alert("Add fail, try again please");
+                },
             });
         }
     </script>

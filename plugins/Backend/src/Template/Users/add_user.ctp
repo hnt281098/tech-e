@@ -24,11 +24,11 @@
                 <div class="widget-body">
                     <form id="addUserForm" class="form-horizontal">
                         <div class="row d-flex align-items-center mb-5">
-                            <label class="col-lg-3 form-control-label">Thông tin đăng nhập</label>
+                            <label id="signinInfo" class="col-lg-3 form-control-label">Thông tin đăng nhập</label>
                             <div class="col-lg-9">
                                 <div class="mt-5 mb-5 position-relative">
                                     <div class="group material-input">
-                                        <input name="email" type="text" required>
+                                        <input id="email" name="email" type="text" required>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label>Email</label>
@@ -36,10 +36,10 @@
                                 </div>
                                 <div class="mt-5 mb-5 position-relative">
                                     <div class="group material-input">
-                                        <input name="password" type="password" required>
+                                        <input id="password" name="password" type="password" required>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
-                                        <label>Mật khẩu</label>
+                                        <label id="passLabel">Mật khẩu</label>
                                     </div>
                                 </div>
                             </div>
@@ -47,25 +47,25 @@
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Facebook</label>
                             <div class="col-lg-9">
-                                <input name="facebook" type="text" class="form-control">
+                                <input id="facebook" name="facebook" value="thai" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Instagram</label>
                             <div class="col-lg-9">
-                                <input name="instagram" type="text" class="form-control">
+                                <input id="instagram" name="instagram" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Họ tên</label>
                             <div class="col-lg-9">
-                                <input name="fullname" type="fullname" class="form-control">
+                                <input id="fullname" name="fullname" type="fullname" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Ngày sinh</label>
                             <div class="col-lg-9">
-                                <input name="birthday" type="birthday" class="form-control">
+                                <input id="birthday" name="birthday" type="birthday" class="form-control">
                             </div>
                         </div>
 
@@ -74,13 +74,13 @@
                             <div class="col-sm-9">
                                 <div class="mb-3">
                                     <div class="styled-radio">
-                                        <input type="radio" value="Nam" name="gender" id="rad-1">
+                                        <input type="radio" value="Nam" name="gender" id="radMale">
                                         <label for="rad-1">Nam</label>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <div class="styled-radio">
-                                        <input type="radio" value="Nữ" name="gender" id="rad-2" checked>
+                                        <input type="radio" value="Nữ" name="gender" id="radFemale" checked>
                                         <label for="rad-2">Nữ</label>
                                     </div>
                                 </div>
@@ -99,13 +99,13 @@
                             <div class="col-sm-9">
                                 <div class="mb-3">
                                     <div class="styled-radio">
-                                        <input type="radio" value=1 name="status" id="rad-3">
+                                        <input type="radio" value=1 name="status" id="radActive">
                                         <label for="rad-3">Hoạt động</label>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <div class="styled-radio">
-                                        <input type="radio" value=0 name="status" id="rad-4" checked>
+                                        <input type="radio" value=0 name="status" id="radInactive" checked>
                                         <label for="rad-4">Không hoạt động</label>
                                     </div>
                                 </div>

@@ -71,7 +71,6 @@ class UsersController extends AppController
             $check = $this->CheckInputs->execute($data, ['password', 'email', 'role_id']);
 
             if (!$check) {
-                log::info("THIEU");
                 $this->response->withStatus(500);
                 $response = [
                     'message' => 'Not enough required data',
@@ -125,24 +124,26 @@ class UsersController extends AppController
      */
     public function update($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'viewDetail', $user['id']]);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        $user = $this->Users->findById($this->request->query('id'));
+        $this->response->type('json');
+        $this->response->withStatus(200);
+        if ($this->request->is(['post', 'patch'])) {
+            
         }
-        $roles = $this->Users->Roles->find('list', ['limit' => 200]);
+        $roles = $this->Users->Roles->find()->select(['id', 'name']);
 
-        if ($user->role_id != 1 || $user->role_id != 2) {
-            unset($user->role_id);
-        }
-        $this->set(compact('user', 'roles'));
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $html = $view->render('Backend.Users/add_user');
+        
+        $response = [
+            'html' => $html,
+            'roles' => $roles,
+            'user' =>$user,
+        ];
+        $this->response->body(json_encode($response));
+
+        return $this->response;
     }
 
     /**
@@ -227,35 +228,5 @@ class UsersController extends AppController
         }
     }
 
-    public function register()
-    {
-        $user = $this->Users->newEntity();
-
-        if ($this->request->is('post')) {
-            $data = $this->request->getData();
-            $check = $this->CheckInputs->execute($data, ['password', 'email']);
-
-            if (!$check) {
-                $this->Flash->error(__($this->CheckInputs->getMessage()));
-
-                return $this->redirect(['action' => 'add']);
-            }
-            $user = $this->Users->patchEntity($user, $data);
-            $user->role_id = 3;
-            $user->status = 0;
-
-            if ($this->Users->save($user)) {
-                $user->user_code = "USER" . $user->id;
-
-
-                if ($this->Users->save($user)) {
-                    $this->Flash->success(__('Register successful.'));
-
-                    return $this->redirect(['action' => 'viewDetail', $user->id]);
-                }
-            }
-            $this->Flash->error(__('User can not be saved'));
-        }
-        $this->set(compact('user'));
-    }
+ 
 }
