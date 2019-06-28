@@ -27,20 +27,31 @@ use Cake\Routing\Router;
             </div>
             <div class="hdr-top-line"></div>
             <div class="hdr-top-block">
-                <div class="theme-dropdown">
-                    <a id="profile-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect font-13"><i class="fa fa-user-o color-black"></i> Tài khoản</a>
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect metarial-menu" data-mdl-for="profile-menu">
-                        <li class="mdl-menu__item">
-                            <a href="<?= Router::url(['controller'=>'users', 'action'=>'login', 'plugin'=>'Backend']) ?>"><i class="fa fa-sign-in"></i> Đăng nhập</a>
-                        </li>
-                        <li class="mdl-menu__item">
-                            <a href="<?= Router::url(['controller'=>'users', 'action'=>'register', 'plugin' => 'Backend']) ?>"><i class="fa fa-user-o"></i> Đăng kí</a>
-                        </li>
-                        <li class="mdl-menu__item">
-                            <a href="/news_website/informations/about"><i class="fa fa-sign-out"></i> Đăng xuất</a>
-                        </li>
-                    </ul>
-                </div>
+                <?php if(!empty($currentUser)){ ?>
+                    <div class="theme-dropdown">
+                        <a id="profile-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect font-13"><i class="fa fa-user-o color-black"></i> <?= $currentUser['fullname'] ?></a>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect metarial-menu" data-mdl-for="profile-menu">
+                            <li class="mdl-menu__item">
+                                <a href="<?= Router::url(['controller'=>'users', 'action'=>'myProfile']) ?>"><i class="fa fa-sign-in"></i> Cá nhân</a>
+                            </li>
+                            <li class="mdl-menu__item">
+                                <a href="<?= Router::url(['controller'=>'users', 'action'=>'logout', 'plugin'=>'Backend']) ?>"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </div>
+                <?php }else{ ?>
+                    <div class="theme-dropdown">
+                        <a id="profile-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect font-13"><i class="fa fa-user-o color-black"></i> Tài khoản</a>
+                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect metarial-menu" data-mdl-for="profile-menu">
+                            <li class="mdl-menu__item">
+                                <a href="<?= Router::url(['controller'=>'users', 'action'=>'login', 'plugin'=>'Backend']) ?>"><i class="fa fa-sign-in"></i> Đăng nhập</a>
+                            </li>
+                            <li class="mdl-menu__item">
+                                <a href="<?= Router::url(['controller'=>'users', 'action'=>'register', 'plugin' => 'Backend']) ?>"><i class="fa fa-user-o"></i> Đăng kí</a>
+                            </li>
+                        </ul>
+                    </div>
+                <?php } ?>
                 <div class="theme-dropdown">
                     <a id="support-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect font-13"><i class="fa fa-support"></i> Hỗ trợ</a>
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect metarial-menu" data-mdl-for="support-menu">

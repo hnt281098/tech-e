@@ -16,11 +16,6 @@ class UsersController extends AppController
         $this->loadComponent('Backend.Role');
         $this->loadComponent('Backend.CheckInputs');
         $this->loadModel('Users');
-        if (!empty($this->Auth->user()) && $this->request->action == 'login') {
-            $this->Flash->error(__('An account have been logged in, logout first to sign in with another please.'));
-
-            return $this->redirect(['action' => 'viewDetail', $this->Auth->user('id')]);
-        }
     }
 
     public function view()
@@ -267,28 +262,10 @@ class UsersController extends AppController
     public function register()
     {
         if($this->request->is('post')){
-            $email = $this->request->getData('email');
-            $password = $this->request->getData('password');
-            $fullname = $this->request->getData('fullname');
-            $gender = $this->request->getData('gender');
-            $birthday = Time::now();
-            // $strBirthday = explode('/', $this->request->getData('birthday'));
-            // $birthday->month((int)$strBirthday[0])->day((int)$strBirthday[1])->year((int)$strBirthday[2]);
-
             $user = $this->Users->newEntity();
-            $user = $this->Users->patchEntity(
-                $user,
-                [
-                    'email'=>$email,
-                    'password'=>$password,
-                    'fullname'=>$fullname,
-                    'gender'=>$gender,
-                    'birthday'=>$birthday,
-                    'avatar'=>'avatar-default.jpg',
-                    'role_id'=>3,
-                    'status'=>1,
-                ]
-            );
+            $requestData = $this->request->getData();
+            $user = $this->Users->patchEntity($user, $requestData);
+            $user->role_id = 3;
 
             if($this->Users->save($user)){
                 $this->redirect(['action'=>'login']);

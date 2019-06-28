@@ -49,8 +49,12 @@ Router::defaultRouteClass(DashedRoute::class);
 Router::scope('/users', ['controller'=>'users'], function(RouteBuilder $routes){
 	$routes->connect('/login', ['action'=>'login', 'plugin' => 'backend']);
 	$routes->connect('/register', ['action'=>'register', 'plugin' => 'backend']);
+	$routes->connect('/logout', ['action'=>'logout', 'plugin' => 'backend']);
 	$routes->connect('/forgot-password', ['action'=>'forgotPassword']);
-	$routes->connect('/my-profile', ['action'=>'myProfile']);
+	$routes->connect(
+		'/my-profile', 
+		['action'=>'myProfile'],
+	);
 	$routes->connect(
 		'/articles-by-user/:id',
 		['action'=>'articlesByUser'],
@@ -106,7 +110,7 @@ Router::scope('/categories', ['controller'=>'categories'], function(RouteBuilder
 //Tạo router searches
 Router::scope('/searches', ['controller'=>'searches'], function(RouteBuilder $routes){
 	$routes->connect('/top-searches', ['action'=>'topSearches']);
-	$routes->connect('/', ['action'=>'search']);
+	$routes->connect('/:tag', ['action'=>'search'], ['pass'=>['tag']]);
 });
 
 //Tạo router comments

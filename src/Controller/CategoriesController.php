@@ -12,6 +12,12 @@ use App\Controller\AppController;
  */
 class CategoriesController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow();
+    }
+    
     public function categoriesList()
     {
         $data['lv1'] = $this->Categories->find('all', ['fields'=>['id', 'name', 'description'], 'conditions'=>['parent_id=0']]);

@@ -50,6 +50,29 @@ class AppController extends Controller
         ]);
 
         $this->loadComponent('Flash');
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'password'
+                    ],
+                    'passwordHasher' => [
+                        'className' => 'Default'
+                    ]
+                ]
+            ],
+            'loginAction' => [
+                'controller' => 'Users',
+                'action' => 'login',
+                'plugin' => 'backend'
+            ],
+             // If unauthorized, return them to page they were just on
+            'unauthorizedRedirect' => false,
+            'checkAuthIn' => 'Controller.initialize',
+        ]);
+        $this->Session = $this->request->getSession();
+        $this->Auth->allow(['login', 'logout', 'register']);
 
         $this->loadModel('Informations');
         $this->loadModel('Categories');
@@ -60,5 +83,13 @@ class AppController extends Controller
         $this->set('info', $info);
         $this->set('cateLv1', $cateLv1);
         $this->set('cateLv2', $cateLv2);
+    }
+
+    public function beforeRender(Event $event)
+    {
+        if (!empty($this->Auth->user())) {
+            $currentUser = $this->Auth->user();
+            $this->set(compact('currentUser'));
+        }
     }
 }

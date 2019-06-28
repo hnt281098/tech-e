@@ -8,7 +8,11 @@ if(!empty($data)){
                     <div class='col-sm-4'>
                         <div class='blog-full-date'><?= $this->calculateDatetime($value['posting_date']); ?></div>
                         <div class='theme-img theme-img-scalerotate'>
-                            <img src='<?= $image[0] ?>' alt=''>
+                            <?php if(!empty($image[0])){
+                                echo $this->Html->image($image[0]);
+                            }else{
+                                echo $this->Html->image('news-default.jpg');
+                            } ?>
                         </div>
                     </div>
                     <div class='col-sm-8'>

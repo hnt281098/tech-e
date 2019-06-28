@@ -81,7 +81,7 @@ class UsersTable extends Table
             ->allowEmptyString('address');
 
         $validator
-            ->requirePresence('status', 'add')
+            // ->requirePresence('status', 'add')
             ->allowEmptyString('status', false);
 
         $validator

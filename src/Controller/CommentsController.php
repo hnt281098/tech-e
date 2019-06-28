@@ -14,33 +14,44 @@ use Cake\Log\Log;
  */
 class CommentsController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow();
+    }
+    
     public function writeComment($articleid = null)
     {
-        if(!empty($articleid)){
-            if($this->request->is('post')){
-                $date = Time::now();
-                $content = $this->request->getData('contentComment');
+        if(!empty($this->Auth->user())){
+            $user = $this->Auth->user();
+            if(!empty($articleid)){
+                if($this->request->is('post')){
+                    $date = Time::now();
+                    $content = $this->request->getData('contentComment');
 
-                if(!empty($content)){
-                    $comment = $this->Comments->newEntity();
-                    $comment = $this->Comments->patchEntity(
-                        $comment,
-                        [
-                            'user_id'=>1,
-                            'article_id'=>$articleid,
-                            'content'=>$content,
-                            'comment_date'=>$date,
-                            'status'=>1
-                        ]
-                    );
-                    if($this->Comments->save($comment)){
+                    if(!empty($content)){
+                        $comment = $this->Comments->newEntity();
+                        $comment = $this->Comments->patchEntity(
+                            $comment,
+                            [
+                                'user_id'=>$user['id'],
+                                'article_id'=>$articleid,
+                                'content'=>$content,
+                                'comment_date'=>$date,
+                                'status'=>1
+                            ]
+                        );
+                        if($this->Comments->save($comment)){
+                            $this->redirect(['controller'=>'articles', 'action'=>'articlesDetails', 'id'=>$articleid]);
+                        }
+                    }else{
                         $this->redirect(['controller'=>'articles', 'action'=>'articlesDetails', 'id'=>$articleid]);
+                        $this->Flash->error(__('Bạn chưa nhập nội dung bình luận...'));
                     }
-                }else{
-                    $this->redirect(['controller'=>'articles', 'action'=>'articlesDetails', 'id'=>$articleid]);
-                    $this->Flash->error(__('Bạn chưa nhập nội dung bình luận...'));
                 }
             }
+        }else{
+            $this->redirect(['controller' => 'users', 'action'=>'login', 'plugin' => 'backend']);
         }
     }
 

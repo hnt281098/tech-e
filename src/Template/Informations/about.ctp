@@ -95,7 +95,11 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="theme-block theme-block-hover">
                         <div class="theme-block-picture">
-                            <img src="<?= $value2['avatar'] ?>" alt="">
+                            <?php if(!empty($value2['avatar'])){
+                                echo $this->Html->image($value2['avatar']);
+                            }else{
+                                echo $this->Html->image('avatar-default.jpg');
+                            } ?>
                         </div>
                         <div class="doctor-name">
                             <h4><a><?= $value2['fullname'] ?></a></h4>
@@ -106,7 +110,7 @@
                             </div>
                             <div class="doctor-details-extra">
                                 <div class="doctor-details-extra-3">
-                                    <p><i class="fa fa-envelope"></i><?= $value2['mail'] ?></p>
+                                    <p><i class="fa fa-envelope"></i><?= $value2['email'] ?></p>
                                     <p><i class="fa fa-user-circle"></i><?= $value2['fullname'] ?></p>
                                     <p><i class="fa fa-calendar"></i><?= $this->calculateAge($value2['birthday']) ?> tuổi</p>
                                 </div>
@@ -139,7 +143,11 @@
                         foreach ($data['feedback'] as $value3) {
                     ?>
                         <div class="testimonial-block">
-                            <img class="img-responsive" src="<?= $avatar ?>" alt="">
+                            <?php if(!empty($value3['user']['avatar'])){
+                                echo $this->Html->image($value3['user']['avatar']);
+                            }else{
+                                echo $this->Html->image('avatar-default.jpg');
+                            } ?>
                             <div class="paragraph-medium paragraph-white">
                                 <i class="fa fa-quote-left"></i>
                                 <?= $value3['content'] ?>
