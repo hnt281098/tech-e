@@ -1,3 +1,4 @@
+<?php use Cake\Log\Log; ?>
 <body>
             <?= $this->element('pre-load'); ?>
 
@@ -35,7 +36,7 @@
                                     </div>
                                     <div class="widget-body">
                                         <div class="table-responsive">
-                                            <table id="sorting-table" class="table mb-0 ">
+                                            <table id="sorting-table" class="table mb-0 thai">
                                                 <thead>
                                                     <tr>
                                                         <?php 
@@ -55,6 +56,11 @@
                                                             <td id="td-actions">
                                                                 <a href="#"><i class="la la-edit edit"></i></a>
                                                                 <a onclick="submitDelete(<?=$article['id']?>,this)"><i class="la la-close delete"></i></a>
+
+                                                                <?php if($article['status'] == "Chờ duyệt") : ?>
+                                                                    <a href="#"><i class="la la-eye eye"></i></a>
+                                                                <?php endif; ?>
+                                                                <!-- <a href="#"><i class="la la-eye eye"></i></a> -->
                                                             </td>
                                                         </tr>
                                                     <?php } ?>

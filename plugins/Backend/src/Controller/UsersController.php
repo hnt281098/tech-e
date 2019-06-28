@@ -4,6 +4,8 @@ namespace Backend\Controller;
 use Backend\Controller\AppController;
 use Cake\Log\Log;
 use Cake\View\View;
+use Cake\I18n\Time;
+use Cake\I18n\Date;
 
 class UsersController extends AppController
 {
@@ -68,7 +70,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->newEntity();
             $data = $this->request->getData();
-            $check = $this->CheckInputs->execute($data, ['password', 'email', 'role_id']);
+            $check = $this->CheckInputs->execute($data, ['password', 'email']);
 
             if (!$check) {
                 $this->response->withStatus(500);
@@ -124,12 +126,46 @@ class UsersController extends AppController
      */
     public function update($id = null)
     {
-        $user = $this->Users->findById($this->request->query('id'));
+        
+
         $this->response->type('json');
         $this->response->withStatus(200);
         if ($this->request->is(['post', 'patch'])) {
-            
+            $user = $this->Users->get($this->request->getData('id'));
+            $data = $this->request->getData();
+            $check = $this->CheckInputs->execute($data, ['password', 'email']);
+
+            if (!$check) {
+                $this->response->withStatus(500);
+
+                $response = [
+                    'message' => 'Not enough required data',
+                ];
+                $this->response->body(json_encode($response));
+
+                return $this->response;
+            }
+            $user = $this->Users->patchEntity($user, $data);
+
+            if ($this->Users->save($user)) {
+                $this->response->body(json_encode(['success' => 'true']));
+                
+                return $this->response;
+            }
+
+            $this->response->withStatus(500);
+            $response = [
+                'message' => 'Can not save',
+            ];
+            $this->response->body(json_encode($response));
+
+            return $this->response;
         }
+
+        $user = $this->Users->findById($this->request->query('id'))->first();
+        $birthday = new Date($user->birthday);
+        $user->birthday = $birthday->format('d/m/Y');
+
         $roles = $this->Users->Roles->find()->select(['id', 'name']);
 
         $view = new \Cake\View\View();
@@ -159,7 +195,7 @@ class UsersController extends AppController
         $id = $this->request->data('id');
         $user = $this->Users->get($id);
         $this->response->type('json');
-        $this->response->body(json_encode(['succcess' => '<h1>ewfhuwe<>']));
+        $this->response->body(json_encode(['succcess' => true]));
         $this->response->withStatus(200);
 
         if ($this->Users->delete($user)) {
@@ -228,5 +264,78 @@ class UsersController extends AppController
         }
     }
 
- 
+    public function register()
+    {
+        if($this->request->is('post')){
+            $email = $this->request->getData('email');
+            $password = $this->request->getData('password');
+            $fullname = $this->request->getData('fullname');
+            $gender = $this->request->getData('gender');
+            $birthday = Time::now();
+            // $strBirthday = explode('/', $this->request->getData('birthday'));
+            // $birthday->month((int)$strBirthday[0])->day((int)$strBirthday[1])->year((int)$strBirthday[2]);
+
+            $user = $this->Users->newEntity();
+            $user = $this->Users->patchEntity(
+                $user,
+                [
+                    'email'=>$email,
+                    'password'=>$password,
+                    'fullname'=>$fullname,
+                    'gender'=>$gender,
+                    'birthday'=>$birthday,
+                    'avatar'=>'avatar-default.jpg',
+                    'role_id'=>3,
+                    'status'=>1,
+                ]
+            );
+
+            if($this->Users->save($user)){
+                $this->redirect(['action'=>'login']);
+            }
+        }
+    }
+
+    public function uploadAvatar()
+    {
+        $temp = $this->request->getData('temp');
+        $name = $temp['name'];
+        $tmp_name = $temp['tmp_name'];
+        $location = '../upload/' . $name;
+        $uploadStatus = true;
+        $filetype = pathinfo($location, PATHINFO_EXTENSION);
+        $valid_extensions = ['jpg', 'jpeg', 'png'];
+
+        if(!in_array(strtolower($filetype), $valid_extensions)){
+            $uploadStatus = false;
+        }
+
+        if(empty($uploadStatus)){
+            $data = 0;
+        }else{
+            if(move_uploaded_file($tmp_name, $location)){
+                $data = $location;
+            }else{
+                $data = 0;
+            }
+        }
+
+        $this->set('data', $data);
+    }
+
+    public function checkEmail()
+    {
+        $email = $this->request->query('email');
+        $list = $this->Users->find('all')->toArray();
+        $data = true;
+
+        foreach ($list as $user) {
+            if($user['email'] == $email){
+                $data = false;
+                break;
+            }
+        }
+
+        $this->set('data', $data);
+    }
 }

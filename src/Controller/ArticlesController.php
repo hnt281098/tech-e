@@ -18,103 +18,28 @@ class ArticlesController extends AppController
     {
         parent::initialize();
     }
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
+
+    public function articlesList ()
     {
-        $this->paginate = [
-            'contain' => ['Categories', 'Authors']
-        ];
-        $articles = $this->paginate($this->Articles);
+        $articlePage = $this->request->query('articlePage');
+        $articlesList = $this->Articles->find(
+            'all',
+            [
+                'conditions' => ['Articles.status_id'=>1],
+                'order' => ['Articles.posting_date'=>'desc', 'Articles.id'=>'desc'],
+                'contain' => 'Users'
+            ]
+        )->toArray();
 
-        $this->set(compact('articles'));
-    }
+        $result = [];
 
-    /**
-     * View method
-     *
-     * @param string|null $id Article id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $article = $this->Articles->get($id, [
-            'contain' => ['Categories', 'Authors', 'Comments']
-        ]);
-
-        $this->set('article', $article);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $article = $this->Articles->newEntity();
-        if ($this->request->is('post')) {
-            $article = $this->Articles->patchEntity($article, $this->request->getData());
-            if ($this->Articles->save($article)) {
-                $this->Flash->success(__('The article has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        foreach ($articlesList as $key => $article) {
+            if (($key >= ($articlePage-1)*10) && ($key <= ($articlePage*10-1))) {
+                $result[] = $article;
             }
-            $this->Flash->error(__('The article could not be saved. Please, try again.'));
-        }
-        $categories = $this->Articles->Categories->find('list', ['limit' => 200]);
-        $authors = $this->Articles->Authors->find('list', ['limit' => 200]);
-        $this->set(compact('article', 'categories', 'authors'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Article id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $article = $this->Articles->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $article = $this->Articles->patchEntity($article, $this->request->getData());
-            if ($this->Articles->save($article)) {
-                $this->Flash->success(__('The article has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The article could not be saved. Please, try again.'));
-        }
-        $categories = $this->Articles->Categories->find('list', ['limit' => 200]);
-        $authors = $this->Articles->Authors->find('list', ['limit' => 200]);
-        $this->set(compact('article', 'categories', 'authors'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Article id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $article = $this->Articles->get($id);
-        if ($this->Articles->delete($article)) {
-            $this->Flash->success(__('The article has been deleted.'));
-        } else {
-            $this->Flash->error(__('The article could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        $this->set('data', $result);
     }
 
     public function articlesDetails($id = null)
@@ -124,26 +49,16 @@ class ArticlesController extends AppController
             $this->loadModel('Users');
             $this->loadModel('Comments');
             //Load chi tiết bài viết
-            $article = $this->Articles->get($id);
-            $data['articleDetails'] = $this->Articles->findAllById($id);
-            $data['userList'] = $this->Users->find(
+            $data['articleDetails'] = $this->Articles->find(
                 'all',
-                ['fields'=>['id', 'fullname', 'avatar']]
-             );
-            //Load list comment
-            foreach($data['articleDetails'] as $value){
-                $data['authorDetails'] = $this->Users->findAllById($value['user_id']);
-                
-                $data['amountComment'] = $this->Comments->findAllByArticleId($value['id'])->count();
-                $this->paginate = [
-                    'conditions'=>['article_id'=>$value['id'], 'Comments.status'=>1], 
-                    'order'=>['comment_date'=>'DESC', 'id'=>'DESC'],
-                    'limit'=>5,
+                [
+                    'conditions' => ['Articles.id'=>$id, 'Articles.status_id'=>1],
                     'contain' => 'Users'
-                ];
-                $data['commentDetails'] = $this->paginate($this->Comments);
-                log::info($data['commentDetails']->toArray());
-            };
+                ]
+            );
+            foreach ($data['articleDetails'] as $article);
+            //Đếm số lượng comment
+            $data['amountComment'] = $this->Comments->findAllByArticleId($article['id'])->count();
             //Tăng view
             $session_article = 'article_'.$id;
             $check_view = empty($this->request->session()->read($session_article));
@@ -156,7 +71,7 @@ class ArticlesController extends AppController
                 $this->Articles->save($article);
             }
             //Get dữ liệu lên view
-            if(!empty([$data['commentDetails'], $data['amountComment'], $data['authorDetails'], $data['userList'], $data['articleDetails']])){
+            if(!empty([$data['amountComment'], $data['articleDetails']])){
                 $this->set('data', $data);
             }else{
                 $this->redirect(['controller'=>'error', 'action'=>'error404']);
@@ -238,39 +153,13 @@ class ArticlesController extends AppController
         $this->set('data', $data);
     }
 
-    public function articlesSearch($tag = null)
+    public function articlesSearch()
     {
-        if($tag == '*'){
-            if($this->request->is('post')){
-                $keyword = $this->request->getData('keyword');
-                if(!empty($keyword)){
-                    $this->loadModel('Searches');
-                    $result = $this->Searches->findAllByKeyword($keyword);
-                    if($result->count() > 0){
-                        foreach ($result as $value) {
-                            $search = $this->Searches->get($value['id']);
-                            $newTimes = $value['times'] + 1;
-                            $search = $this->Searches->patchEntity($search, [
-                                'times'=>$newTimes
-                            ]);
-                            $this->Searches->save($search);
-                        }
-                    }else{
-                        $search = $this->Searches->newEntity();
-                        $search = $this->Searches->patchEntity($search, [
-                            'keyword'=>$keyword,
-                            'times'=>1
-                        ]);
-                        $this->Searches->save($search);
-                    }
-
-                    $this->paginate = ['conditions'=>['title LIKE'=>"%$keyword%", 'status_id'=>1], 'order'=>['posting_date'=>'DESC']];
-                    $data['articlesList'] = $this->paginate('Articles');
-                }
-            }
-        }else{
+        $keyword = $this->request->query('keyword');
+        $articlePage = $this->request->query('articlePage');
+        if(!empty($keyword)){
             $this->loadModel('Searches');
-            $result = $this->Searches->findAllByKeyword($tag);
+            $result = $this->Searches->findAllByKeyword($keyword);
             if($result->count() > 0){
                 foreach ($result as $value) {
                     $search = $this->Searches->get($value['id']);
@@ -280,65 +169,105 @@ class ArticlesController extends AppController
                     ]);
                     $this->Searches->save($search);
                 }
+            }else{
+                $search = $this->Searches->newEntity();
+                $search = $this->Searches->patchEntity($search, [
+                    'keyword'=>$keyword,
+                    'times'=>1
+                ]);
+                $this->Searches->save($search);
             }
 
-            $this->paginate = ['conditions'=>['title LIKE'=>"%$tag%", 'status_id'=>1], 'order'=>['posting_date'=>'DESC']];
-            $data['articlesList'] = $this->paginate('Articles');
-        }
-
-        $this->set('data', $data);
-    }
-
-    public function articlesBy($by = null, $id = null)
-    {
-        if((!empty($id)) && (!empty($by))){
-            $this->loadModel('Categories');
-            $this->loadModel('Users');
-
-            $data['articlesList'] = [];
-            $data['amountArticles'] = 0;
-            if($by == 'category'){
-                $data['category'] = $this->Categories->get($id);
-                $listCate = $this->Categories->find(
-                    'all',
-                    ['conditions'=>['parent_id'=>$id]]
-                );
-                if(empty($listCate->count())){
-                    $this->paginate = [
-                        'limit'=>10,
-                        'order'=>['posting_date'=>'DESC', 'id'=>'DESC'],
-                        'conditions'=>['category_id'=>$id, 'status_id'=>1]
-                    ];
-                    $data['articlesList'][] = $this->paginate($this->Articles);
-                    $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['category_id'=>$id, 'status_id'=>1]])->count();
-                }else{
-                    foreach($listCate as $value){
-                        $this->paginate = [
-                            'limit'=>10,
-                            'order'=>['posting_date'=>'DESC', 'id'=>'DESC'],
-                            'conditions'=>['category_id'=>$value['id']]
-                        ];
-                        $data['articlesList'][] = $this->paginate($this->Articles);
-                        $data['amountArticles'] += $this->Articles->find('all', ['conditions'=>['category_id'=>$value['id'], 'status_id'=>1]])->count();
-                    }
-                }
-            }elseif ($by == 'user') {
-                $data['user'] = $this->Users->get($id);
-
-                $this->paginate = [
-                    'limit'=>10,
-                    'order'=>['posting_date'=>'DESC', 'id'=>'DESC'],
-                    'conditions'=>['user_id'=>$id]
-                ];
-                $data['articlesList'][] = $this->paginate($this->Articles);
-                $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['user_id'=>$id, 'status_id'=>1]])->count();
-            }
-            $data['userList'] = $this->Users->find(
+            $articlesList = $this->Articles->find(
                 'all',
-                ['fields'=>['id', 'fullname', 'avatar']]
-            );
+                [
+                    'conditions' => ['title LIKE' => "%$keyword%", 'status_id' => 1],
+                    'order' => ['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                    'contain' => 'Users'
+                ]
+            )->toArray();
+
+            $result = [];
+
+            foreach ($articlesList as $key => $article) {
+                if (($key >= ($articlePage-1)*10) && ($key <= ($articlePage*10-1))) {
+                    $result[] = $article;
+                }
+            }
+            $data['articlesList'] = $result;
 
             $this->set('data', $data);
         }
+    }
+
+    public function articlesBy()
+    {
+        $id = $this->request->query('id');
+        $type = $this->request->query('type');
+        $articlePage = $this->request->query('articlePage');
+        $this->loadModel('Categories');
+        $this->loadModel('Users');
+
+        $articlesList = [];
+        $data['amountArticles'] = 0;
+        if($type == 'category'){
+            $data['category'] = $this->Categories->get($id);
+            $listCate = $this->Categories->find(
+                'all',
+                ['conditions'=>['parent_id'=>$id]]
+            );
+            if(empty($listCate->count())){
+                $articlesList[] = $this->Articles->find(
+                    'all',
+                    [
+                        'conditions' => ['category_id' => $id, 'status_id' => 1],
+                        'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                        'contain' => 'Users'
+                    ]
+                );
+                $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['category_id'=>$id, 'status_id'=>1]])->count();
+            }else{
+                foreach($listCate as $value){
+                    $articlesList[] = $this->Articles->find(
+                        'all',
+                        [
+                            'conditions' => ['category_id' => $value['id'], 'status_id' => 1],
+                            'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                            'contain' => 'Users'
+                        ]
+                    );
+                    $data['amountArticles'] += $this->Articles->find('all', ['conditions'=>['category_id'=>$value['id'], 'status_id'=>1]])->count();
+                }
+            }
+        }elseif ($type == 'user') {
+            $data['user'] = $this->Users->get($id);
+            $articlesList[] = $this->Articles->find(
+                'all',
+                [
+                    'conditions' => ['user_id' => $id, 'status_id' => 1],
+                    'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                    'contain' => 'Users'
+                ]
+            );
+            $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['user_id' => $id, 'status_id' => 1]])->count();
+        }
+
+        $temp = [];
+        foreach ($articlesList as $list) {
+            foreach ($list as $value) {
+                $temp[] = $value;
+            }
+        }
+
+        $result = [];
+
+        foreach ($temp as $key => $article) {
+            if (($key >= ($articlePage-1)*10) && ($key <= ($articlePage*10-1))) {
+                $result[] = $article;
+            }
+        }
+        $data['articlesList'] = $result;
+
+        $this->set('data', $data);
     }
 }

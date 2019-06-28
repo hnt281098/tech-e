@@ -18,7 +18,11 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="theme-img theme-img-scalerotate">
-                        <?= $this->Html->image($value['avatar']); ?>
+                        <?php if(!empty($value['avatar'])){
+                            echo $this->Html->image($value['avatar']);
+                        }else{
+                            echo $this->Html->image('avatar-default.jpg');
+                        } ?>
                     </div>
                 </div>
                 <div class="col-sm-8">
@@ -41,7 +45,7 @@
                         </div>
                     </div>
                     <div class="doctor-details-extra text-left p-0 pt-4">
-                        <a href="<?= Router::url(['controller'=>'articles', 'action'=>'articlesBy', 'by'=>'user', 'id'=>$value['id']]) ?>">
+                        <a href="<?= Router::url(['controller'=>'users', 'action'=>'articlesByUser', 'id'=>$value['id']]) ?>">
                             <p class="text-center">
                                 <i class="fa fa-newspaper-o"></i>
                                 <?= $data['amountArticle'] ?> bài viết

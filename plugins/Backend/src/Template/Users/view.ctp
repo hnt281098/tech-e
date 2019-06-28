@@ -34,7 +34,7 @@
                             </div>
                             <div class="widget-body">
                                 <div class="table-responsive">
-                                    <table id="sorting-table" class="table mb-0  thai">
+                                    <table id="sorting-table" class="table mb-0 thai">
                                         <thead>
                                             <tr>
                                                 <?php
@@ -143,6 +143,9 @@
 
 
         '../backend/template/js/components/datepicker/datepicker',
+        '../backend/template/vendors/js/datepicker/moment.min',
+	    '../backend/template/vendors/js/datepicker/daterangepicker',
+	    '../backend/template/js/components/datepicker/datepicker',
     ));
     ?>
 
@@ -161,7 +164,6 @@
                     alert("User deleted");
                     var i = r.parentNode.parentNode.rowIndex;
                     document.getElementById("sorting-table").deleteRow(i);
-
                 },
                 error: function(response) {
                     alert("Delete fail");
@@ -218,10 +220,10 @@
 
                 success: function(response) {
                     // $('#showModal').click();
-                    alert("Add success.")
+                    alert("Thêm thành công.")
                 },
                 error: function(response) {
-                    alert("Add fail, try again please");
+                    alert("Thêm không thành công, vui lòng thử lại.");
                 },
 
             });
@@ -246,27 +248,34 @@
                         selections = selections + ' <option value=' + response.roles[i].id + '>' + name + '</option>'
                     }
                     $('#role').html(selections);
-                    // console.log
-                    $('#email').val(response.user[0].email);
+
+                    document.getElementById("formTitle").innerHTML = "Sửa thông tin người dùng";
+                    $('#email').val(response.user.email);
                     $('#password').hide();
                     $('#passLabel').hide();
-                    $('#facebook').val(response.user[0].facebook);
-                    $('#instagram').val(response.user[0].instagram);
-                    $('#fullname').val(response.user[0].fullname);
+                    $('#facebook').val(response.user.facebook);
+                    $('#instagram').val(response.user.instagram);
+                    $('#fullname').val(response.user.fullname);
+                    $('#submitAddButton').text('Lưu');
+                    $("#submitAddButton").attr("onclick","submitUpdateButton(this.form,"+ userId +")");
 
-                    if (response.user[0].gender == "Nam") {
-                        $('#radMale').prop('checked', true);
+                    if (response.user.gender == "Nam") {
+                        $('#radMale').attr("checked", "checked");
                     }        
                     else {
-                        $('#radFemale').prop('checked', true);
+                        $('#radFemale').attr("checked", "checked");
                     }  
 
-                    if (response.user[0].status == 1) {
-                        $('#radActive').prop('checked', true);
+                    if (response.user.status == 1) {
+                        $('#radActive').attr("checked", "checked");
                     }        
                     else {
-                        $('#radInactive').prop('checked', true);
-                    } 
+                        $('#radInactive').attr("checked", "checked");
+                    }
+                    if (!empty(response.user.birthday)) {
+                        $('input[name=birthday]').val(response.user.birthday);
+                    }
+                    
                 },
                 error: function(response) {
                     alert("Can not load form!");
@@ -275,7 +284,7 @@
         }
 
 
-        function submitUpdateButton(form) {
+        function submitUpdateButton(form, userId) {
             var formData = $(form).serializeArray();
             var inputs = [];
             formData.forEach(function(v, i){
@@ -286,6 +295,7 @@
                 dataType: 'json',
                 type: 'POST',
                 data : {
+                    id : userId,
                     email : inputs['email'],
                     password : inputs['password'],
                     facebook : inputs['facebook'],
@@ -300,10 +310,10 @@
 
                 success: function(response) {
                     // $('#showModal').click();
-                    alert("Add success.")
+                    alert("Cập nhật thành công.")
                 },
                 error: function(response) {
-                    alert("Add fail, try again please");
+                    alert("Cập nhật không thành công, vui lòng thử lại");
                 },
             });
         }

@@ -6,7 +6,7 @@
     <div class="layer-stretch">
         <div class="page-ttl-container">
             <h1>Thông tin</h1>
-            <p><a href="<?= Router::url(['controller'=>'pages', 'action'=>'index']) ?>">Trang chủ</a> &#8594; <span>Thông tin</span></p>
+            <p><a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>false]) ?>">Trang chủ</a> &#8594; <span>Thông tin</span></p>
         </div>
     </div>
 </div><!-- End Page Title Section -->
@@ -107,7 +107,7 @@
                             <div class="doctor-details-extra">
                                 <div class="doctor-details-extra-3">
                                     <p><i class="fa fa-envelope"></i><?= $value2['mail'] ?></p>
-                                    <p><i class="fa fa-user-circle"></i><?= $value2['username'] ?></p>
+                                    <p><i class="fa fa-user-circle"></i><?= $value2['fullname'] ?></p>
                                     <p><i class="fa fa-calendar"></i><?= $this->calculateAge($value2['birthday']) ?> tuổi</p>
                                 </div>
                             </div>
@@ -137,13 +137,6 @@
                 <div id="testimonial-slider" class="owl-carousel owl-theme theme-owl-dot">
                     <?php
                         foreach ($data['feedback'] as $value3) {
-                            foreach ($data['userList'] as $value4) {
-                                if($value3['user_id'] == $value4['id']){
-                                    $avatar = $value4['avatar'];
-                                    $username = $value4['fullname'];
-                                    break;
-                                }
-                            }
                     ?>
                         <div class="testimonial-block">
                             <img class="img-responsive" src="<?= $avatar ?>" alt="">
@@ -151,7 +144,7 @@
                                 <i class="fa fa-quote-left"></i>
                                 <?= $value3['content'] ?>
                             </div>
-                            <a><?= $username ?></a>
+                            <a><?= $value3['user']['fullname'] ?></a>
                         </div>
                     <?php
                         }
