@@ -110,7 +110,7 @@ Router::scope('/categories', ['controller'=>'categories'], function(RouteBuilder
 //Tạo router searches
 Router::scope('/searches', ['controller'=>'searches'], function(RouteBuilder $routes){
 	$routes->connect('/top-searches', ['action'=>'topSearches']);
-	$routes->connect('/', ['action'=>'search']);
+	$routes->connect('/:tag', ['action'=>'search'], ['pass'=>['tag']]);
 });
 
 //Tạo router comments
