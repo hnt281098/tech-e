@@ -110,7 +110,7 @@
                             </div>
                             <div class="doctor-details-extra">
                                 <div class="doctor-details-extra-3">
-                                    <p><i class="fa fa-envelope"></i><?= $value2['mail'] ?></p>
+                                    <p><i class="fa fa-envelope"></i><?= $value2['email'] ?></p>
                                     <p><i class="fa fa-user-circle"></i><?= $value2['fullname'] ?></p>
                                     <p><i class="fa fa-calendar"></i><?= $this->calculateAge($value2['birthday']) ?> tuổi</p>
                                 </div>

@@ -1,3 +1,4 @@
+<?php use Cake\Routing\Router; ?>
 <header class="header">
                 <nav class="navbar fixed-top">         
                     <!-- Begin Search Box-->
@@ -130,7 +131,7 @@
                                             Faq
                                         </a>
                                     </li>
-                                    <li><a rel="nofollow" href="pages-login.html" class="dropdown-item logout text-center"><i class="ti-power-off"></i></a></li>
+                                    <li><a rel="nofollow" href="<?= Router::url(['controller'=>'users', 'action'=>'logout']) ?>" class="dropdown-item logout text-center"><i class="ti-power-off"></i></a></li>
                                 </ul>
                             </li>
                             <!-- End User -->
