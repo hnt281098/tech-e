@@ -29,10 +29,19 @@ class CategoriesController extends AppController
     {
         $this->loadModel('Articles');
         $data = $this->Categories->get($id);
-        $amountArticles = $this->Articles->find(
+        $amountArticles = 0;
+
+        $listCate = $this->Categories->find(
             'all',
-            ['conditions' => ['status_id' => 1, 'category_id' => $id]]
-        )->count();
+            ['conditions'=>['parent_id'=>$id]]
+        );
+        if(empty($listCate->count())){
+            $amountArticles = $this->Articles->find('all', ['conditions'=>['category_id'=>$id, 'status_id'=>1]])->count();
+        }else{
+            foreach($listCate as $value){
+                $amountArticles += $this->Articles->find('all', ['conditions'=>['category_id'=>$value['id'], 'status_id'=>1]])->count();
+            }
+        }
 
         $this->set(['data' => $data, 'amountArticles' => $amountArticles]);
     }

@@ -7,7 +7,9 @@ if(!empty($data['articlesList'])){
         <div class='theme-material-card blog-full-block'>
             <div class='row'>
                 <div class='col-sm-4'>
-                    <div class='blog-full-date'><?= $this->calculateDatetime($value['posting_date']); ?></div>
+                    <?php if(!empty($value['posting_date'])){ ?>
+                        <div class='blog-full-date'><?= $this->calculateDatetime($value['posting_date']); ?></div>
+                    <?php } ?>
                     <div class='theme-img theme-img-scalerotate'>
                         <img src='<?= $image[0] ?>' alt=''>
                     </div>

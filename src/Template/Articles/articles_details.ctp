@@ -30,7 +30,9 @@ use Cake\Routing\Router;
                     <h2 class='blog-ttl'><?= $value['title'] ?></h2>
                     <ul class='blog-detail'>
                         <li><i class='fa fa-user-o'></i><?= $value['user']['fullname'] ?></li>
-                        <li><i class='fa fa-calendar-o'></i><?= $value['posting_date']->format('d M Y') ?></li>
+                        <?php if(!empty($value['posting_date'])){ ?>
+                            <li><i class='fa fa-calendar-o'></i><?= $value['posting_date']->format('d M Y') ?></li>
+                        <?php } ?>
                         <li><i class='fa fa-comment-o'></i><?= $data['amountComment'] ?></li>
                     </ul>
                     <div class='blog-post'>
