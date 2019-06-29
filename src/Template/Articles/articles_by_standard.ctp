@@ -13,7 +13,9 @@
         <?php if($standard == 'user_most_view'){ ?>
             <p><?= $value['view'] ?> lượt xem</p>
         <?php }else{ ?>
-            <p><?= $this->calculateDatetime($value['posting_date']) ?></p>
+            <?php if(!empty($value['posting_date'])){ ?>
+                <p><?= $this->calculateDatetime($value['posting_date']) ?></p>
+            <?php } ?>
         <?php } ?>
     </div>
 </a>

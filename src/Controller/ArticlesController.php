@@ -90,7 +90,7 @@ class ArticlesController extends AppController
                         'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'category_id'=>8], 
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
-                        'limit'=>5
+                        'limit'=>4
                     ]
                 );
             }elseif($standard == 'samsung'){
@@ -100,7 +100,7 @@ class ArticlesController extends AppController
                         'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'category_id'=>9], 
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
-                        'limit'=>5
+                        'limit'=>4
                     ]
                 );
             }elseif($standard == 'connection'){
@@ -112,7 +112,7 @@ class ArticlesController extends AppController
                         'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'category_id'=>$value['category_id'], 'id != '.$id], 
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
-                        'limit'=>5
+                        'limit'=>4
                     ]
                 );
             }elseif($standard == 'user_most_view'){

@@ -14,7 +14,9 @@
                                      'action'=>'articlesDetails',
                                       'id'=>$value['id']
                                     ]) ?></h4>
-                    <p class='text-left primary-color'><?= $this->calculateDatetime($value['posting_date']); ?></p>
+                    <?php if(!empty($value['posting_date'])){ ?>
+                        <p class='text-left primary-color'><?= $this->calculateDatetime($value['posting_date']); ?></p>
+                    <?php } ?>
                 </div>
             </li>
     <?php } ?>

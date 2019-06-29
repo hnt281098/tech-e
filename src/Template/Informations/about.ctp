@@ -112,7 +112,9 @@
                                 <div class="doctor-details-extra-3">
                                     <p><i class="fa fa-envelope"></i><?= $value2['email'] ?></p>
                                     <p><i class="fa fa-user-circle"></i><?= $value2['fullname'] ?></p>
-                                    <p><i class="fa fa-calendar"></i><?= $this->calculateAge($value2['birthday']) ?> tuổi</p>
+                                    <?php if(!empty($value2['birthday'])){ ?>
+                                        <p><i class="fa fa-calendar"></i><?= $this->calculateAge($value2['birthday']) ?> tuổi</p>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <div class="doctor-social">
