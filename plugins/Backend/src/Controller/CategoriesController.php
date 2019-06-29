@@ -2,6 +2,7 @@
 namespace Backend\Controller;
 
 use Backend\Controller\AppController;
+use Cake\Log\Log;
 /**
  * Categories Controller
  *
@@ -22,21 +23,32 @@ class CategoriesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function view()
     {
-        $categories = $this->paginate($this->Categories);
+        if ($this->request->query('type') == 'parent' ) {
+            $categories = $this->paginate($this->Categories->find()->where(['parent_id = 0']));
 
-        $this->set(compact('categories'));
+            foreach($categories as $category) {
+                unset($category['parent_id']);
+            }
+            $type = "Danh mục lớn";
+        }
+
+        else {
+            $categories = $this->paginate($this->Categories->find()->where(['parent_id != 0']));
+
+            foreach($categories as $category) {
+                $parentName = $this->Categories->find()->where(['id' => $category['parent_id']])->select('name')->first();
+                $category['parent'] = $parentName->name;
+                unset($category['parent_id']);
+            }
+            $type = "Danh mục nhỏ";
+        }
+
+        $this->set(compact('categories', 'type'));
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Category id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
+    public function viewDetail($id = null)
     {
         $category = $this->Categories->get($id, [
             'contain' => ['Articles']

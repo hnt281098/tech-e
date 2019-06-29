@@ -44,6 +44,10 @@ Router::plugin(
                 ['pass'=>['tag']]
             );
         });
+
+        $routes->scope('/categories', ['controller' => 'Categories'], function(RouteBuilder $routes) {
+            $routes->get('/view', ['action' => 'view']);
+        });
         
         $routes->scope('/users', ['controller' => 'Users'], function(RouteBuilder $routes) {
             $routes->connect('/login', ['action' => 'login']);

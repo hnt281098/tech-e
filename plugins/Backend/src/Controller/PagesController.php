@@ -13,6 +13,7 @@ class PagesController extends AppController
     public function initialize()
     {
         parent::initialize();
+        $this->Auth->allow();
     }
 
     public $helpers = ['Form','Paginator','Html', 'Session'];
