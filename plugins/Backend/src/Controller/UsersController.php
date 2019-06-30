@@ -266,6 +266,24 @@ class UsersController extends AppController
             $requestData = $this->request->getData();
             $user = $this->Users->patchEntity($user, $requestData);
             $user->role_id = 3;
+            $user->status = 1;
+
+            //Thêm ngày sinh
+            $date = $this->request->getData('birthday');
+            $date = explode('/', $date);
+            $birthday = Time::now();
+            $birthday->year($date[2])->month($date[0])->day($date[1]);
+            $user->birthday = $birthday;
+
+            //Upload avatar
+            $file = $this->request->getData('avatar');
+            $filename = null;
+            if(!empty($file['tmp_name'])){
+                $filename = $file['name'];
+                if(move_uploaded_file($file['tmp_name'], WWW_ROOT . 'uploads' . DS . 'avatar' . DS . $filename)){
+                    $user->avatar = $filename;
+                }
+            }
 
             if($this->Users->save($user)){
                 $this->redirect(['action'=>'login']);

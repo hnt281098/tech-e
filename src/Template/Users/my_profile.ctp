@@ -49,7 +49,7 @@
                 <div class="col-md-4">
                     <div class='theme-img theme-img-scalerotate'>
                         <?php if(!empty($data['user']['avatar'])){
-                            echo $this->Html->image($data['user']['avatar']);
+                            echo $this->Html->image('../uploads/avatar/' . $data['user']['avatar']);
                         }else{
                             echo $this->Html->image('avatar-default.jpg');
                         } ?>

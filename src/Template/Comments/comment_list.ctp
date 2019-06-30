@@ -7,7 +7,7 @@
                 <div class='col-2 hidden-xs-down pr-0 comment-img'>
                     <div class='theme-img'>
                         <?php if(!empty($value['user']['avatar'])){
-                            echo $this->Html->image($value['user']['avatar']);
+                            echo $this->Html->image('../uploads/avatar/' . $value['user']['avatar']);
                         }else{
                             echo $this->Html->image('avatar-default.jpg');
                         } ?>

@@ -37,7 +37,7 @@
                         </div>
                         <h3>Welcome to TechE-Magazine !!!</h3>
                         <!-- <form method="post" action="google.com" enctype="multipart/form-data"> -->
-                        <?= $this->Form->create('register', ['url'=>['controller'=>'users', 'action'=>'register'], 'enctype'=>'multipart/form-data']) ?>
+                        <?= $this->Form->create('register', ['url'=>['controller'=>'users', 'action'=>'register'], 'enctype'=>'multipart/form-data', 'type'=>'file']) ?>
                             <!-- <img src="" id="img" width="90" height="90"> -->
                             <!-- <label onclick="uploadAvatar()" class="btn btn-info mr-1 mb-2">Tải ảnh lên</label> -->
                             <div class="group material-input">

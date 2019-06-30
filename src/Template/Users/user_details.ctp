@@ -19,7 +19,7 @@
                 <div class="col-sm-4">
                     <div class="theme-img theme-img-scalerotate">
                         <?php if(!empty($value['avatar'])){
-                            echo $this->Html->image($value['avatar']);
+                            echo $this->Html->image('../uploads/avatar/' . $value['avatar']);
                         }else{
                             echo $this->Html->image('avatar-default.jpg');
                         } ?>
