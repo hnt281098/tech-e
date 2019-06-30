@@ -9,5 +9,6 @@
 		'../backend/template/css/datatables/datatables.min',
 		'../backend/template/icons/lineawesome/css/line-awesome',
 		'../backend/template/css/thai',
+		'../backend/template/icons/themify/css/themify-icons',
 	));
 ?>

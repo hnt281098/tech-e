@@ -3,14 +3,6 @@
 <?php use Cake\Routing\Router; ?>
 <header class="header">
                 <nav class="navbar fixed-top">         
-                    <!-- Begin Search Box-->
-                    <div class="search-box">
-                        <button class="dismiss"><i class="ion-close-round"></i></button>
-                        <form id="searchForm" action="#" role="search">
-                            <input type="search" placeholder="Search something ..." class="form-control">
-                        </form>
-                    </div>
-                    <!-- End Search Box-->
                     <!-- Begin Topbar -->
                     <div class="navbar-holder d-flex align-items-center align-middle justify-content-between">
                         <!-- Begin Logo -->
@@ -34,9 +26,6 @@
                         <!-- End Logo -->
                         <!-- Begin Navbar Menu -->
                         <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center pull-right">
-                            <!-- Search -->
-                            <li class="nav-item d-flex align-items-center"><a id="search" href="#"><i class="la la-search"></i></a></li>
-                            <!-- End Search -->
                             <!-- Begin Notifications -->
                             <li class="nav-item dropdown"><a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i class="la la-bell animated infinite swing"></i><span class="badge-pulse"></span></a>
                                 <ul aria-labelledby="notifications" class="dropdown-menu notification">
@@ -108,9 +97,6 @@
                                 </ul>
                             </li>
                             <!-- End User -->
-                            <!-- Begin Quick Actions -->
-                            <li class="nav-item"><a href="#off-canvas" class="open-sidebar"><i class="la la-ellipsis-h"></i></a></li>
-                            <!-- End Quick Actions -->
                         </ul>
                         <!-- End Navbar Menu -->
                     </div>
