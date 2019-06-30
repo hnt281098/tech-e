@@ -12,11 +12,11 @@
                 <div class="row">
                     <div class="page-header">
                         <div class="d-flex align-items-center">
-                            <h2 class="page-header-title">Quản lý người dùng</h2>
+                            <h2 class="page-header-title"><?=$type?></h2>
                             <div>
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                                    <li class="breadcrumb-item active">Quản lý người dùng</li>
+                                    <li class="breadcrumb-item active"><?=$type?></li>
                                 </ul>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-xl-12">
 
-                        <button onclick="addUser()" class="btn btn-success btn-square mr-1 mb-2">Thêm người dùng</button>
+                        <button onclick="add('<?= $type ?>')" class="btn btn-success btn-square mr-1 mb-2">Thêm danh mục</button>
 
                         <!-- Sorting -->
                         <div class="widget has-shadow">
@@ -43,29 +43,29 @@
                                                 $fields = array_keys($categories[0]->toArray());
                                                 foreach ($fields as $field) {
                                                     ?>
-                                                    <th id="my_th"><?= str_replace('_', ' ', ucwords($field)) ?></th>
+                                                    <th ><?= str_replace('_', ' ', ucwords($field)) ?></th>
                                                 <?php } ?>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($categories as $categories) : ?>
+                                            <?php foreach ($categories as $category) : ?>
                                                 <tr>
                                                     <?php foreach ($fields as $field) : ?>
                                                         <?php if ($field == "status") : ?>
-                                                            <td id="my_th">
-                                                                <?php if ($categories["status"] == 1) : ?>
+                                                            <td >
+                                                                <?php if ($category["status"] == 1) : ?>
                                                                     <span><span class="badge-text badge-text-small info">Active</span></span></td>
                                                             <?php else : ?>
                                                                 <span><span class="badge-text badge-text-small danger">Inactive</span></span></td>
                                                             <?php endif; ?>
                                                             </td>
                                                         <?php else : ?>
-                                                            <td id="my_th"><?= $categories[$field] ?></td>
+                                                            <td ><?= $category[$field] ?></td>
                                                         <?php endif; ?>
                                                     <?php endforeach ?>
                                                     <td class="td-actions">
                                                         <a ><i class="la la-edit edit"></i></a>
-                                                        <a ><i class="la la-close delete"></i></a>
+                                                        <a onclick="submitDelete(<?= $category['id'] ?>, this)"><i class="la la-close delete"></i></a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach ?>
@@ -150,18 +150,18 @@
     ?>
 
     <script>
-        function submitDelete(userId, r) {
+        function submitDelete(categoryId, r) {
             $.ajax({
                 url: 'delete',
                 dataType: 'json',
                 type: 'delete',
                 data: {
-                    id: userId
+                    id: categoryId
                 },
                 cache: false,
 
                 success: function(response) {
-                    alert("User deleted");
+                    alert("Category deleted");
                     var i = r.parentNode.parentNode.rowIndex;
                     document.getElementById("sorting-table").deleteRow(i);
                 },
@@ -171,23 +171,35 @@
             });
         }
 
-        function addUser() {
+        function add(type) {
             $.ajax({
                 url: 'add',
                 dataType: 'json',
                 type: 'GET',
                 cache: false,
+                data : {
+                    type : type
+                },
 
                 success: function(response) {
                     $('#content').html(response.html);
-                    var selections = "";
 
-                    for (i = 0; i < response.roles.length; i++) {
-                        name = response.roles[i].name;
-                        name = name.charAt(0).toUpperCase() + name.slice(1);
-                        selections = selections + ' <option value=' + response.roles[i].id + '>' + name + '</option>'
+                    if (type == 'Danh mục lớn') {
+                        $('#link-back').attr('href', '/tech-e/backend/categories/view?type=parent');
+                        $('#parent-category-choose').hide();
                     }
-                    $('#role').html(selections);
+                    else {
+                        $('#link-back').attr('href', '/tech-e/backend/categories/view?type=children');
+                        var selections = "";
+                    
+                        for (i = 0; i < response.parentCategories.length; i++) {
+                            name = response.parentCategories[i].name;
+                            name = name.charAt(0).toUpperCase() + name.slice(1);
+                            selections = selections + ' <option value=' + response.parentCategories[i].id + '>' + name + '</option>'
+                        }
+                        $('#parent-category').html(selections);
+                    }
+                    
                 },
                 error: function(response) {
                     alert("Can not load form!");

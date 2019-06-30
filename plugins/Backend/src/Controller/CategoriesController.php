@@ -64,17 +64,56 @@ class CategoriesController extends AppController
      */
     public function add()
     {
-        $category = $this->Categories->newEntity();
+        $this->response->type('json');
+        $this->response->withStatus(200);
+        
         if ($this->request->is('post')) {
-            $category = $this->Categories->patchEntity($category, $this->request->getData());
-            if ($this->Categories->save($category)) {
-                $this->Flash->success(__('The category has been saved.'));
+            $category = $this->Categories->newEntity();
+            $data = $this->request->getData();
+            $check = $this->CheckInputs->execute($data, ['password', 'email']);
 
-                return $this->redirect(['action' => 'index']);
+            if (!$check) {
+                $this->response->withStatus(500);
+                $response = [
+                    'message' => 'Not enough required data',
+                ];
+                $this->response->body(json_encode($response));
+
+                return $this->response;
             }
-            $this->Flash->error(__('The category could not be saved. Please, try again.'));
+
+            $category = $this->Categories->patchEntity($category, $data);
+
+            if ($this->Categories->save($category)) {
+                $this->response->body(json_encode(['success' => 'true']));
+                
+                return $this->response;
+            }
+
+            $this->response->withStatus(500);
+            $response = [
+                'message' => 'Can not save',
+            ];
+            $this->response->body(json_encode($response));
+
+            return $this->response;
         }
-        $this->set(compact('category'));
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $html = $view->render('Backend.Categories/add');
+
+        $response['html'] = $html;
+
+        if ($this->request->query('type') != 'Danh mục lớn') {
+            $parentCategories = $this->Categories->find()->where(['parent_id' => 0])->select(['name', 'id']);
+
+            $response['parentCategories'] = $parentCategories;
+        }
+        
+        $this->response->body(json_encode($response));
+
+        return $this->response;
     }
 
     /**
@@ -108,17 +147,26 @@ class CategoriesController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete()
     {
         $this->request->allowMethod(['post', 'delete']);
-        $category = $this->Categories->get($id);
-        if ($this->Categories->delete($category)) {
-            $this->Flash->success(__('The category has been deleted.'));
-        } else {
-            $this->Flash->error(__('The category could not be deleted. Please, try again.'));
-        }
+        $id = $this->request->data('id');
+        $Category = $this->Categories->get($id);
 
-        return $this->redirect(['action' => 'index']);
+        $this->response->type('json');
+        $this->response->withStatus(200);
+
+        if ($this->Categories->delete($Category)) {
+            $this->response->body(json_encode(['success' => true]));
+
+            return $this->response;
+        }
+        else {
+            $this->response->withStatus(500);
+            $this->response->body(json_encode(['success' => false]));
+
+            return $this->response;
+        }
     }
 
     public function categoriesList(){

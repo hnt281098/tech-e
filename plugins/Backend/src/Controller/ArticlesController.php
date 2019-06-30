@@ -150,7 +150,8 @@ class ArticlesController extends AppController
             return $this->response;
         }
         else {
-            $this->response->body(json_encode(['success' => true]));
+            $this->response->withStatus(500);
+            $this->response->body(json_encode(['success' => false]));
 
             return $this->response;
         }

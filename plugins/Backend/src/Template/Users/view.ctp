@@ -12,12 +12,6 @@
                     <div class="page-header">
                         <div class="d-flex align-items-center">
                             <h2 class="page-header-title">Quản lý người dùng</h2>
-                            <div>
-                                <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                                    <li class="breadcrumb-item active">Quản lý người dùng</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -180,6 +174,7 @@
 
                 success: function(response) {
                     $('#content').html(response.html);
+                    $('#link-back').attr('href', '/tech-e/backend/users/view');
                     var selections = "";
 
                     for (i = 0; i < response.roles.length; i++) {

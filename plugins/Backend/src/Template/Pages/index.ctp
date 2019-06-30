@@ -4,7 +4,7 @@
             <?= $this->element('header'); ?>
             <?= $this->element('left-bar'); ?>
             
-                <div class="content-inner">
+                <div id="content" class="content-inner">
                     <div class="container-fluid">
                         <!-- Begin Page Header-->
                         <div class="row">

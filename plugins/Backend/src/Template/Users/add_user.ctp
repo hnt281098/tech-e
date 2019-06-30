@@ -9,8 +9,7 @@
                 <div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                        <li class="breadcrumb-item"><a href="#">Components</a></li>
-                        <li class="breadcrumb-item active">Forms Basic</li>
+                        <li class="breadcrumb-item"><a id="link-back" href="#">Về danh sách</a></li>
                     </ul>
                 </div>
             </div>
@@ -166,11 +165,4 @@
 <!-- End Container -->
 <!-- End Page Footer -->
 <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
-    <?= $this->Html->script(array(
-        '../backend/template/vendors/js/base/jquery.min',
-        '../backend/template/vendors/js/base/core.min',
-        '../backend/template/vendors/js/app/app.min',
-        '../backend/template/vendors/js/datepicker/moment.min',
-	    '../backend/template/vendors/js/datepicker/daterangepicker',
-	    '../backend/template/js/components/datepicker/datepicker',
-    )); ?>
+  

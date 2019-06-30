@@ -14,10 +14,10 @@
                                     <li><a method ="GET" href="/tech-e/backend/articles/view?article_status_id=2">Chờ duyệt</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#dropdown-authentication" aria-expanded="false" data-toggle="collapse"><i class="la la-list list"></i><span>Quản lý danh mục</span></a>
-                                <ul id="dropdown-authentication" class="collapse list-unstyled pt-0">
-                                    <li><a href="/tech-e/backend/users/view?type=parent">Danh mục lớn</a></li>
-                                    <li><a href="/tech-e/backend/users/view?type=children">Danh mục nhỏ</a></li>
+                            <li><a href="#dropdown-generic" aria-expanded="false" data-toggle="collapse"><i class="la la-list list"></i><span>Quản lý danh mục</span></a>
+                                <ul id="dropdown-generic" class="collapse list-unstyled pt-0">
+                                    <li><a href="/tech-e/backend/categories/view?type=parent">Danh mục lớn</a></li>
+                                    <li><a href="/tech-e/backend/categories/view?type=children">Danh mục nhỏ</a></li>
                                 </ul>
                             </li>
                         </ul>
