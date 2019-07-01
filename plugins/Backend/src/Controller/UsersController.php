@@ -21,6 +21,9 @@ class UsersController extends AppController
     public function view()
     {
         $this->loadModel('Roles');
+        $this->response->type('json');
+        $this->response->withStatus(200);
+
         $users = $this->Users->find()->order(['id'])->toArray();
 
         foreach ($users as $user) {
@@ -33,7 +36,15 @@ class UsersController extends AppController
             unset($user['facebook']);
             unset($user['instagram']);
         }
-        $this->set(compact('users'));
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $view->set(compact('users'));
+        $html = $view->render('Backend.Users/view');
+        
+        $this->response->body(json_encode(['html' => $html]));
+        
+        return $this->response;
     }
 
     /**

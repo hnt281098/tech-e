@@ -25,6 +25,8 @@ class CategoriesController extends AppController
      */
     public function view()
     {
+        $this->response->type('json');
+        $this->response->withStatus(200);   
         if ($this->request->query('type') == 'parent' ) {
             $categories = $this->paginate($this->Categories->find()->where(['parent_id = 0']));
 
@@ -45,7 +47,13 @@ class CategoriesController extends AppController
             $type = "Danh mục nhỏ";
         }
 
-        $this->set(compact('categories', 'type'));
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $view->set(compact(['categories', 'type']));
+        $html = $view->render('Backend.Categories/view');
+        $this->response->body(json_encode(['html' => $html]));
+        
+        return $this->response;
     }
 
     public function viewDetail($id = null)
@@ -151,12 +159,12 @@ class CategoriesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $id = $this->request->data('id');
-        $Category = $this->Categories->get($id);
+        $category = $this->Categories->get($id);
 
         $this->response->type('json');
         $this->response->withStatus(200);
 
-        if ($this->Categories->delete($Category)) {
+        if ($this->Categories->delete($category)) {
             $this->response->body(json_encode(['success' => true]));
 
             return $this->response;

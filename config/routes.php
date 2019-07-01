@@ -53,7 +53,7 @@ Router::scope('/users', ['controller'=>'users'], function(RouteBuilder $routes){
 	$routes->connect('/forgot-password', ['action'=>'forgotPassword']);
 	$routes->connect(
 		'/my-profile', 
-		['action'=>'myProfile'],
+		['action'=>'myProfile']
 	);
 	$routes->connect(
 		'/articles-by-user/:id',

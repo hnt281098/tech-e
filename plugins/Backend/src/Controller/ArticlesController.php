@@ -57,7 +57,14 @@ class ArticlesController extends AppController
             unset($article['source']);
         }
 
-        $this->set(compact('articles'));
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $view->set(compact('articles'));
+        $html = $view->render('Backend.Articles/view');
+        
+        $this->response->body(json_encode(['html' => $html]));
+        
+        return $this->response;
     }
 
     /**

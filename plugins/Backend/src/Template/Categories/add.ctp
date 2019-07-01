@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div id="parent-category-choose" class="form-group row mb-5">
-                            <label class="col-lg-3 form-control-label">Parent category</label>
+                            <label class="col-lg-3 form-control-label">Danh mục cha</label>
                             <div class="col-lg-9 select mb-3">
                                 <select id="parent-category" name="parent_id" class="custom-select form-control">
                                 </select>
