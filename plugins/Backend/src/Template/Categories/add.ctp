@@ -21,17 +21,17 @@
             <!-- Form -->  
             <div class="widget has-shadow">
                 <div class="widget-body">
-                    <form id="addUserForm" class="form-horizontal">
+                    <form id="addCategoryForm" class="form-horizontal">
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Tên</label>
                             <div class="col-lg-9">
-                                <input id="name" name="name" value="" type="text" class="form-control">
+                                <input id="name" name="name" value="" type="text" class="form-value form-control">
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Mô tả</label>
                             <div class="col-lg-9">
-                                <input id="description" name="description" type="text" class="form-control">
+                                <input id="description" name="description" type="text" class="form-value form-control">
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
@@ -62,9 +62,9 @@
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <button id="submitAddButton" type="submit" onclick="submitAddButton(this.form)" class="btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</button>
+                                <a href="javascript: void(0)" id="submitAddButton"  class="btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</a>
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
-
+                                <!-- onclick="submitAddButton(this.form)" -->
                             </div>
                         </div>
                         <!-- End Auto Close Modal -->

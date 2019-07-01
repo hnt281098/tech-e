@@ -206,35 +206,44 @@
         });
     }
 
-    function submitAddButton(form) {
-        var formData = $(form).serializeArray();
+    $(document).ready(function(){
+        console.log($('#addCategoryForm').length);
+    });
+
+    $('body').on( 'click', '#submitAddButton', function(){
+        //var $inputs = $('#addCategoryForm .form-value');
+
+        // var values = {};
+        // $inputs.each(function() {
+        //     values[this.name] = $(this).val();
+        // });
+        // return false
+
+        var formData = $('#addCategoryForm').serializeArray();
+
         var inputs = [];
         formData.forEach(function(v, i) {
             inputs[v.name] = v.value;
         });
+
         var url = '<?= $this->Url->build([
                         'controller' => 'categories',
                         'action' => 'add'
                     ]); ?>';
+
         $.ajax({
             url: url,
             dataType: 'json',
             type: 'POST',
             data: {
-                email: inputs['email'],
-                password: inputs['password'],
-                facebook: inputs['facebook'],
-                instagram: inputs['instagram'],
-                fullname: inputs['fullname'],
-                birthday: inputs['birthday'],
-                gender: inputs['gender'],
-                role_id: inputs['role_id'],
+                parent_id: (inputs['parent_id'] != "")?inputs['parent_id'] : 0,
                 status: inputs['status'],
+                name: inputs['name'],
+                description: inputs['description'],
             },
             cache: false,
 
             success: function(response) {
-                // $('#showModal').click();
                 alert("Thêm thành công.")
             },
             error: function(response) {
@@ -242,7 +251,40 @@
             },
 
         });
-    }
+        
+    });
+
+
+    // function submitAddButton(form) {
+    //     var formData = $(form).serializeArray();
+
+    //     var inputs = [];
+    //     formData.forEach(function(v, i) {
+    //         inputs[v.name] = v.value;
+    //     });
+    //     console.log(inputs);
+      
+    //     $.ajax({
+    //         url: url,
+    //         dataType: 'json',
+    //         type: 'POST',
+    //         data: {
+    //             parent_id: inputs['parent_id'],
+    //             status: inputs['status'],
+    //             name: inputs['name'],
+    //             description: inputs['description'],
+    //         },
+    //         cache: false,
+
+    //         success: function(response) {
+    //             alert("Thêm thành công.")
+    //         },
+    //         error: function(response) {
+    //             alert("Thêm không thành công, vui lòng thử lại.");
+    //         },
+
+    //     });
+    // }
 
     function updateUser(userId) {
         var url = '<?= $this->Url->build([

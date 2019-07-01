@@ -16,6 +16,7 @@ class CategoriesController extends AppController
     {
         parent::initialize();
         $this->loadModel('Categories');
+        $this->loadComponent('Backend.CheckInputs');
     }
 
     /**
@@ -78,6 +79,7 @@ class CategoriesController extends AppController
         if ($this->request->is('post')) {
             $category = $this->Categories->newEntity();
             $data = $this->request->getData();
+            log::info($data);
             $check = $this->CheckInputs->execute($data, ['password', 'email']);
 
             if (!$check) {

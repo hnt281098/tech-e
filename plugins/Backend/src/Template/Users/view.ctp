@@ -191,7 +191,10 @@
         });
     }
 
+    
+
     function submitAddButton(form) {
+        console.log(form);
         var formData = $(form).serializeArray();
         var inputs = [];
         formData.forEach(function(v, i) {
