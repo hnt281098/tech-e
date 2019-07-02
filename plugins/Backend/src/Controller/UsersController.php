@@ -112,7 +112,7 @@ class UsersController extends AppController
 
         $view = new \Cake\View\View();
         $view->setLayout(false);
-        $html = $view->render('Backend.Users/add_user');
+        $html = $view->render('Backend.Users/add');
         
         $response = [
             'html' => $html,
@@ -130,17 +130,16 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function update($id = null)
+    public function update()
     {
-        
-
         $this->response->type('json');
         $this->response->withStatus(200);
+
         if ($this->request->is(['post', 'patch'])) {
             $user = $this->Users->get($this->request->getData('id'));
+            $password = $user->password;
             $data = $this->request->getData();
-            $check = $this->CheckInputs->execute($data, ['password', 'email']);
-
+            $check = $this->CheckInputs->execute($data, ['email']);
             if (!$check) {
                 $this->response->withStatus(500);
 
@@ -152,7 +151,7 @@ class UsersController extends AppController
                 return $this->response;
             }
             $user = $this->Users->patchEntity($user, $data);
-
+            $user->password = $password;
             if ($this->Users->save($user)) {
                 $this->response->body(json_encode(['success' => 'true']));
                 
@@ -176,8 +175,8 @@ class UsersController extends AppController
 
         $view = new \Cake\View\View();
         $view->setLayout(false);
-        $html = $view->render('Backend.Users/add_user');
-        
+        $html = $view->render('Backend.Users/add');
+
         $response = [
             'html' => $html,
             'roles' => $roles,

@@ -206,19 +206,7 @@
         });
     }
 
-    $(document).ready(function(){
-        console.log($('#addCategoryForm').length);
-    });
-
     $('body').on( 'click', '#submitAddButton', function(){
-        //var $inputs = $('#addCategoryForm .form-value');
-
-        // var values = {};
-        // $inputs.each(function() {
-        //     values[this.name] = $(this).val();
-        // });
-        // return false
-
         var formData = $('#addCategoryForm').serializeArray();
 
         var inputs = [];
@@ -254,37 +242,27 @@
         
     });
 
+    $('body').on( 'click', '#back', function(){
+        var url = '<?= $this->Url->build([
+                        'controller' => 'categories',
+                        'action' => 'view'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
 
-    // function submitAddButton(form) {
-    //     var formData = $(form).serializeArray();
+            success: function(response) {
+                $('#content').html(response.html);
+            },
+            error: function(response) {
+                alert("Không thể tải form này!");
+            }
 
-    //     var inputs = [];
-    //     formData.forEach(function(v, i) {
-    //         inputs[v.name] = v.value;
-    //     });
-    //     console.log(inputs);
-      
-    //     $.ajax({
-    //         url: url,
-    //         dataType: 'json',
-    //         type: 'POST',
-    //         data: {
-    //             parent_id: inputs['parent_id'],
-    //             status: inputs['status'],
-    //             name: inputs['name'],
-    //             description: inputs['description'],
-    //         },
-    //         cache: false,
-
-    //         success: function(response) {
-    //             alert("Thêm thành công.")
-    //         },
-    //         error: function(response) {
-    //             alert("Thêm không thành công, vui lòng thử lại.");
-    //         },
-
-    //     });
-    // }
+        });
+        
+    });
 
     function updateUser(userId) {
         var url = '<?= $this->Url->build([

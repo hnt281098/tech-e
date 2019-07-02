@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-xl-12">
 
-            <button onclick="addUser()" class="btn btn-success btn-square mr-1 mb-2">Thêm người dùng</button>
+            <button onclick="addUser()" class="btn btn-success btn-square mr-1 mb-2 add-user">Thêm người dùng</button>
 
             <!-- Sorting -->
             <div class="widget has-shadow">
@@ -190,47 +190,103 @@
             }
         });
     }
+    
+    $('body').on( 'click', '.btn-submit', function(){
+        var _type = $(this).data('type');
+        switch(_type) {
+            case 'create':
+                var url = '<?= $this->Url->build([
+                            'controller' => 'users',
+                            'action' => 'add'
+                        ]); ?>';
+                var formData = $('#addUserForm').serializeArray();
+
+                var inputs = [];
+                formData.forEach(function(v, i) {
+                    inputs[v.name] = v.value;
+                });
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        email: inputs['email'],
+                        password: inputs['password'],
+                        facebook: inputs['facebook'],
+                        instagram: inputs['instagram'],
+                        fullname: inputs['fullname'],
+                        birthday: inputs['birthday'],
+                        gender: inputs['gender'],
+                        role_id: inputs['role_id'],
+                        status: inputs['status'],
+                    },
+                    cache: false,
+                    success: function(response) {
+                        alert("Thêm thành công.")
+                    },
+                    error: function(response) {
+                        alert("Thêm không thành công, vui lòng thử lại.");
+                    },
+                });
+
+                break;
+            case 'update':
+                var url = '<?= $this->Url->build([
+                            'controller' => 'users',
+                            'action' => 'update'
+                        ]); ?>';
+
+                var formData = $('#updateUserForm').serializeArray();
+
+                var userId = $('.btn-submit').attr('userId');
+
+                var inputs = [];
+                formData.forEach(function(v, i) {
+                    inputs[v.name] = v.value;
+                });
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        id: userId,
+                        email: inputs['email'],
+                        facebook: inputs['facebook'],
+                        instagram: inputs['instagram'],
+                        fullname: inputs['fullname'],
+                        birthday: inputs['birthday'],
+                        gender: inputs['gender'],
+                        role_id: inputs['role_id'],
+                        status: inputs['status'],
+                    },
+                    cache: false,
+                    success: function(response) {
+                        alert("Cập nhật thành công.")
+                    },
+                    error: function(response) {
+                        alert("Cập nhật không thành công, vui lòng thử lại.");
+                    },
+                });
+
+                break;
+            default:
+                 var url = '<?= $this->Url->build([
+                            'controller' => 'users',
+                            'action' => 'add'
+                        ]); ?>';
+                break;
+                var formData = $('#addUserForm').serializeArray();
+
+                var inputs = [];
+                formData.forEach(function(v, i) {
+                    inputs[v.name] = v.value;
+                });
+        }
+    });
 
     
-
-    function submitAddButton(form) {
-        console.log(form);
-        var formData = $(form).serializeArray();
-        var inputs = [];
-        formData.forEach(function(v, i) {
-            inputs[v.name] = v.value;
-        });
-        var url = '<?= $this->Url->build([
-                        'controller' => 'users',
-                        'action' => 'add'
-                    ]); ?>';
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'POST',
-            data: {
-                email: inputs['email'],
-                password: inputs['password'],
-                facebook: inputs['facebook'],
-                instagram: inputs['instagram'],
-                fullname: inputs['fullname'],
-                birthday: inputs['birthday'],
-                gender: inputs['gender'],
-                role_id: inputs['role_id'],
-                status: inputs['status'],
-            },
-            cache: false,
-
-            success: function(response) {
-                // $('#showModal').click();
-                alert("Thêm thành công.")
-            },
-            error: function(response) {
-                alert("Thêm không thành công, vui lòng thử lại.");
-            },
-
-        });
-    }
 
     function updateUser(userId) {
         var url = '<?= $this->Url->build([
@@ -258,13 +314,17 @@
 
                 document.getElementById("formTitle").innerHTML = "Sửa thông tin người dùng";
                 $('#email').val(response.user.email);
-                $('#password').hide();
+                // $('#password').hide();
+                // $('#password').attr("value", response.user.password);
+                $('#password').remove();
                 $('#passLabel').hide();
                 $('#facebook').val(response.user.facebook);
                 $('#instagram').val(response.user.instagram);
                 $('#fullname').val(response.user.fullname);
-                $('#submitAddButton').text('Lưu');
-                $("#submitAddButton").attr("onclick", "submitUpdateButton(this.form," + userId + ")");
+                $('.btn-submit').text('Lưu');
+                $(".btn-submit").attr("userId", userId);
+                $(".btn-submit").attr("data-type", "update");
+                $("#addUserForm").attr("id", "updateUserForm");
 
                 if (response.user.gender == "Nam") {
                     $('#radMale').attr("checked", "checked");
@@ -277,7 +337,7 @@
                 } else {
                     $('#radInactive').attr("checked", "checked");
                 }
-                if (!empty(response.user.birthday)) {
+                if (response.user.birthday != null) {
                     $('input[name=birthday]').val(response.user.birthday);
                 }
 
@@ -288,42 +348,27 @@
         });
     }
 
+    
 
-    function submitUpdateButton(form, userId) {
-        var formData = $(form).serializeArray();
-        var inputs = [];
-        formData.forEach(function(v, i) {
-            inputs[v.name] = v.value;
-        });
+   
+
+    function back() {
         var url = '<?= $this->Url->build([
-                        'controller' => 'users',
-                        'action' => 'update'
-                    ]); ?>';
+                            'controller' => 'users',
+                            'action' => 'view'
+                        ]); ?>';
         $.ajax({
             url: url,
             dataType: 'json',
-            type: 'POST',
-            data: {
-                id: userId,
-                email: inputs['email'],
-                password: inputs['password'],
-                facebook: inputs['facebook'],
-                instagram: inputs['instagram'],
-                fullname: inputs['fullname'],
-                birthday: inputs['birthday'],
-                gender: inputs['gender'],
-                role_id: inputs['role_id'],
-                status: inputs['status'],
-            },
+            type: 'GET',
             cache: false,
 
             success: function(response) {
-                // $('#showModal').click();
-                alert("Cập nhật thành công.")
+                $('#content').html(response.html);
             },
             error: function(response) {
-                alert("Cập nhật không thành công, vui lòng thử lại");
-            },
+                alert("Không thể tải form này!");
+            }
         });
     }
 </script>

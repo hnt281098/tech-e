@@ -7,9 +7,9 @@
             <div class="d-flex align-items-center">
                 <h2 id="formTitle" class="page-header-title">Thêm người dùng</h2>
                 <div>
-                    <ul class="breadcrumb">
+                    <ul class="breadcrumb thai">
                         <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                        <li class="breadcrumb-item"><a id="link-back" href="#">Về danh sách</a></li>
+                        <li class="breadcrumb-item "><a onclick="back()" href="#">Về danh sách</a></li>
                     </ul>
                 </div>
             </div>
@@ -33,9 +33,9 @@
                                         <label>Email</label>
                                     </div>
                                 </div>
-                                <div class="mt-5 mb-5 position-relative">
+                                <div id="password" class="mt-5 mb-5 position-relative">
                                     <div class="group material-input">
-                                        <input id="password" name="password" type="password" required>
+                                        <input  name="password" type="password" required>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                         <label id="passLabel">Mật khẩu</label>
@@ -46,7 +46,7 @@
                         <div class="form-group row d-flex align-items-center mb-5">
                             <label class="col-lg-3 form-control-label">Facebook</label>
                             <div class="col-lg-9">
-                                <input id="facebook" name="facebook" value="thai" type="text" class="form-control">
+                                <input id="facebook" name="facebook" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
@@ -117,40 +117,12 @@
                                 </div>
                             </div>
                         </div>
- 
-                        <!-- <div class="form-group row d-flex align-items-center mb-5">
-                            <label class="col-lg-3 form-control-label">Date Range</label>
-                            <div class="col-lg-9">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="daterange" placeholder="Select value">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row d-flex align-items-center mb-5">
-                            <label class="col-lg-3 form-control-label">Date Time</label>
-                            <div class="col-lg-9">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="datetime" placeholder="Select value">
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
 
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <button id="submitAddButton" type="submit" onclick="submitAddButton(this.form)" class="btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</button>
+                                <a data-type="create" userId="" class="btn-submit btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a>
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
-
                             </div>
                         </div>
                         <!-- End Auto Close Modal -->
