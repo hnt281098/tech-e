@@ -20,38 +20,25 @@ class CommentsController extends AppController
         $this->Auth->allow();
     }
     
-    public function writeComment($articleid = null)
+    public function writeComment()
     {
-        if(!empty($this->Auth->user())){
-            $user = $this->Auth->user();
-            if(!empty($articleid)){
-                if($this->request->is('post')){
-                    $date = Time::now();
-                    $content = $this->request->getData('contentComment');
-
-                    if(!empty($content)){
-                        $comment = $this->Comments->newEntity();
-                        $comment = $this->Comments->patchEntity(
-                            $comment,
-                            [
-                                'user_id'=>$user['id'],
-                                'article_id'=>$articleid,
-                                'content'=>$content,
-                                'comment_date'=>$date,
-                                'status'=>1
-                            ]
-                        );
-                        if($this->Comments->save($comment)){
-                            $this->redirect(['controller'=>'articles', 'action'=>'articlesDetails', 'id'=>$articleid]);
-                        }
-                    }else{
-                        $this->redirect(['controller'=>'articles', 'action'=>'articlesDetails', 'id'=>$articleid]);
-                        $this->Flash->error(__('Bạn chưa nhập nội dung bình luận...'));
-                    }
-                }
-            }
-        }else{
-            $this->redirect(['controller' => 'users', 'action'=>'login', 'plugin' => 'backend']);
+        $user = $this->Auth->user();
+        $articleId = $this->request->query('articleId');
+        $content = $this->request->query('content');
+        $date = Time::now();
+        $comment = $this->Comments->newEntity();
+        $comment = $this->Comments->patchEntity(
+            $comment,
+            [
+                'user_id'=>$user['id'],
+                'article_id'=>$articleId,
+                'content'=>$content,
+                'comment_date'=>$date,
+                'status'=>1
+            ]
+        );
+        if($this->Comments->save($comment)){
+            $this->set('data', true);
         }
     }
 
@@ -75,6 +62,8 @@ class CommentsController extends AppController
                 $result[] = $comment;
             }
         }
-        $this->set('data', $result);
+
+        $amountComment = $this->Comments->findAllByArticleId($articleId)->count();
+        $this->set(['data'=>$result, 'amountComment'=>$amountComment]);
     }
 }

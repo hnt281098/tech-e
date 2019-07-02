@@ -29,6 +29,26 @@
     <!-- End Left Sidebar -->
 
     <script>
+        $(document).ready(function() {
+
+            if ('<?= $message ?>' != '') {
+                alert('<?= $message ?>');
+            }
+
+            if ('<?= $currentPage ?>' == 'users') {
+                viewUser();
+            }
+            
+            if ('<?= $currentPage ?>' == 'categories') {
+                var type = '<?= $type ?>';
+                viewCategories(type);
+            }
+
+            if ('<?= $currentPage ?>' == 'articles') {
+                var statusId = <?= $statusId ?>;
+                viewArticles(statusId);
+            }
+        });
 
         function showLoading(){
             $('.loading').show();

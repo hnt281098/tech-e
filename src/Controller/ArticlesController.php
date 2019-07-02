@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Log\Log;
+use Cake\I18n\Time;
 
 /**
  * Articles Controller
@@ -270,5 +271,47 @@ class ArticlesController extends AppController
         $data['articlesList'] = $result;
 
         $this->set('data', $data);
+    }
+
+    public function writeArticle()
+    {
+        if($this->request->is('post')){
+            $user = $this->Auth->user();
+            $article = $this->Articles->newEntity();
+            $requestData = $this->request->getData();
+            $article = $this->Articles->patchEntity($article, $requestData);
+
+            //Người đăng
+            $article->user_id = $user['id'];
+
+            //Ngày đăng
+            $date = Time::now();
+            $article->posting_date = $date;
+
+            //Lượt xem
+            $article->view = 0;
+
+            //Trạng thái
+            $article->status_id = 2;
+
+            //Upload image
+            $file = $this->request->getData('image');
+            $image = "";
+            foreach ($file as $key => $value) {
+                $filename = $file[$key]['name'];
+                $tmp_name = $file[$key]['tmp_name'];
+                if(!empty($tmp_name)){
+                    if(move_uploaded_file($tmp_name, WWW_ROOT . 'uploads' . DS . 'articles' . DS . $filename)){
+                        $image = $image . $filename . "\n";
+                    }
+                }
+            }
+            $image = trim($image, "\n");
+            $article->image = $image;
+
+            if($this->Articles->save($article)){
+                $this->redirect(['action'=>'writeArticle']);
+            }
+        }
     }
 }

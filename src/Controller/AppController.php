@@ -68,7 +68,7 @@ class AppController extends Controller
                 'plugin' => 'backend'
             ],
              // If unauthorized, return them to page they were just on
-            'unauthorizedRedirect' => true,
+            'unauthorizedRedirect' => false,
             'checkAuthIn' => 'Controller.initialize',
         ]);
         $this->Session = $this->request->getSession();

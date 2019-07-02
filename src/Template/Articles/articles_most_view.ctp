@@ -4,11 +4,15 @@
 ?>
     <ul class='slides'>
     <?php foreach ($data as $value) {
-        $image = explode('; ', $value['image']);
+        $image = explode("\n", $value['image']);
     ?>
             <li>
                 <div class='theme-flexslider-container'>
-                    <img src='<?= $image[0] ?>' alt='' />
+                    <?php if(!empty($image[0])){
+                        echo $this->Html->image('../uploads/articles/'.$image[0]);
+                    }else{
+                        echo $this->Html->image('news-default.jpg');
+                    } ?>
                     <h4 class='font-16 text-left'><?= $this->Html->link($value['title'],
                                     ['controller'=>'articles',
                                      'action'=>'articlesDetails',

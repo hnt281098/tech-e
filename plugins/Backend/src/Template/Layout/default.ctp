@@ -46,14 +46,7 @@
             .spinner {
                 border-top: solid 5px #68c2e8;
             }
-            .no-scroll{
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                overflow: hidden;
-            }
+  
             .loading {
                 position: fixed;
                 top: 0;

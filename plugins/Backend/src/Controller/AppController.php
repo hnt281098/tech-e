@@ -42,8 +42,10 @@ class AppController extends BaseController
     public function initialize()
     {
         parent::initialize();
-        if (empty($this->Auth->user())) {
-            return $this->redirect(['controller' => 'users', 'action' => 'login']);
+
+        if (empty($this->Auth->user()) && $this->request->action != "login") {
+
+            return $this->redirect(['controller' => 'users', 'action' => 'login', 'plugin' =>'Backend']);
         }
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,

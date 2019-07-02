@@ -21,11 +21,19 @@
             <!-- Form -->  
             <div class="widget has-shadow">
                 <div class="widget-body">
-                    <form id="addCategoryForm" class="form-horizontal">
-                        <div class="form-group row d-flex align-items-center mb-5">
-                            <label class="col-lg-3 form-control-label">Tên</label>
+                    <form id="addCategoryForm" class="form-horizontal" method="POST" action="<?= Router::url(['controller'=>'categories', 'action'=>'add']); ?>">
+                        <input type="hidden" id="id" >
+                        <div class="row d-flex align-items-center mb-5">
+                            <label id="signinInfo" class="col-lg-3 form-control-label">Tên</label>
                             <div class="col-lg-9">
-                                <input id="name" name="name" value="" type="text" class="form-value form-control">
+                                <div class="mt-5 mb-5 position-relative">
+                                    <div class="group material-input">
+                                        <input id="name" name="name" type="text" required>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Tên</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row d-flex align-items-center mb-5">
@@ -62,9 +70,9 @@
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                            <a data-type="create" categoryId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</a>
+                                <button type="submit" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</button>
+                                <!-- <a data-type="create" categoryId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</a> -->
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
-                                <!-- onclick="submitAddButton(this.form)" -->
                             </div>
                         </div>
                         <!-- End Auto Close Modal -->

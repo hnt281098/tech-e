@@ -2,7 +2,7 @@
 use Cake\Routing\Router;
     if(!empty($data)){
         foreach ($data['articleDetails'] as $value);
-        $image = explode('; ', $value['image']);
+        $image = explode("\n", $value['image']);
         $commentPage = 1;
         $totalCommentPage = (integer)($data['amountComment']/5);
         if($data['amountComment']%5 != 0){
@@ -15,6 +15,11 @@ use Cake\Routing\Router;
         goCommentPage(<?= $value['id'] ?>, 1);
     };
 </script>
+<?php if(!empty($currentUser)){ ?>
+        <script>var statusComment = true;</script>
+<?php }else{ ?>
+        <script>var statusComment = false;</script>
+<?php } ?>
 <div class='layer-stretch'>
     <div class='layer-wrapper'>
         <div class='row'>
@@ -22,7 +27,7 @@ use Cake\Routing\Router;
                 <div class='theme-material-card'>
                     <div class='theme-img blog-picture'>
                         <?php if(!empty($image[0])){
-                            echo $this->Html->image($image[0]);
+                            echo $this->Html->image('../uploads/articles/'.$image[0]);
                         }else{
                             echo $this->Html->image('news-default.jpg');
                         } ?>
@@ -33,7 +38,7 @@ use Cake\Routing\Router;
                         <?php if(!empty($value['posting_date'])){ ?>
                             <li><i class='fa fa-calendar-o'></i><?= $value['posting_date']->format('d M Y') ?></li>
                         <?php } ?>
-                        <li><i class='fa fa-comment-o'></i><?= $data['amountComment'] ?></li>
+                        <!-- <li><i class='fa fa-comment-o'></i><?= $data['amountComment'] ?></li> -->
                     </ul>
                     <div class='blog-post'>
                         <p class='paragraph-medium paragraph-black'><?= $value['description'] ?></p>
@@ -47,7 +52,7 @@ use Cake\Routing\Router;
                                         <div class='col-md-4'>
                                             <div class='theme-img'>
                                                 <?php if(!empty($img)){
-                                                    echo $this->Html->image($img);
+                                                    echo $this->Html->image('../uploads/articles/'.$img);
                                                 }else{
                                                     echo $this->Html->image('news-default.jpg');
                                                 } ?>
@@ -63,7 +68,6 @@ use Cake\Routing\Router;
                     </div>
                 </div> 
                 <div class='theme-material-card'>
-                    <div class='sub-ttl'>Bình luận (<?= $data['amountComment'] ?>)</div>
                     <div id='commentList'></div>
                     <?php if($data['amountComment'] > 5){ ?>
                             <ul class="theme-pagination">
@@ -76,29 +80,30 @@ use Cake\Routing\Router;
                 </div>
                 <div class='theme-material-card'>
                     <div id='comment' class='sub-ttl layer-ttl-white'>Để lại một bình luận</div>
-                    <?= $this->Form->create(
+                    <!-- <?= $this->Form->create(
                         'comment', 
                         ['url'=>['controller'=>'comments', 'action'=>'writeComment', 'articleid'=>$value['id']]]
-                    ); ?>
+                    ); ?> -->
                     <div class='row comment-form'>
                         <div class='col-sm-12'>
                                 <div class='mdl-textfield mdl-js-textfield form-input'>
                                 <?= $this->Form->textarea(
                                     'contentComment', 
-                                    ['class'=>'mdl-textfield__input', 'rows'=>4]
+                                    ['class'=>'mdl-textfield__input', 'rows'=>4, 'id' => 'contentComment', 'placeholder'=>'Viết bình luận của bạn...']
                                 ); ?>
-                                    <label class='mdl-textfield__label' for='contentComment'>
+                                    <!-- <label class='mdl-textfield__label' for='contentComment'>
                                         Viết bình luận của bạn ...
-                                    </label>
+                                    </label> -->
                                 </div>
                         </div>
                         <div class='col-sm-12'>
                             <div class='form-submit'>
-                                <?= $this->Form->button('Bình luận', ['class'=>'mdl-button mdl-js-button mdl-js-ripple-effect button button-primary']); ?>
+                                <!-- <?= $this->Form->button('Bình luận', ['class'=>'mdl-button mdl-js-button mdl-js-ripple-effect button button-primary']); ?> -->
+                                <button id="btnComment" class="mdl-button mdl-js-button mdl-js-ripple-effect button button-primary" onclick="writeComment(<?= $value['id'] ?>)">Bình luận</button>
                             </div>
                         </div>
                     </div>
-                    <?= $this->Form->end(); ?>
+                    <!-- <?= $this->Form->end(); ?> -->
                 </div>
             </div>
             <div class="col-lg-4">
@@ -148,5 +153,36 @@ use Cake\Routing\Router;
                 alert("Lỗi...");
             }
         });
+    };
+
+    function writeComment(articleId) {
+        if(statusComment){
+            $topCommentList = $('#commentList').offset().top;
+            $("body,html").animate({scrollTop: ($topCommentList - 100)}, "slow");
+            var content = $('#contentComment').val();
+            if(content != ""){
+                $.ajax({
+                    url: '<?= Router::url(['controller' => 'comments', 'action' => 'writeComment']) ?>',
+                    type: 'GET',
+                    data: {
+                        articleId : articleId,
+                        content : content
+                    },
+                    
+                    success: function (response) {
+                        goCommentPage(articleId, 1);
+                        $('#contentComment').val("");
+                    },
+                    error: function (response) {
+                        alert("Lỗi comment...");
+                    }
+                });
+            }else{
+                alert('Bạn chưa nhập bình luận...');
+            }
+        }else{
+            alert('Bạn chưa đăng nhập...');
+            window.location = '<?= Router::url(['controller' => 'users', 'action' => 'login', 'plugin'=>'Backend']) ?>';
+        }
     };
 </script> 

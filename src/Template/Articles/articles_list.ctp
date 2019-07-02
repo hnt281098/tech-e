@@ -1,7 +1,7 @@
 <?php use Cake\Routing\Router;
 if(!empty($data)){
     foreach($data as $value){ 
-        $image = explode('; ', $value['image']);
+        $image = explode("\n", $value['image']);
 ?>
             <div class='theme-material-card blog-full-block'>
                 <div class='row'>
@@ -11,7 +11,7 @@ if(!empty($data)){
                         <?php } ?>
                         <div class='theme-img theme-img-scalerotate'>
                             <?php if(!empty($image[0])){
-                                echo $this->Html->image($image[0]);
+                                echo $this->Html->image('../uploads/articles/'.$image[0]);
                             }else{
                                 echo $this->Html->image('news-default.jpg');
                             } ?>

@@ -57,8 +57,28 @@ class PagesController extends AppController
     //     }
     // }
 
-    public function index()
+    public function index($currentPage = '', $type = 'children', $action ='', $statusId = 1, $message = '')
     {
-        
+        if (!empty($this->request->query('currentPage'))) {
+            $currentPage = $this->request->query('currentPage');
+        }
+
+        if (!empty($this->request->query('type'))) {
+            $type = $this->request->query('type');
+        }
+
+        if (!empty($this->request->query('action'))) {
+            $type = $this->request->query('action');
+        }
+
+        if (!empty($this->request->query('statusId'))) {
+            $statusId = $this->request->query('statusId');
+        }
+
+        if (!empty($this->request->query('message'))) {
+            $message = $this->request->query('message');
+        }
+
+        $this->set(compact('type', 'currentPage', 'action', 'statusId', 'message'));
     }
 }

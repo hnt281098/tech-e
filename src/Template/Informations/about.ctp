@@ -47,7 +47,7 @@
                         <div class="tbl-cell hm-about-icon"><i class="fa fa-users"></i></div>
                         <div class="tbl-cell hm-about-number">
                             <span class="counter"><?= $data['amountUser'] ?></span>
-                            <p>Người dùng</p>
+                            <p>Đọc giả</p>
                         </div>
                     </div>
                     <div class="hm-about-block">
@@ -71,11 +71,11 @@
                 <div class="row about-mission-vission text-center">
                     <div class="col-md-6 about-mission">
                         <span>Nhiệm vụ</span>
-                        <p class="paragraph-medium paragraph-white">Partem volumus cum an, eam vitae civibus ne, doctus repudiare posidonium eu duo. Mei partem similique eu. At per facer iudicabit, soluta accommodare delicatissimi et nam, semper senserit aliquando ex nec. Cu tollit aliquip sea, pri vivendo vivendum ad. Cu electram mnesarchum eos, ius id iusto assueverit repudiandae.</p>
+                        <p class="paragraph-medium paragraph-white"><?= $value['introduce'] ?></p>
                     </div>
                     <div class="col-md-6 about-vission">
                         <span>Tầm nhìn</span>
-                        <p class="paragraph-medium paragraph-white">Partem volumus cum an, eam vitae civibus ne, doctus repudiare posidonium eu duo. Mei partem similique eu. At per facer iudicabit, soluta accommodare delicatissimi et nam, semper senserit aliquando ex nec. Cu tollit aliquip sea, pri vivendo vivendum ad. Cu electram mnesarchum eos, ius id iusto assueverit repudiandae.</p>
+                        <p class="paragraph-medium paragraph-white"><?= $value['introduce'] ?></p>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                     <div class="theme-block theme-block-hover">
                         <div class="theme-block-picture">
                             <?php if(!empty($value2['avatar'])){
-                                echo $this->Html->image($value2['avatar']);
+                                echo $this->Html->image('../uploads/avatar/' . $value2['avatar']);
                             }else{
                                 echo $this->Html->image('avatar-default.jpg');
                             } ?>
@@ -146,7 +146,7 @@
                     ?>
                         <div class="testimonial-block">
                             <?php if(!empty($value3['user']['avatar'])){
-                                echo $this->Html->image($value3['user']['avatar']);
+                                echo $this->Html->image('../uploads/avatar/' . $value3['user']['avatar']);
                             }else{
                                 echo $this->Html->image('avatar-default.jpg');
                             } ?>

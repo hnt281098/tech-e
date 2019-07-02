@@ -1,3 +1,4 @@
+<div class='sub-ttl'>Bình luận (<?= $amountComment ?>)</div>
 <ul class='comment-list'>
 <?php
     foreach ($data as $value){

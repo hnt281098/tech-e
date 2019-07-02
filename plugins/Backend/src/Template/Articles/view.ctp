@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-xl-12">
 
-            <button type="button" class="btn btn-success btn-square mr-1 mb-2">Thêm bài đăng</button>
+            <button type="button" onclick="add()" class="btn btn-success btn-square mr-1 mb-2">Thêm bài đăng</button>
 
             <!-- Sorting -->
             <div class="widget has-shadow">
@@ -34,7 +34,7 @@
                             <tbody>
                                 <?php foreach ($articles as $article) { ?>
                                     <tr>
-                                        <?php foreach ($fields as $field) { ?>
+                                        <?php foreach ($fields as $field) { $status = $article['status_id']; ?>
                                             <td ><?= $article[$field] ?></td>
                                         <?php } ?>
                                         <td class="td-actions">
@@ -42,9 +42,8 @@
                                             <a onclick="submitDelete(<?= $article['id'] ?>,this)" href="#"><i class="la la-close delete"></i></a>
 
                                             <?php if ($article['status'] == "Chờ duyệt") : ?>
-                                                <a href="#"><i class="la la-eye edit"></i></a>
+                                                <a onclick="reviewed(<?= $article['id'] ?>,this)" href="#"><i class="la la-eye edit"></i></a>
                                             <?php endif; ?>
-                                            <!-- <a href="#"><i class="la la-eye eye"></i></a> -->
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -89,6 +88,32 @@
 ?>
 
 <script>
+    function approve(articleId, r) {
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'approve'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+                id: articleId
+            },
+            cache: false,
+
+            success: function(response) {
+                alert("Đã duyệt bài đăng");
+                var i = r.parentNode.parentNode.rowIndex;
+                document.getElementById("sorting-table").deleteRow(i);
+
+            },
+            error: function(response) {
+                alert("Không thể duyệt!");
+            }
+        });
+    }
+
     function submitDelete(articleId, r) {
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
@@ -111,6 +136,67 @@
             },
             error: function(response) {
                 alert("Xóa thất bại!");
+            }
+        });
+    }
+
+    function add() {
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'add'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+
+            success: function(response) {
+                $('#content').html(response.html);
+
+                var selections = "";
+                
+                for (i = 0; i < response.users.length; i++) {
+                    email = response.users[i]['email'];
+                    
+                    selections = selections + ' <option value=' + response.users[i]['id'] + '>' + email + '</option>'
+                }
+                $('#users').html(selections);
+            },
+            error: function(response) {
+                alert("Không thể tải form này!");
+            }
+        });
+    }
+
+    function down(ta){
+        setTimeout(function(){
+            ta.style.cssText = 'height:auto; padding:0';
+            // for box-sizing other than "content-box" use:
+            // el.style.cssText = '-moz-box-sizing:content-box';
+            ta.style.cssText = 'height:' + ta.scrollHeight + 'px';
+        },0);
+    }
+
+    function back() {
+        var url = '<?= $this->Url->build([
+                            'controller' => 'articles',
+                            'action' => 'view'
+                        ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                article_status_id: <?=$type?>,
+            },
+
+            success: function(response) {
+                $('#content').html(response.html);
+            },
+            error: function(response) {
+                alert("Không thể tải form này!");
             }
         });
     }

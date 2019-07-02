@@ -1,3 +1,4 @@
+<?php use Cake\Routing\Router; ?>
 <div class="container-fluid">
     <!-- Begin Page Header-->
     <div class="row">
@@ -189,91 +190,6 @@
             }
         });
     }
-    
-    $('body').on( 'click', '.btn-save', function(){
-        var _type = $(this).data('type');
-        switch(_type) {
-            case 'create':
-                var url = '<?= $this->Url->build([
-                            'controller' => 'users',
-                            'action' => 'add'
-                        ]); ?>';
-                var formData = $('#addUserForm').serializeArray();
-
-                var inputs = [];
-                formData.forEach(function(v, i) {
-                    inputs[v.name] = v.value;
-                });
-
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    type: 'POST',
-                    data: {
-                        email: inputs['email'],
-                        password: inputs['password'],
-                        facebook: inputs['facebook'],
-                        instagram: inputs['instagram'],
-                        fullname: inputs['fullname'],
-                        birthday: inputs['birthday'],
-                        gender: inputs['gender'],
-                        role_id: inputs['role_id'],
-                        status: inputs['status'],
-                    },
-                    cache: false,
-                    success: function(response) {
-                        alert("Thêm thành công.")
-                    },
-                    error: function(response) {
-                        alert("Thêm không thành công, vui lòng thử lại.");
-                    },
-                });
-
-                break;
-            case 'update':
-                var url = '<?= $this->Url->build([
-                            'controller' => 'users',
-                            'action' => 'update'
-                        ]); ?>';
-
-                var formData = $('#updateUserForm').serializeArray();
-
-                var userId = $('.btn-save').attr('userId');
-
-                var inputs = [];
-                formData.forEach(function(v, i) {
-                    inputs[v.name] = v.value;
-                });
-
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    type: 'POST',
-                    data: {
-                        id: userId,
-                        email: inputs['email'],
-                        facebook: inputs['facebook'],
-                        instagram: inputs['instagram'],
-                        fullname: inputs['fullname'],
-                        birthday: inputs['birthday'],
-                        gender: inputs['gender'],
-                        role_id: inputs['role_id'],
-                        status: inputs['status'],
-                    },
-                    cache: false,
-                    success: function(response) {
-                        alert("Cập nhật thành công.")
-                    },
-                    error: function(response) {
-                        alert("Cập nhật không thành công, vui lòng thử lại.");
-                    },
-                });
-
-                break;
-        }
-    });
-
-    
 
     function updateUser(userId) {
         var url = '<?= $this->Url->build([
@@ -300,9 +216,9 @@
                 $('#role').html(selections);
 
                 document.getElementById("formTitle").innerHTML = "Sửa thông tin người dùng";
+                $('#id').attr("name", "id");
+                $('#id').val(userId);
                 $('#email').val(response.user.email);
-                // $('#password').hide();
-                // $('#password').attr("value", response.user.password);
                 $('#password').remove();
                 $('#passLabel').hide();
                 $('#facebook').val(response.user.facebook);
@@ -310,9 +226,10 @@
                 $('#fullname').val(response.user.fullname);
                 $('.btn-save').text('Lưu');
                 $(".btn-save").attr("userId", userId);
-                $(".btn-save").attr("data-type", "update");
+                $("#addUserForm").attr("action", "<?= Router::url(['controller'=>'users', 'action'=>'update']); ?>");
+                $("#addUserForm").attr("method", "POST");
                 $("#addUserForm").attr("id", "updateUserForm");
-
+                
                 if (response.user.gender == "Nam") {
                     $('#radMale').attr("checked", "checked");
                 } else {

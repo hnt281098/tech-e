@@ -21,7 +21,9 @@
             <!-- Form -->  
             <div class="widget has-shadow">
                 <div class="widget-body">
-                    <form id="addUserForm" class="form-horizontal">
+                    <?php ?>
+                    <form id="addUserForm" class="form-horizontal" method="POST" action="<?= Router::url(['controller'=>'users', 'action'=>'add']); ?>">
+                        <input type="hidden" id="id">
                         <div class="row d-flex align-items-center mb-5">
                             <label id="signinInfo" class="col-lg-3 form-control-label">Thông tin đăng nhập</label>
                             <div class="col-lg-9">
@@ -121,7 +123,8 @@
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <a data-type="create" userId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a>
+                                <button type="submit" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</button>
+                                <!-- <a data-type="create" userId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a> -->
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
                             </div>
                         </div>

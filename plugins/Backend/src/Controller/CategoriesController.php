@@ -42,6 +42,7 @@ class CategoriesController extends AppController
 
             foreach($categories as $category) {
                 $parentName = $this->Categories->find()->where(['id' => $category['parent_id']])->select('name')->first();
+                log::info($parentName);
                 $category['parent'] = $parentName->name;
                 unset($category['parent_id']);
             }
@@ -93,19 +94,23 @@ class CategoriesController extends AppController
 
             $category = $this->Categories->patchEntity($category, $data);
 
-            if ($this->Categories->save($category)) {
-                $this->response->body(json_encode(['success' => 'true']));
-                
-                return $this->response;
+            if (empty($data['parent_id'])) {
+                $category->parent_id = 0;
+            }
+            
+            if ($category->parent_id == 0 ) {
+                $type = 'parent';
+            }
+            else {
+                $type = 'chirldren';
             }
 
-            $this->response->statusCode(500);
-            $response = [
-                'message' => 'Can not save',
-            ];
-            $this->response->body(json_encode($response));
+            if ($this->Categories->save($category)) {
 
-            return $this->response;
+                return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, "message" => "Thêm thành công"]]);
+            }
+
+            return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, "message" => "Thêm thất bại"]]);
         }
 
         $view = new \Cake\View\View();
@@ -126,7 +131,7 @@ class CategoriesController extends AppController
     }
 
     /**
-     * Edit method
+     * Update method
      *
      * @param string|null $id Category id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
@@ -154,10 +159,20 @@ class CategoriesController extends AppController
             // }
             $category = $this->Categories->patchEntity($category, $data);
 
+            if (empty($data['parent_id'])) {
+                $category->parent_id = 0;
+            }
+            
+            if ($category->parent_id == 0 ) {
+                $type = 'parent';
+            }
+            else {
+                $type = 'chirldren';
+            }
+            
             if ($this->Categories->save($category)) {
-                $this->response->body(json_encode(['success' => 'true']));
 
-                return $this->response;
+                return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, 'message' => 'Cập nhật thành công']]);
             }
             $this->response->statusCode(500);
             

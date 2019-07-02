@@ -21,6 +21,7 @@ class ArticlesController extends AppController
     {
         parent::initialize();
         $this->loadModel('Articles');
+        $this->loadModel('ArticleStatus');
     }
 
     /**
@@ -28,7 +29,7 @@ class ArticlesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function view()
+    public function view($statusId = 1)
     {
         $this->paginate = [
             'contain' => ['Categories','Users', 'ArticleStatus']
@@ -90,23 +91,44 @@ class ArticlesController extends AppController
      */
     public function add()
     {
-        $article = $this->Articles->newEntity();
+        $this->loadModel('Users');
+        $this->response->type('json');
+        $this->response->statusCode(200);
+        
         if ($this->request->is('post')) {
-            $article = $this->Articles->patchEntity($article, $this->request->getData());
+            $article = $this->Articles->newEntity();
+            $data = $this->request->getData();
+
+            $article = $this->Articles->patchEntity($article, $data);
+            $statusId = $article->status_id;
+
             if ($this->Articles->save($article)) {
-                $this->Flash->success(__('The article has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->response->body(json_encode(['success' => 'true']));
+                
+                return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'articles', 'statusId' => $statusId]]);
             }
-            $this->Flash->error(__('Cannot save!'));
 
-            foreach($article->errors() as $error) {
-                $this->Flash->error(__($error));
-            }
+            $this->response->statusCode(500);
+            $response = [
+                'message' => 'Can not save',
+            ];
+            $this->response->body(json_encode($response));
+
+            return $this->response;
         }
-        $categories = $this->Articles->Categories->find('list', ['limit' => 200]);
-        $authors = $this->Articles->Authors->find('list', ['limit' => 200]);
-        $this->set(compact('article', 'categories', 'authors'));
+        $users = $this->Users->find()->select(['id', 'email'])->order(['email' => 'ASC']);
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $html = $view->render('Backend.Articles/add');
+        
+        $response = [
+            'html' => $html,
+            'users' => $users,
+        ];
+        $this->response->body(json_encode($response));
+
+        return $this->response;
     }
 
     /**
@@ -169,13 +191,13 @@ class ArticlesController extends AppController
         $this->loadModel('Users');
         $this->loadModel('Comments');
         $data['articleDetails'] = $this->Articles->findAllById($id);
-        $data['userList'] = $this->Users->find(
+        $data['userList'] = $this->Articles->find(
             'all',
             ['fields'=>['id', 'fullname', 'avatar']]
          );
         
         foreach($data['articleDetails'] as $value){
-            $data['authorDetails'] = $this->Users->findAllById($value['user_id']);
+            $data['authorDetails'] = $this->Articles->findAllById($value['user_id']);
 
 
             $data['amountComment'] = $this->Comments->findAllByArticleId($value['id'])->count();

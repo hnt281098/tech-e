@@ -94,19 +94,12 @@ class UsersController extends AppController
                 $user->user_code = "USER" . $user->id;
 
                 if ($this->Users->save($user)) {
-                    $this->response->body(json_encode(['success' => 'true']));
                     
-                    return $this->response;
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'users', 'message' => 'Thêm thành công']]);
                 }
             }
 
-            $this->response->statusCode(500);
-            $response = [
-                'message' => 'Can not save',
-            ];
-            $this->response->body(json_encode($response));
-
-            return $this->response;
+            return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'users', 'message' => 'Thêm thất bại']]);
         }
         $roles = $this->Users->Roles->find()->select(['id', 'name']);
 
@@ -153,18 +146,11 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $data);
             $user->password = $password;
             if ($this->Users->save($user)) {
-                $this->response->body(json_encode(['success' => 'true']));
 
-                return $this->response;
+                return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'users', 'message' => 'Cập nhật thành công']]);            
             }
-            $this->response->statusCode(500);
-            
-            $response = [
-                'message' => 'Can not save',
-            ];
-            $this->response->body(json_encode($response));
 
-            return $this->response;
+            return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'users', 'message' => 'Cập nhật thất bại']]);   
         }
 
         $user = $this->Users->findById($this->request->query('id'))->first();

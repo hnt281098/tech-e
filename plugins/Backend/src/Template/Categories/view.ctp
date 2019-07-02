@@ -1,3 +1,4 @@
+<?php use Cake\Routing\Router; ?>
 <div class="container-fluid">
     <!-- Begin Page Header-->
     <div class="row">
@@ -201,84 +202,6 @@
         });
     }
 
-    $('body').on( 'click', '.btn-save', function(e){
-        e.isDefaultPrevented();
-        console.log($('.btn-save').length);
-        var _type = $(this).data('type');
-
-        switch(_type) {
-            case 'create':
-                var url = '<?= $this->Url->build([
-                            'controller' => 'categories',
-                            'action' => 'add'
-                        ]); ?>';
-                var formData = $('#addCategoriesForm').serializeArray();
-
-                var inputs = [];
-                formData.forEach(function(v, i) {
-                    inputs[v.name] = v.value;
-                });
-
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    type: 'POST',
-                    data: {
-                        parent_id: (inputs['parent_id'] != "")?inputs['parent_id'] : 0,
-                        status: inputs['status'],
-                        name: inputs['name'],
-                        description: inputs['description'],
-                    },
-                    cache: false,
-                    success: function(response) {
-                        alert("Thêm thành công.")
-                    },
-                    error: function(response) {
-                        alert("Thêm không thành công, vui lòng thử lại.");
-                    },
-                });
-
-                break;
-            case 'update':
-                var url = '<?= $this->Url->build([
-                            'controller' => 'categories',
-                            'action' => 'update'
-                        ]); ?>';
-
-                var formData = $('#updateCategoryForm').serializeArray();
-
-                var categoryId = $('.btn-save').attr('categoryId');
-
-                var inputs = [];
-                formData.forEach(function(v, i) {
-                    inputs[v.name] = v.value;
-                });
-                console.log(inputs);
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    type: 'POST',
-                    data: {
-                        id: categoryId,
-                        parent_id: (inputs['parent_id'] != "")?inputs['parent_id'] : 0,
-                        status: inputs['status'],
-                        name: inputs['name'],
-                        description: inputs['description'],
-                    },
-                    cache: false,
-                    success: function(response) {
-                        alert("Cập nhật thành công.")
-                        <?php ?>
-                    },
-                    error: function(response) {
-                        alert("Cập nhật không thành công, vui lòng thử lại.");
-                    },
-                });
-
-                break;
-        }
-    });
-
     function update(categoryId, type) {
         var url = '<?= $this->Url->build([
                         'controller' => 'categories',
@@ -293,11 +216,15 @@
                 id: categoryId,
             },
             success: function(response) {
+               
                 $('#content').html(response.html);
 
                 document.getElementById("formTitle").innerHTML = "Sửa thông tin danh mục";
+                $('#id').attr("name", "id");
+                $('#id').val(categoryId);
                 $('#name').val(response.category.name);
                 $('#description').val(response.category.description);
+               
                 if (response.category.status == 1) {
                     $('#radActive').attr("checked", "checked");
                 } else {
@@ -305,8 +232,11 @@
                 }
                 $('.btn-save').text('Lưu');
                 $(".btn-save").attr("categoryId", categoryId);
+
+                
+                $("#addCategoryForm").attr("action", "<?= Router::url(['controller'=>'categories', 'action'=>'update']); ?>");
+                $("#addCategoryForm").attr("method", "POST");
                 $("#addCategoryForm").attr("id", "updateCategoryForm");
-                $(".btn-save").attr("data-type", "update");
 
                 if (type == 'Danh mục lớn') {
                     $('#parent-category-choose').remove();

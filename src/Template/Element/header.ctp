@@ -31,6 +31,19 @@ use Cake\Routing\Router;
                     <div class="theme-dropdown">
                         <a id="profile-menu" class="mdl-button mdl-js-button mdl-js-ripple-effect font-13"><i class="fa fa-user-o color-black"></i> <?= $currentUser['fullname'] ?></a>
                         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect metarial-menu" data-mdl-for="profile-menu">
+                            <?php if($currentUser['role_id'] == 4){ ?>
+                                <li class="mdl-menu__item">
+                                    <a href="<?= Router::url(['controller'=>'articles', 'action'=>'writeArticle']) ?>"><i class="fa fa-edit"></i> Viết báo</a>
+                                </li>
+                            <?php }elseif ($currentUser['role_id'] == 1) { ?>
+                                <li class="mdl-menu__item">
+                                    <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>'Backend']) ?>"><i class="fa fa-edit"></i> Quản trị</a>
+                                </li>
+                            <?php }elseif ($currentUser['role_id'] == 2) { ?>
+                                <li class="mdl-menu__item">
+                                    <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>'Backend']) ?>"><i class="fa fa-edit"></i> Duyệt báo</a>
+                                </li>
+                            <?php } ?>
                             <li class="mdl-menu__item">
                                 <a href="<?= Router::url(['controller'=>'users', 'action'=>'myProfile']) ?>"><i class="fa fa-sign-in"></i> Cá nhân</a>
                             </li>
