@@ -92,6 +92,7 @@ class UsersController extends AppController
 
             if ($this->Users->save($user)) {
                 $user->user_code = "USER" . $user->id;
+                log::info("AAAA");
 
                 if ($this->Users->save($user)) {
                     $this->response->body(json_encode(['success' => 'true']));
@@ -99,6 +100,7 @@ class UsersController extends AppController
                     return $this->response;
                 }
             }
+            log::info("aaaaa");
 
             $this->response->withStatus(500);
             $response = [
@@ -154,11 +156,11 @@ class UsersController extends AppController
             $user->password = $password;
             if ($this->Users->save($user)) {
                 $this->response->body(json_encode(['success' => 'true']));
-                
+
                 return $this->response;
             }
-
             $this->response->withStatus(500);
+            
             $response = [
                 'message' => 'Can not save',
             ];

@@ -271,18 +271,6 @@
                 });
 
                 break;
-            default:
-                 var url = '<?= $this->Url->build([
-                            'controller' => 'users',
-                            'action' => 'add'
-                        ]); ?>';
-                break;
-                var formData = $('#addUserForm').serializeArray();
-
-                var inputs = [];
-                formData.forEach(function(v, i) {
-                    inputs[v.name] = v.value;
-                });
         }
     });
 
