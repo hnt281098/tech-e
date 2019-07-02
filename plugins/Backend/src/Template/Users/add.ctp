@@ -121,7 +121,7 @@
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <a data-type="create" userId="" class="btn-submit btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a>
+                                <a data-type="create" userId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a>
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
                             </div>
                         </div>

@@ -29,7 +29,18 @@
     <!-- End Left Sidebar -->
 
     <script>
+
+        function showLoading(){
+            $('.loading').show();
+            $('body').addClass('no-scroll');
+        }
+        function hideLoading(){
+            $('.loading').hide();
+            $('body').addClass('no-scroll');
+        }
+
         function viewUser() {
+            showLoading();
             var url = '<?= $this->Url->build([
                             'controller' => 'users',
                             'action' => 'view'
@@ -42,17 +53,17 @@
 
                 success: function(response) {
                     $('#content').html(response.html);
-
-
-
+                    hideLoading();
                 },
                 error: function(response) {
                     alert("Không thể tải form này!");
+                    hideLoading();
                 }
             });
         }
 
         function viewArticles(articleStatusId) {
+            showLoading();
             var url = '<?= $this->Url->build([
                             'controller' => 'articles',
                             'action' => 'view'
@@ -67,14 +78,17 @@
                 },
                 success: function(response) {
                     $('#content').html(response.html);
+                    hideLoading();
                 },
                 error: function(response) {
                     alert("Không thể tải form này!");
+                    hideLoading();
                 }
             });
         }
 
         function viewCategories(categoryType) {
+            showLoading();
             var url = '<?= $this->Url->build([
                             'controller' => 'categories',
                             'action' => 'view'
@@ -89,9 +103,13 @@
                 },
                 success: function(response) {
                     $('#content').html(response.html);
+                    hideLoading();
+
                 },
                 error: function(response) {
+                    hideLoading();
                     alert("Không thể tải form này!");
+
                 }
             });
         }

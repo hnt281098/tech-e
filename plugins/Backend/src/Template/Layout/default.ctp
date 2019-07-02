@@ -42,6 +42,65 @@
         <link rel="icon" type="image/png" sizes="32x32" href="template/img/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="template/img/favicon-16x16.png"><title>Klinik health care - HTML5 &#38; CSS3 Template for Clinic and Hospital</title>
         <?= $this->element('css'); ?>
+        <style>
+            .spinner {
+                border-top: solid 5px #68c2e8;
+            }
+            .no-scroll{
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .loading {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 99999;
+                background-color: rgba(255,255,255,.6);
+            }
+            .lds-hourglass {
+                display: inline-block;
+                position: absolute;
+                width: 64px;
+                height: 64px;
+                margin-top: -32px;
+                margin-left: -32px;
+                top: 50%;
+                left: 50%;
+            }
+            .lds-hourglass:after {
+                content: " ";
+                display: block;
+                border-radius: 50%;
+                width: 0;
+                height: 0;
+                margin: 6px;
+                box-sizing: border-box;
+                border: 26px solid #69c2e8;
+                border-color: #69c2e8 transparent #69c2e8 transparent;
+                animation: lds-hourglass 1.2s infinite;
+            }
+            @keyframes lds-hourglass {
+                0% {
+                    transform: rotate(0);
+                    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+                }
+                50% {
+                    transform: rotate(900deg);
+                    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                }
+                100% {
+                    transform: rotate(1800deg);
+                }
+            }
+
+
+        </style>
     </head>
 <body>
     <?= $this->fetch('content'); ?>

@@ -27,7 +27,7 @@ class CategoriesController extends AppController
     public function view()
     {
         $this->response->type('json');
-        $this->response->withStatus(200);   
+        $this->response->statusCode(200);   
         if ($this->request->query('type') == 'parent' ) {
             $categories = $this->paginate($this->Categories->find()->where(['parent_id = 0']));
 
@@ -74,7 +74,7 @@ class CategoriesController extends AppController
     public function add()
     {
         $this->response->type('json');
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
         
         if ($this->request->is('post')) {
             $category = $this->Categories->newEntity();
@@ -82,7 +82,7 @@ class CategoriesController extends AppController
             $check = $this->CheckInputs->execute($data, ['name']);
 
             if (!$check) {
-                $this->response->withStatus(500);
+                $this->response->statusCode(500);
                 $response = [
                     'message' => 'Not enough required data',
                 ];
@@ -99,7 +99,7 @@ class CategoriesController extends AppController
                 return $this->response;
             }
 
-            $this->response->withStatus(500);
+            $this->response->statusCode(500);
             $response = [
                 'message' => 'Can not save',
             ];
@@ -132,21 +132,60 @@ class CategoriesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function update()
     {
-        $category = $this->Categories->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $category = $this->Categories->patchEntity($category, $this->request->getData());
-            if ($this->Categories->save($category)) {
-                $this->Flash->success(__('The category has been saved.'));
+        $this->response->type('json');
+        $this->response->statusCode(200);
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['post', 'patch'])) {
+            $category = $this->Categories->get($this->request->getData('id'));
+            $data = $this->request->getData();
+            $status = $data['status'];
+            // $check = $this->CheckInputs->execute($data, ['email']);
+            // if (!$check) {
+            //     $this->response->statusCode(500);
+
+            //     $response = [
+            //         'message' => 'Not enough required data',
+            //     ];
+            //     $this->response->body(json_encode($response));
+
+            //     return $this->response;
+            // }
+            $category = $this->Categories->patchEntity($category, $data);
+
+            if ($this->Categories->save($category)) {
+                $this->response->body(json_encode(['success' => 'true']));
+
+                return $this->response;
             }
-            $this->Flash->error(__('The category could not be saved. Please, try again.'));
+            $this->response->statusCode(500);
+            
+            $response = [
+                'message' => 'Can not save',
+            ];
+            $this->response->body(json_encode($response));
+
+            return $this->response;
         }
-        $this->set(compact('category'));
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $html = $view->render('Backend.Categories/add');
+
+        $category = $this->Categories->findById($this->request->query('id'))->first();
+
+        $response['html'] = $html;
+        $response['category'] = $category;
+
+        if ($this->request->query('type') != 'Danh mục lớn') {
+            $parentCategories = $this->Categories->find()->where(['parent_id' => 0])->select(['name', 'id']);
+
+            $response['parentCategories'] = $parentCategories;
+        }
+        $this->response->body(json_encode($response));
+
+        return $this->response;
     }
 
     /**
@@ -163,7 +202,7 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id);
 
         $this->response->type('json');
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
 
         if ($this->Categories->delete($category)) {
             $this->response->body(json_encode(['success' => true]));
@@ -171,7 +210,7 @@ class CategoriesController extends AppController
             return $this->response;
         }
         else {
-            $this->response->withStatus(500);
+            $this->response->statusCode(500);
             $this->response->body(json_encode(['success' => false]));
 
             return $this->response;

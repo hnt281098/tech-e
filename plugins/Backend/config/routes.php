@@ -47,6 +47,7 @@ Router::plugin(
 
         $routes->scope('/categories', ['controller' => 'Categories'], function(RouteBuilder $routes) {
             $routes->get('/view', ['action' => 'view']);
+            $routes->connect('/update', ['action' => 'update']);
         });
         
         $routes->scope('/users', ['controller' => 'Users'], function(RouteBuilder $routes) {

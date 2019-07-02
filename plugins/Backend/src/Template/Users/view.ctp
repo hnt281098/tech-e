@@ -175,7 +175,6 @@
 
             success: function(response) {
                 $('#content').html(response.html);
-                $('#link-back').attr('href', '/tech-e/backend/users/view');
                 var selections = "";
 
                 for (i = 0; i < response.roles.length; i++) {
@@ -191,7 +190,7 @@
         });
     }
     
-    $('body').on( 'click', '.btn-submit', function(){
+    $('body').on( 'click', '.btn-save', function(){
         var _type = $(this).data('type');
         switch(_type) {
             case 'create':
@@ -239,7 +238,7 @@
 
                 var formData = $('#updateUserForm').serializeArray();
 
-                var userId = $('.btn-submit').attr('userId');
+                var userId = $('.btn-save').attr('userId');
 
                 var inputs = [];
                 formData.forEach(function(v, i) {
@@ -309,9 +308,9 @@
                 $('#facebook').val(response.user.facebook);
                 $('#instagram').val(response.user.instagram);
                 $('#fullname').val(response.user.fullname);
-                $('.btn-submit').text('Lưu');
-                $(".btn-submit").attr("userId", userId);
-                $(".btn-submit").attr("data-type", "update");
+                $('.btn-save').text('Lưu');
+                $(".btn-save").attr("userId", userId);
+                $(".btn-save").attr("data-type", "update");
                 $("#addUserForm").attr("id", "updateUserForm");
 
                 if (response.user.gender == "Nam") {
@@ -331,14 +330,10 @@
 
             },
             error: function(response) {
-                alert("Can not load form!");
+                alert("Không thể tải form này!");
             }
         });
     }
-
-    
-
-   
 
     function back() {
         var url = '<?= $this->Url->build([

@@ -4,12 +4,6 @@
         <div class="page-header">
             <div class="d-flex align-items-center">
                 <h2 class="page-header-title"><?= $type ?></h2>
-                <div>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                        <li class="breadcrumb-item active"><?= $type ?></li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -55,7 +49,7 @@
                                             <?php endif; ?>
                                         <?php endforeach ?>
                                         <td class="td-actions">
-                                            <a href="#"><i class="la la-edit edit"></i></a>
+                                            <a onclick="update(<?=$category['id']?>,'<?=$type?>')" href="#"><i class="la la-edit edit"></i></a>
                                             <a onclick="submitDelete(<?= $category['id'] ?>, this)" href="#"><i class="la la-close delete"></i></a>
                                         </td>
                                     </tr>
@@ -185,10 +179,11 @@
                 $('#content').html(response.html);
 
                 if (type == 'Danh mục lớn') {
-                    $('#link-back').attr('href', '/tech-e/backend/categories/view?type=parent');
-                    $('#parent-category-choose').hide();
-                } else {
-                    $('#link-back').attr('href', '/tech-e/backend/categories/view?type=children');
+                    $('#parent-category-choose').remove();
+                    $('#back').attr("onclick", "back('parent')");
+                } 
+                else {
+                    $('#back').attr("onclick", "back('children')");
                     var selections = "";
 
                     for (i = 0; i < response.parentCategories.length; i++) {
@@ -202,56 +197,153 @@
             },
             error: function(response) {
                 alert("Can not load form!");
-            }
+            },
         });
     }
 
-    $('body').on( 'click', '#submitAddButton', function(){
-        var formData = $('#addCategoryForm').serializeArray();
+    $('body').on( 'click', '.btn-save', function(e){
+        e.isDefaultPrevented();
+        console.log($('.btn-save').length);
+        var _type = $(this).data('type');
 
-        var inputs = [];
-        formData.forEach(function(v, i) {
-            inputs[v.name] = v.value;
-        });
+        switch(_type) {
+            case 'create':
+                var url = '<?= $this->Url->build([
+                            'controller' => 'categories',
+                            'action' => 'add'
+                        ]); ?>';
+                var formData = $('#addCategoriesForm').serializeArray();
 
-        var url = '<?= $this->Url->build([
-                        'controller' => 'categories',
-                        'action' => 'add'
-                    ]); ?>';
+                var inputs = [];
+                formData.forEach(function(v, i) {
+                    inputs[v.name] = v.value;
+                });
 
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'POST',
-            data: {
-                parent_id: (inputs['parent_id'] != "")?inputs['parent_id'] : 0,
-                status: inputs['status'],
-                name: inputs['name'],
-                description: inputs['description'],
-            },
-            cache: false,
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        parent_id: (inputs['parent_id'] != "")?inputs['parent_id'] : 0,
+                        status: inputs['status'],
+                        name: inputs['name'],
+                        description: inputs['description'],
+                    },
+                    cache: false,
+                    success: function(response) {
+                        alert("Thêm thành công.")
+                    },
+                    error: function(response) {
+                        alert("Thêm không thành công, vui lòng thử lại.");
+                    },
+                });
 
-            success: function(response) {
-                alert("Thêm thành công.")
-            },
-            error: function(response) {
-                alert("Thêm không thành công, vui lòng thử lại.");
-            },
+                break;
+            case 'update':
+                var url = '<?= $this->Url->build([
+                            'controller' => 'categories',
+                            'action' => 'update'
+                        ]); ?>';
 
-        });
-        
+                var formData = $('#updateCategoryForm').serializeArray();
+
+                var categoryId = $('.btn-save').attr('categoryId');
+
+                var inputs = [];
+                formData.forEach(function(v, i) {
+                    inputs[v.name] = v.value;
+                });
+                console.log(inputs);
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        id: categoryId,
+                        parent_id: (inputs['parent_id'] != "")?inputs['parent_id'] : 0,
+                        status: inputs['status'],
+                        name: inputs['name'],
+                        description: inputs['description'],
+                    },
+                    cache: false,
+                    success: function(response) {
+                        alert("Cập nhật thành công.")
+                        <?php ?>
+                    },
+                    error: function(response) {
+                        alert("Cập nhật không thành công, vui lòng thử lại.");
+                    },
+                });
+
+                break;
+        }
     });
 
-    $('body').on( 'click', '#back', function(){
+    function update(categoryId, type) {
         var url = '<?= $this->Url->build([
                         'controller' => 'categories',
-                        'action' => 'view'
+                        'action' => 'update'
                     ]); ?>';
         $.ajax({
             url: url,
             dataType: 'json',
             type: 'GET',
             cache: false,
+            data: {
+                id: categoryId,
+            },
+            success: function(response) {
+                $('#content').html(response.html);
+
+                document.getElementById("formTitle").innerHTML = "Sửa thông tin danh mục";
+                $('#name').val(response.category.name);
+                $('#description').val(response.category.description);
+                if (response.category.status == 1) {
+                    $('#radActive').attr("checked", "checked");
+                } else {
+                    $('#radInactive').attr("checked", "checked");
+                }
+                $('.btn-save').text('Lưu');
+                $(".btn-save").attr("categoryId", categoryId);
+                $("#addCategoryForm").attr("id", "updateCategoryForm");
+                $(".btn-save").attr("data-type", "update");
+
+                if (type == 'Danh mục lớn') {
+                    $('#parent-category-choose').remove();
+                    $('#back').attr("onclick", "back('parent')");
+                } 
+                else {
+                    $('#back').attr("onclick", "back('children')");
+                    var selections = "";
+
+                    for (i = 0; i < response.parentCategories.length; i++) {
+                        name = response.parentCategories[i].name;
+                        name = name.charAt(0).toUpperCase() + name.slice(1);
+                        selections = selections + ' <option value=' + response.parentCategories[i].id + '>' + name + '</option>'
+                    }
+                    $('#parent-category').html(selections);
+                }
+            },
+            error: function(response) {
+                alert("Không thể load form này!");
+            }
+        });
+    }
+
+    function back(categoryType) {
+        $('#updateCategoryForm').empty();
+        var url = '<?= $this->Url->build([
+                            'controller' => 'categories',
+                            'action' => 'view',
+                        ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                type: categoryType,
+            },
 
             success: function(response) {
                 $('#content').html(response.html);
@@ -259,104 +351,8 @@
             error: function(response) {
                 alert("Không thể tải form này!");
             }
-
-        });
-        
-    });
-
-    function updateUser(userId) {
-        var url = '<?= $this->Url->build([
-                        'controller' => 'categories',
-                        'action' => 'update'
-                    ]); ?>';
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'GET',
-            cache: false,
-            data: {
-                id: userId
-            },
-            success: function(response) {
-                $('#content').html(response.html);
-                var selections = "";
-
-                for (i = 0; i < response.roles.length; i++) {
-                    name = response.roles[i].name;
-                    name = name.charAt(0).toUpperCase() + name.slice(1);
-                    selections = selections + ' <option value=' + response.roles[i].id + '>' + name + '</option>'
-                }
-                $('#role').html(selections);
-
-                document.getElementById("formTitle").innerHTML = "Sửa thông tin người dùng";
-                $('#email').val(response.user.email);
-                $('#password').hide();
-                $('#passLabel').hide();
-                $('#facebook').val(response.user.facebook);
-                $('#instagram').val(response.user.instagram);
-                $('#fullname').val(response.user.fullname);
-                $('#submitAddButton').text('Lưu');
-                $("#submitAddButton").attr("onclick", "submitUpdateButton(this.form," + userId + ")");
-
-                if (response.user.gender == "Nam") {
-                    $('#radMale').attr("checked", "checked");
-                } else {
-                    $('#radFemale').attr("checked", "checked");
-                }
-
-                if (response.user.status == 1) {
-                    $('#radActive').attr("checked", "checked");
-                } else {
-                    $('#radInactive').attr("checked", "checked");
-                }
-                if (!empty(response.user.birthday)) {
-                    $('input[name=birthday]').val(response.user.birthday);
-                }
-
-            },
-            error: function(response) {
-                alert("Can not load form!");
-            }
         });
     }
 
-
-    function submitUpdateButton(form, userId) {
-        var formData = $(form).serializeArray();
-        var inputs = [];
-        formData.forEach(function(v, i) {
-            inputs[v.name] = v.value;
-        });
-        var url = '<?= $this->Url->build([
-                        'controller' => 'categories',
-                        'action' => 'update'
-                    ]); ?>';
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'POST',
-            data: {
-                id: userId,
-                email: inputs['email'],
-                password: inputs['password'],
-                facebook: inputs['facebook'],
-                instagram: inputs['instagram'],
-                fullname: inputs['fullname'],
-                birthday: inputs['birthday'],
-                gender: inputs['gender'],
-                role_id: inputs['role_id'],
-                status: inputs['status'],
-            },
-            cache: false,
-
-            success: function(response) {
-                // $('#showModal').click();
-                alert("Cập nhật thành công.")
-            },
-            error: function(response) {
-                alert("Cập nhật không thành công, vui lòng thử lại");
-            },
-        });
-    }
 </script>
 </body>

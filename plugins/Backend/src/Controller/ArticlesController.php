@@ -149,7 +149,7 @@ class ArticlesController extends AppController
         $article = $this->Articles->get($id);
 
         $this->response->type('json');
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
 
         if ($this->Articles->delete($article)) {
             $this->response->body(json_encode(['success' => true]));
@@ -157,7 +157,7 @@ class ArticlesController extends AppController
             return $this->response;
         }
         else {
-            $this->response->withStatus(500);
+            $this->response->statusCode(500);
             $this->response->body(json_encode(['success' => false]));
 
             return $this->response;

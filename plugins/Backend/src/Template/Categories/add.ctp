@@ -9,7 +9,7 @@
                 <div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="db-default.html"><i class="ti ti-home"></i></a></li>
-                        <li class="breadcrumb-item"><a id="link-back" href="#">Về danh sách</a></li>
+                        <li class="breadcrumb-item"><a id="back" onclick="" href="#">Về danh sách</a></li>
                     </ul>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <a href="javascript: void(0)" id="submitAddButton"  class="btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</a>
+                            <a data-type="create" categoryId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Thêm</a>
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
                                 <!-- onclick="submitAddButton(this.form)" -->
                             </div>

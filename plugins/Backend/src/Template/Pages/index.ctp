@@ -3,6 +3,9 @@
 
 <body id="page">
     <?= $this->element('pre-load'); ?>
+    <div class="loading" style="display: none">
+        <div class="lds-hourglass"></div>
+    </div>
     <div class="page">
         <?= $this->element('header'); ?>
         <?= $this->element('left-bar'); ?>
@@ -835,5 +838,6 @@
         '../backend/template/js/components/widgets/widgets.min',
         '../backend/template/vendors/js/app/app.min',
     ));
+
     ?>
 </body>
