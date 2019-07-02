@@ -21,7 +21,13 @@
             <!-- Form -->  
             <div class="widget has-shadow">
                 <div class="widget-body">
-                    <form id="addUserForm" class="form-horizontal">
+                    <form id="addUserForm" class="form-horizontal" enctype="multipart/form-data" method="POST">
+                        <div class="form-group row d-flex align-items-center mb-5">
+                            <label class="col-lg-3 form-control-label">Avatar</label>
+                            <div class="col-lg-9">
+                                <input id="avatar" name="avatar" type="file" class="form-control">
+                            </div>
+                        </div>
                         <div class="row d-flex align-items-center mb-5">
                             <label id="signinInfo" class="col-lg-3 form-control-label">Thông tin đăng nhập</label>
                             <div class="col-lg-9">
@@ -66,9 +72,6 @@
                             <div class="col-lg-9">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="la la-calendar"></i>
-                                        </span>
                                         <input name="birthday" type="text" class="form-control" id="date" >
                                     </div>
                                 </div>
@@ -121,7 +124,7 @@
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <a data-type="create" userId="" class="btn-submit btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a>
+                                <a data-type="create" userId="" class="btn-save btn btn-gradient-01" style="padding: 22px 50px; left: 50%;">Lưu</a>
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
                             </div>
                         </div>
@@ -137,4 +140,12 @@
 <!-- End Container -->
 <!-- End Page Footer -->
 <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
+<?= $this->Html->script(array(
+    '../backend/template/vendors/js/base/jquery.min',
+    '../backend/template/vendors/js/base/core.min',
+    '../backend/template/vendors/js/app/app.min',
+    '../backend/template/vendors/js/datepicker/moment.min',
+    '../backend/template/vendors/js/datepicker/daterangepicker',
+    '../backend/template/js/components/datepicker/datepicker',
+)); ?>
   

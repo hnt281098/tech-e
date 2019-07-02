@@ -22,7 +22,7 @@ class UsersController extends AppController
     {
         $this->loadModel('Roles');
         $this->response->type('json');
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
 
         $users = $this->Users->find()->order(['id'])->toArray();
 
@@ -71,7 +71,7 @@ class UsersController extends AppController
     public function add()
     {
         $this->response->type('json');
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
         
         if ($this->request->is('post')) {
             $user = $this->Users->newEntity();
@@ -79,7 +79,7 @@ class UsersController extends AppController
             $check = $this->CheckInputs->execute($data, ['password', 'email']);
 
             if (!$check) {
-                $this->response->withStatus(500);
+                $this->response->statusCode(500);
                 $response = [
                     'message' => 'Not enough required data',
                 ];
@@ -89,6 +89,24 @@ class UsersController extends AppController
             }
 
             $user = $this->Users->patchEntity($user, $data);
+
+            //Thêm ngày sinh
+            $date = $this->request->getData('birthday');
+            $date = explode('/', $date);
+            $birthday = Time::now();
+            $birthday->year($date[2])->month($date[0])->day($date[1]);
+            $user->birthday = $birthday;
+
+            // //Upload avatar
+            // $file = $this->request->getData('file');
+            // $filename = $file['name'];
+            // if(!empty($file['tmp_name'])){
+            //     $filename = $file['name'];
+            //     if(move_uploaded_file($file['tmp_name'], WWW_ROOT . 'uploads' . DS . 'avatar' . DS . $filename)){
+            //         $user->avatar = $filename;
+            //     }
+            // }
+            // $user->avatar = $file['name'];
 
             if ($this->Users->save($user)) {
                 $user->user_code = "USER" . $user->id;
@@ -102,7 +120,7 @@ class UsersController extends AppController
             }
             log::info("aaaaa");
 
-            $this->response->withStatus(500);
+            $this->response->statusCode(500);
             $response = [
                 'message' => 'Can not save',
             ];
@@ -135,7 +153,7 @@ class UsersController extends AppController
     public function update()
     {
         $this->response->type('json');
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
 
         if ($this->request->is(['post', 'patch'])) {
             $user = $this->Users->get($this->request->getData('id'));
@@ -143,7 +161,7 @@ class UsersController extends AppController
             $data = $this->request->getData();
             $check = $this->CheckInputs->execute($data, ['email']);
             if (!$check) {
-                $this->response->withStatus(500);
+                $this->response->statusCode(500);
 
                 $response = [
                     'message' => 'Not enough required data',
@@ -159,7 +177,7 @@ class UsersController extends AppController
 
                 return $this->response;
             }
-            $this->response->withStatus(500);
+            $this->response->statusCode(500);
             
             $response = [
                 'message' => 'Can not save',
@@ -203,13 +221,13 @@ class UsersController extends AppController
         $user = $this->Users->get($id);
         $this->response->type('json');
         $this->response->body(json_encode(['succcess' => true]));
-        $this->response->withStatus(200);
+        $this->response->statusCode(200);
 
         if ($this->Users->delete($user)) {
 
             return $this->response;
         } else {
-            $this->response->withStatus(500);
+            $this->response->statusCode(500);
 
             return $this->response;
         }
