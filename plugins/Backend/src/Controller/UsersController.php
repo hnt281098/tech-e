@@ -21,7 +21,7 @@ class UsersController extends AppController
     public function view()
     {
         $this->loadModel('Roles');
-        $this->response->type('json');
+        $this->response->withType('json');
         $this->response->withStatus(200);
 
         $users = $this->Users->find()->order(['id'])->toArray();
@@ -42,7 +42,7 @@ class UsersController extends AppController
         $view->set(compact('users'));
         $html = $view->render('Backend.Users/view');
         
-        $this->response->body(json_encode(['html' => $html]));
+        $this->response->getBody(json_encode(['html' => $html]));
         
         return $this->response;
     }
@@ -70,7 +70,7 @@ class UsersController extends AppController
      */
     public function add()
     {
-        $this->response->type('json');
+        $this->response->withType('json');
         $this->response->withStatus(200);
         
         if ($this->request->is('post')) {
@@ -83,7 +83,7 @@ class UsersController extends AppController
                 $response = [
                     'message' => 'Not enough required data',
                 ];
-                $this->response->body(json_encode($response));
+                $this->response->getBody(json_encode($response));
 
                 return $this->response;
             }
@@ -95,7 +95,7 @@ class UsersController extends AppController
                 log::info("AAAA");
 
                 if ($this->Users->save($user)) {
-                    $this->response->body(json_encode(['success' => 'true']));
+                    $this->response->getBody(json_encode(['success' => 'true']));
                     
                     return $this->response;
                 }
@@ -106,7 +106,7 @@ class UsersController extends AppController
             $response = [
                 'message' => 'Can not save',
             ];
-            $this->response->body(json_encode($response));
+            $this->response->getBody(json_encode($response));
 
             return $this->response;
         }
@@ -120,7 +120,7 @@ class UsersController extends AppController
             'html' => $html,
             'roles' => $roles,
         ];
-        $this->response->body(json_encode($response));
+        $this->response->getBody(json_encode($response));
 
         return $this->response;
     }
@@ -134,7 +134,7 @@ class UsersController extends AppController
      */
     public function update()
     {
-        $this->response->type('json');
+        $this->response->withType('json');
         $this->response->withStatus(200);
 
         if ($this->request->is(['post', 'patch'])) {
@@ -148,14 +148,14 @@ class UsersController extends AppController
                 $response = [
                     'message' => 'Not enough required data',
                 ];
-                $this->response->body(json_encode($response));
+                $this->response->getBody(json_encode($response));
 
                 return $this->response;
             }
             $user = $this->Users->patchEntity($user, $data);
             $user->password = $password;
             if ($this->Users->save($user)) {
-                $this->response->body(json_encode(['success' => 'true']));
+                $this->response->getBody(json_encode(['success' => 'true']));
 
                 return $this->response;
             }
@@ -164,7 +164,7 @@ class UsersController extends AppController
             $response = [
                 'message' => 'Can not save',
             ];
-            $this->response->body(json_encode($response));
+            $this->response->getBody(json_encode($response));
 
             return $this->response;
         }
@@ -184,7 +184,7 @@ class UsersController extends AppController
             'roles' => $roles,
             'user' =>$user,
         ];
-        $this->response->body(json_encode($response));
+        $this->response->getBody(json_encode($response));
 
         return $this->response;
     }
@@ -201,8 +201,8 @@ class UsersController extends AppController
         $this->request->allowMethod(['delete']);
         $id = $this->request->data('id');
         $user = $this->Users->get($id);
-        $this->response->type('json');
-        $this->response->body(json_encode(['succcess' => true]));
+        $this->response->withType('json');
+        $this->response->getBody(json_encode(['succcess' => true]));
         $this->response->withStatus(200);
 
         if ($this->Users->delete($user)) {

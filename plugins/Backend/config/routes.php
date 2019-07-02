@@ -51,34 +51,34 @@ Router::plugin(
         
         $routes->scope('/users', ['controller' => 'Users'], function(RouteBuilder $routes) {
             $routes->connect('/login', ['action' => 'login']);
-            $routes->connect('/add', ['action' => 'add', '[method]' => 'POST']);
-            $routes->connect('/update', ['action' => 'update', '[method]' => 'PATCH']);
-            $routes->connect('/view', ['action' => 'view', '[method]' => 'GET']);
-            $routes->connect('/', ['action' => 'view', '[method]' => 'GET']);
-            $routes->connect('/viewDetail/:id', ['action' => 'viewDetail', '[method]' => 'GET']);
-            $routes->connect('/delete', ['action' => 'delete', '[method]' => 'DELETE']);
-            $routes->connect('/register', ['action' => 'register', '[method]' => 'POST']);
+            $routes->connect('/add', ['action' => 'add', '[_method]' => 'POST']);
+            $routes->connect('/update', ['action' => 'update', '[_method]' => 'PATCH']);
+            $routes->connect('/view', ['action' => 'view', '[_method]' => 'GET']);
+            $routes->connect('/', ['action' => 'view', '[_method]' => 'GET']);
+            $routes->connect('/viewDetail/:id', ['action' => 'viewDetail', '[_method]' => 'GET']);
+            $routes->connect('/delete', ['action' => 'delete', '[_method]' => 'DELETE']);
+            $routes->connect('/register', ['action' => 'register', '[_method]' => 'POST']);
             $routes->connect('/logout', ['action' => 'logout']);
-            $routes->connect('/uploadAvatar', ['action' => 'uploadAvatar', '[method]' => 'POST']);
-            $routes->connect('/check-email', ['action' => 'checkEmail', '[method]' => 'GET']);
+            $routes->connect('/uploadAvatar', ['action' => 'uploadAvatar', '[_method]' => 'POST']);
+            $routes->connect('/check-email', ['action' => 'checkEmail', '[_method]' => 'GET']);
         });
 
         $routes->scope('/permissions', ['controller' => 'Permissions'], function(RouteBuilder $routes) {
-            $routes->connect('/add', ['action' => 'add', '[method]' => 'POST']);
-            $routes->connect('/update', ['action' => 'update', '[method]' => 'PATCH']);
-            $routes->connect('/', ['action' => 'view', '[method]' => 'GET']);
-            $routes->connect('/view', ['action' => 'view', '[method]' => 'GET']);
-            $routes->connect('/viewDetail', ['action' => 'viewDetail', '[method]' => 'GET']);
-            $routes->connect('/delete', ['action' => 'delete', '[method]' => 'DELETE']);
+            $routes->connect('/add', ['action' => 'add', '[_method]' => 'POST']);
+            $routes->connect('/update', ['action' => 'update', '[_method]' => 'PATCH']);
+            $routes->connect('/', ['action' => 'view', '[_method]' => 'GET']);
+            $routes->connect('/view', ['action' => 'view', '[_method]' => 'GET']);
+            $routes->connect('/viewDetail', ['action' => 'viewDetail', '[_method]' => 'GET']);
+            $routes->connect('/delete', ['action' => 'delete', '[_method]' => 'DELETE']);
         });
 
         $routes->scope('/roles', ['controller' => 'Roles'], function(RouteBuilder $routes) {
-            $routes->connect('/add', ['action' => 'add', '[method]' => 'POST']);
-            $routes->connect('/update', ['action' => 'update', '[method]' => 'PATCH']);
-            $routes->connect('/view', ['action' => 'view', '[method]' => 'GET']);
-            $routes->connect('/', ['action' => 'view', '[method]' => 'GET']);
-            $routes->connect('/viewDetail', ['action' => 'viewDetail', '[method]' => 'GET']);
-            $routes->connect('/delete', ['action' => 'delete', '[method]' => 'DELETE']);
+            $routes->connect('/add', ['action' => 'add', '[_method]' => 'POST']);
+            $routes->connect('/update', ['action' => 'update', '[_method]' => 'PATCH']);
+            $routes->connect('/view', ['action' => 'view', '[_method]' => 'GET']);
+            $routes->connect('/', ['action' => 'view', '[_method]' => 'GET']);
+            $routes->connect('/viewDetail', ['action' => 'viewDetail', '[_method]' => 'GET']);
+            $routes->connect('/delete', ['action' => 'delete', '[_method]' => 'DELETE']);
         });
         $routes->fallbacks('DashedRoute');
 
