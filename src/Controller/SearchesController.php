@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Log\Log;
+use Cake\I18n\Time;
 
 /**
  * Searches Controller
@@ -45,7 +47,6 @@ class SearchesController extends AppController
                 ]
         )->count();
         
-
         $this->set(['keyword' => $keyword, 'amountArticles' => $amountArticles]);
     }
 }

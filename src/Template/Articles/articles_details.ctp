@@ -80,10 +80,6 @@ use Cake\Routing\Router;
                 </div>
                 <div class='theme-material-card'>
                     <div id='comment' class='sub-ttl layer-ttl-white'>Để lại một bình luận</div>
-                    <!-- <?= $this->Form->create(
-                        'comment', 
-                        ['url'=>['controller'=>'comments', 'action'=>'writeComment', 'articleid'=>$value['id']]]
-                    ); ?> -->
                     <div class='row comment-form'>
                         <div class='col-sm-12'>
                                 <div class='mdl-textfield mdl-js-textfield form-input'>
@@ -91,19 +87,14 @@ use Cake\Routing\Router;
                                     'contentComment', 
                                     ['class'=>'mdl-textfield__input', 'rows'=>4, 'id' => 'contentComment', 'placeholder'=>'Viết bình luận của bạn...']
                                 ); ?>
-                                    <!-- <label class='mdl-textfield__label' for='contentComment'>
-                                        Viết bình luận của bạn ...
-                                    </label> -->
                                 </div>
                         </div>
                         <div class='col-sm-12'>
                             <div class='form-submit'>
-                                <!-- <?= $this->Form->button('Bình luận', ['class'=>'mdl-button mdl-js-button mdl-js-ripple-effect button button-primary']); ?> -->
                                 <button id="btnComment" class="mdl-button mdl-js-button mdl-js-ripple-effect button button-primary" onclick="writeComment(<?= $value['id'] ?>)">Bình luận</button>
                             </div>
                         </div>
                     </div>
-                    <!-- <?= $this->Form->end(); ?> -->
                 </div>
             </div>
             <div class="col-lg-4">
@@ -116,7 +107,7 @@ use Cake\Routing\Router;
                 </div>
                 <div class="theme-material-card">
                     <div class="flexslider theme-flexslider">
-                        <?= $this->requestAction('/articles/articles-most-view'); ?>
+                        <?= $this->requestAction('/articles/most-view'); ?>
                     </div>
                 </div>
                 <div class="theme-material-card">

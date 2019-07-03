@@ -88,20 +88,18 @@ class ArticlesController extends AppController
                 $data = $this->Articles->find(
                     'all', 
                     [
-                        'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'category_id'=>8], 
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
-                        'limit'=>4
+                        'limit'=>3
                     ]
                 );
             }elseif($standard == 'samsung'){
                 $data = $this->Articles->find(
                     'all', 
                     [
-                        'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'category_id'=>9], 
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
-                        'limit'=>4
+                        'limit'=>3
                     ]
                 );
             }elseif($standard == 'connection'){
@@ -110,17 +108,15 @@ class ArticlesController extends AppController
                 $data = $this->Articles->find(
                     'all', 
                     [
-                        'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'category_id'=>$value['category_id'], 'id != '.$id], 
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
-                        'limit'=>4
+                        'limit'=>3
                     ]
                 );
             }elseif($standard == 'user_most_view'){
                 $data = $this->Articles->find(
                     'all',
                     [
-                        'fields'=>['id', 'title', 'posting_date', 'image', 'view'], 
                         'conditions'=>['status_id'=>1, 'user_id'=>$id],
                         'order'=>['view'=>'desc'], 
                         'limit'=>5
@@ -130,7 +126,6 @@ class ArticlesController extends AppController
                 $data = $this->Articles->find(
                     'all', 
                     [
-                        'fields'=>['id', 'title', 'posting_date', 'image'], 
                         'conditions'=>['status_id'=>1, 'user_id'=>$id],
                         'order'=>['posting_date'=>'desc', 'id'=>'desc'], 
                         'limit'=>5
@@ -139,6 +134,52 @@ class ArticlesController extends AppController
             }
             $this->set(['data'=>$data, 'standard'=>$standard]);
         }
+    }
+
+    public function articlesIndex($standard = null)
+    {
+        if($standard == "new"){
+            $data = $this->Articles->find(
+                'all', 
+                [
+                    'conditions'=>['status_id'=>1],
+                    'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
+                    'limit'=>3,
+                    'contain' => ['Users']
+                ]
+            );
+        }elseif($standard == "tech_toy"){
+            $data = $this->Articles->find(
+                'all', 
+                [
+                    'conditions'=>['status_id'=>1, 'category_id'=>7],
+                    'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
+                    'limit'=>3,
+                    'contain' => ['Users']
+                ]
+            );
+        }elseif($standard == "laptop"){
+            $data = $this->Articles->find(
+                'all', 
+                [
+                    'conditions'=>['status_id'=>1, 'category_id'=>14],
+                    'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
+                    'limit'=>3,
+                    'contain' => ['Users']
+                ]
+            );
+        }elseif($standard == "vsmart"){
+            $data = $this->Articles->find(
+                'all', 
+                [
+                    'conditions'=>['status_id'=>1, 'category_id'=>12],
+                    'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
+                    'limit'=>3,
+                    'contain' => ['Users']
+                ]
+            );
+        }
+        $this->set(['data'=>$data, 'standard'=>$standard]);
     }
 
     public function articlesMostView()
@@ -155,10 +196,26 @@ class ArticlesController extends AppController
         $this->set('data', $data);
     }
 
+    public function articlesMostViewMore()
+    {
+        $amountArticles = $this->Articles->find('all', ['conditions'=>['status_id'=>1]])->count();
+
+        $this->set(['amountArticles' => $amountArticles]);
+    }
+
+    public function articlesNewMore()
+    {
+        $amountArticles = $this->Articles->find('all', ['conditions'=>['status_id'=>1]])->count();
+
+        $this->set(['amountArticles' => $amountArticles]);
+    }
+
     public function articlesSearch()
     {
         $keyword = $this->request->query('keyword');
         $articlePage = $this->request->query('articlePage');
+        $dateStart = $this->request->query('dateStart');
+        $dateEnd = $this->request->query('dateEnd');
         if(!empty($keyword)){
             $this->loadModel('Searches');
             $result = $this->Searches->findAllByKeyword($keyword);
@@ -183,7 +240,7 @@ class ArticlesController extends AppController
             $articlesList = $this->Articles->find(
                 'all',
                 [
-                    'conditions' => ['title LIKE' => "%$keyword%", 'status_id' => 1],
+                    'conditions' => ['title LIKE' => "%$keyword%", 'status_id' => 1, "posting_date >= '$dateStart'", "posting_date <= '$dateEnd'"],
                     'order' => ['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
                     'contain' => 'Users'
                 ]
@@ -207,6 +264,8 @@ class ArticlesController extends AppController
         $id = $this->request->query('id');
         $type = $this->request->query('type');
         $articlePage = $this->request->query('articlePage');
+        $dateStart = $this->request->query('dateStart');
+        $dateEnd = $this->request->query('dateEnd');
         $this->loadModel('Categories');
         $this->loadModel('Users');
 
@@ -222,25 +281,26 @@ class ArticlesController extends AppController
                 $articlesList[] = $this->Articles->find(
                     'all',
                     [
-                        'conditions' => ['category_id' => $id, 'status_id' => 1],
+                        'conditions' => ['category_id' => $id, 'status_id' => 1, "posting_date >= '$dateStart'", "posting_date <= '$dateEnd'"],
                         'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
                         'contain' => 'Users'
                     ]
                 );
-                $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['category_id'=>$id, 'status_id'=>1]])->count();
+                $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['category_id'=>$id, 'status_id'=>1, "posting_date >= '$dateStart'", "posting_date <= '$dateEnd'"]])->count();
             }else{
                 foreach($listCate as $value){
                     $articlesList[] = $this->Articles->find(
                         'all',
                         [
-                            'conditions' => ['category_id' => $value['id'], 'status_id' => 1],
+                            'conditions' => ['category_id' => $value['id'], 'status_id' => 1, "posting_date >= '$dateStart'", "posting_date <= '$dateEnd'"],
                             'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
                             'contain' => 'Users'
                         ]
                     );
-                    $data['amountArticles'] += $this->Articles->find('all', ['conditions'=>['category_id'=>$value['id'], 'status_id'=>1]])->count();
+                    $data['amountArticles'] += $this->Articles->find('all', ['conditions'=>['category_id'=>$value['id'], 'status_id'=>1, "posting_date >= '$dateStart'", "posting_date <= '$dateEnd'"]])->count();
                 }
             }
+
         }elseif ($type == 'user') {
             $data['user'] = $this->Users->get($id);
             $articlesList[] = $this->Articles->find(
@@ -252,6 +312,26 @@ class ArticlesController extends AppController
                 ]
             );
             $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['user_id' => $id, 'status_id' => 1]])->count();
+        }elseif ($type == 'most_view') {
+            $articlesList[] = $this->Articles->find(
+                'all',
+                [
+                    'conditions' => ['status_id' => 1],
+                    'order'=>['view' => 'desc', 'Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                    'contain' => 'Users'
+                ]
+            );
+            $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['status_id' => 1]])->count();
+        }elseif ($type == 'new') {
+            $articlesList[] = $this->Articles->find(
+                'all',
+                [
+                    'conditions' => ['status_id' => 1],
+                    'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                    'contain' => 'Users'
+                ]
+            );
+            $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['status_id' => 1]])->count();
         }
 
         $temp = [];
@@ -310,10 +390,68 @@ class ArticlesController extends AppController
             $article->image = $image;
 
             if($this->Articles->save($article)){
-                $this->redirect(['action'=>'writeArticle']);
+                $this->redirect(['action'=>'manageArticle']);
             }
         }
     }
 
-  
+    public function manageArticle()
+    {
+        $user = $this->Auth->user();
+        $data['amountArticlesApproved'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 1]])->count();
+        $data['amountArticlesPending'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 2]])->count();
+        $this->set('data', $data);
+    }
+
+    public function articlesApproved()
+    {
+        $articlePage = $this->request->query('articlePage');
+        $user = $this->Auth->user();
+        $articlesList = $this->Articles->find(
+            'all',
+            [
+                'conditions' => ['user_id' => $user['id'], 'status_id' => 1],
+                'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                'contain' => 'Users'
+            ]
+        )->toArray();
+        $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 1]])->count();
+
+        $result = [];
+
+        foreach ($articlesList as $key => $article) {
+            if (($key >= ($articlePage-1)*10) && ($key <= ($articlePage*10-1))) {
+                $result[] = $article;
+            }
+        }
+        $data['articlesList'] = $result;
+
+        $this->set('data', $data);
+    }
+
+    public function articlesPending()
+    {
+        $articlePage = $this->request->query('articlePage');
+        $user = $this->Auth->user();
+        $articlesList = $this->Articles->find(
+            'all',
+            [
+                'conditions' => ['user_id' => $user['id'], 'status_id' => 2],
+                'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                'contain' => 'Users'
+            ]
+        )->toArray();
+        $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 2]])->count();
+
+        $result = [];
+
+        foreach ($articlesList as $key => $article) {
+            if (($key >= ($articlePage-1)*10) && ($key <= ($articlePage*10-1))) {
+                $result[] = $article;
+            }
+        }
+        $data['articlesList'] = $result;
+
+        $this->set('data', $data);
+    }
 }

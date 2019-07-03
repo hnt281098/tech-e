@@ -86,7 +86,17 @@ Router::scope('/articles', ['controller'=>'articles'], function(RouteBuilder $ro
 		['action'=>'articlesByStandard'],
 		['pass'=>['standard', 'id']]
 	);
-	$routes->connect('/articles-most-view', ['action'=>'articlesMostView']);
+	$routes->connect(
+		'/index/:standard',
+		['action'=>'articlesIndex'],
+		['pass'=>['standard']]
+	);
+	$routes->connect('/most-view', ['action'=>'articlesMostView']);
+	$routes->connect('manage-article', ['action'=>'manageArticle']);
+	$routes->connect('/most-view-more', ['action'=>'articlesMostViewMore']);
+	$routes->connect('/new-more', ['action'=>'articlesNewMore']);
+	$routes->connect('/apprpved', ['action'=>'articlesApproved']);
+	$routes->connect('/pending', ['action'=>'articlesPending']);
 	$routes->connect('/list', ['action'=>'articlesList']);
 	$routes->connect(
 		'/details/:id',

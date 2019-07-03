@@ -1,7 +1,10 @@
-<div class="sub-ttl">Xem nhiều</div>
 <?php
+use Cake\Routing\Router;
     if(!empty($data)){
 ?>
+<div class="sub-ttl">
+    <a href="<?= Router::url(['controller'=>'articles', 'action'=>'articlesMostViewMore']) ?>">Xem nhiều nhất</a>
+</div>
     <ul class='slides'>
     <?php foreach ($data as $value) {
         $image = explode("\n", $value['image']);

@@ -35,6 +35,9 @@ use Cake\Routing\Router;
                                 <li class="mdl-menu__item">
                                     <a href="<?= Router::url(['controller'=>'articles', 'action'=>'writeArticle']) ?>"><i class="fa fa-edit"></i> Đăng bài</a>
                                 </li>
+                                <li class="mdl-menu__item">
+                                    <a href="<?= Router::url(['controller'=>'articles', 'action'=>'manageArticle']) ?>"><i class="fa fa-edit"></i> Quản lí bài đăng</a>
+                                </li>
                             <?php }elseif ($currentUser['role_id'] == 1) { ?>
                                 <li class="mdl-menu__item">
                                     <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>'Backend']) ?>"><i class="fa fa-edit"></i> Quản trị</a>
@@ -121,4 +124,5 @@ use Cake\Routing\Router;
             </div>
         </div>
     </div><!-- End Main Header Section -->
-</header><!-- End Header
+</header>
+<!-- End header -->

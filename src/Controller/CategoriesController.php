@@ -21,7 +21,6 @@ class CategoriesController extends AppController
     public function categoriesList()
     {
         $data['lv1'] = $this->Categories->find('all', ['fields'=>['id', 'name', 'description'], 'conditions'=>['parent_id=0']]);
-        // $categories['lv2'] = $this->Categories->find('all', ['fields'=>['id', 'parent_id', 'name'], 'conditions'=>['parent_id!=0']]);
         $this->set('data', $data);
     }
 
