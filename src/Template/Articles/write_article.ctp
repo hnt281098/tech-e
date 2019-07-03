@@ -3,7 +3,7 @@
 <div class="page-ttl">
     <div class="layer-stretch">
         <div class="page-ttl-container">
-            <h1>Viết báo</h1>
+            <h1>Đăng bài</h1>
             <p><a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>false]) ?>">Trang chủ</a></p>
         </div>
     </div>
@@ -21,7 +21,6 @@
                             ['class'=>'mdl-textfield__input', 'rows'=>2, 'id' => 'title', 'required']
                         ); ?>
                         <label class="mdl-textfield__label" for="title">Tiêu đề</label>
-                        <span class="mdl-textfield__error">Please Enter Valid Name!</span>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label form-input-icon">
                         <?= $this->Form->textarea(
@@ -29,7 +28,6 @@
                             ['class'=>'mdl-textfield__input', 'rows'=>4, 'id' => 'description', 'required']
                         ); ?>
                         <label class="mdl-textfield__label" for="description">Mô tả</label>
-                        <span class="mdl-textfield__error">Please Enter Valid Name!</span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -54,7 +52,6 @@
                             ['class'=>'mdl-textfield__input', 'rows'=>2, 'id' => 'source', 'required']
                         ); ?>
                         <label class="mdl-textfield__label" for="source">Nguồn tin</label>
-                        <span class="mdl-textfield__error">Please Enter Valid Name!</span>
                     </div>
                 </div>
             </div>
@@ -66,12 +63,11 @@
                             ['class'=>'mdl-textfield__input', 'rows'=>20, 'id' => 'content', 'required']
                         ); ?>
                         <label class="mdl-textfield__label" for="content">Nội dung</label>
-                        <span class="mdl-textfield__error">Please Enter Valid Name!</span>
                     </div>
                 </div>
             </div>
             <div class="form-submit">
-                <?= $this->Form->button('Đăng tải', ['class'=>'mdl-button mdl-js-button mdl-js-ripple-effect button button-primary']) ?>
+                <?= $this->Form->button('Đăng bài', ['class'=>'mdl-button mdl-js-button mdl-js-ripple-effect button button-primary']) ?>
             </div>
             <?= $this->Form->end() ?>
         </div>  

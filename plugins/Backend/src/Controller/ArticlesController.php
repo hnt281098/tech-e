@@ -172,8 +172,8 @@ class ArticlesController extends AppController
 
         $this->response->type('json');
         $this->response->statusCode(200);
-
-        if ($this->Articles->delete($article)) {
+        $article->status_id = 3;
+        if ($this->Articles->save($article)) {
             $this->response->body(json_encode(['success' => true]));
 
             return $this->response;
@@ -287,4 +287,46 @@ class ArticlesController extends AppController
             $this->set('data', $data);
         }
     }
+
+    
+    public function approve() 
+    {
+        log::info($this->request->getData());
+        $this->response->type('json');
+        $this->response->statusCode(200);
+        $id = $this->request->getData('id');
+        $article = $this->Articles->get($id);
+
+        if (empty($article)) {
+            $response = [
+                'success' => false,
+                'message' => 'Not found',
+            ];
+            $this->response->body(json_encode($response));
+            $this->response->statusCode(500);
+
+            return $this->response;
+        }
+
+        $article->status_id = 1;
+
+        if ($this->Articles->save($article)) {
+            $response = [
+                'success' => true,
+            ]; 
+            
+            $this->response->body(json_encode($response));
+
+            return $this->response;
+        }
+
+        $response = [
+                'success' => false,
+                'message' => 'Can not save',
+            ];
+        $this->response->statusCode(500);
+        $this->response->body(json_encode($response));
+
+        return $this->response;
+    } 
 }

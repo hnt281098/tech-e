@@ -50,6 +50,7 @@ class ArticlesTable extends Table
         $this->belongsTo('ArticleStatus', [
             'foreignKey' => 'status_id'
         ]);
+        $this->addBehavior('Timestamp');
     }
 
     /**

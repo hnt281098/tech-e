@@ -95,6 +95,7 @@ Router::scope('/articles', ['controller'=>'articles'], function(RouteBuilder $ro
 	);
 	$routes->connect('/search', ['action'=>'articlesSearch']);
 	$routes->connect('/by', ['action'=>'articlesBy']);
+	$routes->connect('/write-article', ['action'=>'writeArticle']);
 });
 
 //Tạo router categories
@@ -116,9 +117,8 @@ Router::scope('/searches', ['controller'=>'searches'], function(RouteBuilder $ro
 //Tạo router comments
 Router::scope('/comments', ['controller'=>'comments'], function(RouteBuilder $routes){
 	$routes->connect(
-		'/write-comment/:articleid', 
-		['action'=>'writeComment'],
-		['pass'=>['articleid']]
+		'/write-comment', 
+		['action'=>'writeComment']
 	);
 	$routes->connect('/commentList', ['action' => 'commentList']);
 });

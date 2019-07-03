@@ -49,6 +49,7 @@ class CategoriesTable extends Table
             'className' => 'Categories',
             'foreignKey' => 'parent_id'
         ]);
+        $this->addBehavior('Timestamp');
     }
 
     /**

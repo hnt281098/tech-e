@@ -43,6 +43,7 @@ class CommentsTable extends Table
         $this->belongsTo('Articles', [
             'foreignKey' => 'article_id'
         ]);
+        $this->addBehavior('Timestamp');
     }
 
     /**

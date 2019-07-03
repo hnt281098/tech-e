@@ -50,7 +50,7 @@
 						    <label>Mật khẩu</label>
                         </div>
                         <div class="row">
-                            <div class="col text-left">
+                            <!-- <div class="col text-left">
                                 <div class="styled-checkbox">
                                     <input type="checkbox" name="checkbox" id="remeber">
                                     <label for="remeber">Giữ tôi đăng nhập</label>
@@ -58,7 +58,7 @@
                             </div>
                             <div class="col text-right">
                                 <a href="pages-forgot-password.html">Quên mật khẩu ?</a>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="sign-btn text-center">
                             <input type="submit" class="btn btn-lg btn-gradient-01" value="Đăng nhập    ">

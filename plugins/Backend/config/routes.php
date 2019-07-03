@@ -32,6 +32,8 @@ Router::plugin(
             $routes->get('/view', ['action'=>'view']);
             $routes->connect('/articles-new', ['action'=>'articlesNew']);
             $routes->post('/add', ['action'=>'add']);
+            $routes->post('/approve', ['action' => 'approve']);
+            $routes->post('/delete', ['action' => 'delete']);
             $routes->connect('/articles-most-view', ['action'=>'articlesMostView']);
             $routes->connect(
                 '/:id',

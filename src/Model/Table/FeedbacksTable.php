@@ -39,6 +39,7 @@ class FeedbacksTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id'
         ]);
+        $this->addBehavior('Timestamp');
     }
 
     /**

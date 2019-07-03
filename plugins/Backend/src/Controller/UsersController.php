@@ -89,6 +89,22 @@ class UsersController extends AppController
             }
 
             $user = $this->Users->patchEntity($user, $data);
+            //Thêm ngày sinh
+            $date = $this->request->getData('birthday');
+            $date = explode('/', $date);
+            $birthday = Time::now();
+            $birthday->year($date[2])->month($date[0])->day($date[1]);
+            $user->birthday = $birthday;
+
+            //Upload avatar
+            $file = $this->request->getData('avatar');
+            $filename = null;
+            if(!empty($file['tmp_name'])){
+                $filename = $file['name'];
+                if(move_uploaded_file($file['tmp_name'], WWW_ROOT . 'uploads' . DS . 'avatar' . DS . $filename)){
+                    $user->avatar = $filename;
+                }
+            }
 
             if ($this->Users->save($user)) {
                 $user->user_code = "USER" . $user->id;
@@ -207,7 +223,7 @@ class UsersController extends AppController
             if ($user) {
                 $user['allowedActions'] = $this->Role->getAllowedActions($user['role_id']);
                 $this->Auth->setUser($user);
-                if ($user['role_id'] == 3) {
+                if ($user['role_id'] == 3 || $user['role_id'] == 4) {
                     return $this->redirect(['controller' => 'Pages', 'action' => 'index', 'plugin' => false]);
                 }
                 else {

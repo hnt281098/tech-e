@@ -11,13 +11,13 @@
     <div class="row">
         <div class="col-xl-12">
 
-            <button type="button" onclick="add()" class="btn btn-success btn-square mr-1 mb-2">Thêm bài đăng</button>
+            <!-- <button type="button" onclick="add()" class="btn btn-success btn-square mr-1 mb-2">Thêm bài đăng</button> -->
 
             <!-- Sorting -->
             <div class="widget has-shadow">
-                <div class="widget-header bordered no-actions d-flex align-items-center">
+                <!-- <div class="widget-header bordered no-actions d-flex align-items-center">
                     <h4>Sorting</h4>
-                </div>
+                </div> -->
                 <div class="widget-body">
                     <div class="table-responsive">
                         <table id="sorting-table" class="table mb-0 thai">
@@ -38,11 +38,11 @@
                                             <td ><?= $article[$field] ?></td>
                                         <?php } ?>
                                         <td class="td-actions">
-                                            <a href="#"><i class="la la-edit edit"></i></a>
+                                            <!-- <a href="#"><i class="la la-edit edit"></i></a> -->
                                             <a onclick="submitDelete(<?= $article['id'] ?>,this)" href="#"><i class="la la-close delete"></i></a>
 
                                             <?php if ($article['status'] == "Chờ duyệt") : ?>
-                                                <a onclick="reviewed(<?= $article['id'] ?>,this)" href="#"><i class="la la-eye edit"></i></a>
+                                                <a onclick="approve(<?= $article['id'] ?>,this)" href="#"><i class="la la-eye edit"></i></a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -122,7 +122,7 @@
         $.ajax({
             url: url,
             dataType: 'json',
-            type: 'delete',
+            type: 'POST',
             data: {
                 id: articleId
             },
@@ -140,65 +140,7 @@
         });
     }
 
-    function add() {
-        var url = '<?= $this->Url->build([
-                        'controller' => 'articles',
-                        'action' => 'add'
-                    ]); ?>';
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'GET',
-            cache: false,
 
-            success: function(response) {
-                $('#content').html(response.html);
-
-                var selections = "";
-                
-                for (i = 0; i < response.users.length; i++) {
-                    email = response.users[i]['email'];
-                    
-                    selections = selections + ' <option value=' + response.users[i]['id'] + '>' + email + '</option>'
-                }
-                $('#users').html(selections);
-            },
-            error: function(response) {
-                alert("Không thể tải form này!");
-            }
-        });
-    }
-
-    function down(ta){
-        setTimeout(function(){
-            ta.style.cssText = 'height:auto; padding:0';
-            // for box-sizing other than "content-box" use:
-            // el.style.cssText = '-moz-box-sizing:content-box';
-            ta.style.cssText = 'height:' + ta.scrollHeight + 'px';
-        },0);
-    }
-
-    function back() {
-        var url = '<?= $this->Url->build([
-                            'controller' => 'articles',
-                            'action' => 'view'
-                        ]); ?>';
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'GET',
-            cache: false,
-            data: {
-                article_status_id: <?=$type?>,
-            },
-
-            success: function(response) {
-                $('#content').html(response.html);
-            },
-            error: function(response) {
-                alert("Không thể tải form này!");
-            }
-        });
-    }
+  
 </script>
 </body>

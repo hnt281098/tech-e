@@ -14,6 +14,7 @@
 namespace App\View;
 
 use Cake\View\View;
+use Cake\I18n\Time;
 
 /**
  * Application View
@@ -38,46 +39,30 @@ class AppView extends View
         parent::initialize();
     }
 
-    public function calculateDatetime($datetime = null)
+    public function calculateDatetime($postingDate = null)
     {
-        if(!empty($datetime)){
-            $yNow = date('Y');
-            if(empty($yNow - $datetime->format('Y'))){
-                $mNow = date('m');
-                if(empty($mNow - $datetime->format('m'))){
-                    $dNow = date('d');
-                    if(empty($dNow - $datetime->format('d'))){
-                        $hNow = date('H');
-                        if (empty($hNow - $datetime->format('H'))) {
-                            $iNow = date('i');
-                            if (empty($iNow - $datetime->format('i'))) {
-                                $sNow = date('s');
-                                if(empty($sNow - $datetime->format('s'))){
-                                    echo "0 giây trước";
-                                }else{
-                                    echo ($sNow - $datetime->format('s'))." giây trước";
-                                }
-                            }else{
-                                echo ($iNow - $datetime->format('i'))." phút trước";
-                            }
-                        }else{
-                            echo ($hNow - $datetime->format('H'))." giờ trước";
-                        }
-                    }else{
-                        echo ($dNow - $datetime->format('d'))." ngày trước";
-                    }
-                }else{
-                    echo ($mNow - $datetime->format('m'))." tháng trước";
-                }
-            }else{
-                echo ($yNow - $datetime->format('Y'))." năm trước";
-            }
+        $now = Time::now();
+        $tmp = $now->diff($postingDate);
+        if(!empty($tmp->y)){
+            echo $tmp->y . " năm trước";
+        }elseif (!empty($tmp->m)) {
+            echo $tmp->m . " tháng trước";
+        }elseif (!empty($tmp->d)) {
+            echo $tmp->d . " ngày trước";
+        }elseif (!empty($tmp->h)) {
+            echo $tmp->h . " giờ trước";
+        }elseif (!empty($tmp->i)) {
+            echo $tmp->i . " phút trước";
+        }elseif (!empty($tmp->s)) {
+            echo $tmp->s . " giây trước";
         }
     }
 
     public function calculateAge($birthday = null)
     {
-        $age = date('Y') - $birthday->format('Y');
+        $now = Time::now();
+        $tmp = $now->diff($birthday);
+        $age = $tmp->y;
         return $age;
     }
 

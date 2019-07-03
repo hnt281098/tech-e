@@ -33,7 +33,7 @@ use Cake\Routing\Router;
                         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect metarial-menu" data-mdl-for="profile-menu">
                             <?php if($currentUser['role_id'] == 4){ ?>
                                 <li class="mdl-menu__item">
-                                    <a href="<?= Router::url(['controller'=>'articles', 'action'=>'writeArticle']) ?>"><i class="fa fa-edit"></i> Viết báo</a>
+                                    <a href="<?= Router::url(['controller'=>'articles', 'action'=>'writeArticle']) ?>"><i class="fa fa-edit"></i> Đăng bài</a>
                                 </li>
                             <?php }elseif ($currentUser['role_id'] == 1) { ?>
                                 <li class="mdl-menu__item">
@@ -41,7 +41,7 @@ use Cake\Routing\Router;
                                 </li>
                             <?php }elseif ($currentUser['role_id'] == 2) { ?>
                                 <li class="mdl-menu__item">
-                                    <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>'Backend']) ?>"><i class="fa fa-edit"></i> Duyệt báo</a>
+                                    <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>'Backend']) ?>"><i class="fa fa-edit"></i> Duyệt bài</a>
                                 </li>
                             <?php } ?>
                             <li class="mdl-menu__item">
