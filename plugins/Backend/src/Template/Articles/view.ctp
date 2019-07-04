@@ -1,3 +1,4 @@
+<?php use Cake\Routing\Router; ?>
 <div class="container-fluid">
     <!-- Begin Page Header-->
     <div class="row">
@@ -34,7 +35,14 @@
                             <tbody>
                                 <?php foreach ($articles as $article) { ?>
                                     <tr>
-                                        <?php foreach ($fields as $field) { $status = $article['status_id']; ?>
+                                        <?php foreach ($fields as $field) { 
+                                            if ($article['status'] == 'Chờ duyệt') {
+                                                $type = 2;
+                                            }    
+                                            else {
+                                                $type = 1;
+                                            }
+                                        ?>
                                             <td ><?= $article[$field] ?></td>
                                         <?php } ?>
                                         <td class="td-actions">
@@ -42,7 +50,7 @@
                                             <a onclick="submitDelete(<?= $article['id'] ?>,this)" href="#"><i class="la la-close delete"></i></a>
 
                                             <?php if ($article['status'] == "Chờ duyệt") : ?>
-                                                <a onclick="approve(<?= $article['id'] ?>,this)" href="#"><i class="la la-eye edit"></i></a>
+                                                <a onclick="showDetailAprrove(<?= $article['id'] ?>)" href="#"><i class="la la-eye edit"></i></a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -82,12 +90,49 @@
     '../backend/template/vendors/js/app/app.min',
     '../backend/template/js/components/tables/tables',
 
-
     '../backend/template/js/components/datepicker/datepicker',
 ));
 ?>
 
 <script>
+    function showDetailAprrove(articleId) {
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'edit'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                'id' => articleId,
+            },
+            success: function(response) {
+                $('#content').html(response.html);
+
+                document.getElementById("formTitle").innerHTML = "Duyệt đơn";
+                $('#id').attr("name", "id");
+                $('#id').val(articleId);
+                $("#updateArticleForm").attr("action", "<?= Router::url(['controller'=>'articles', 'action'=>'edit']); ?>");
+                $("#updateArticleForm").attr("method", "POST");
+                $("#updateArticleForm").attr("id", "approveArticleForm");
+                $("#article-content").text("");
+
+                var selections = "";
+                
+                for (i = 0; i < response.users.length; i++) {
+                    email = response.users[i]['email'];
+                    
+                    selections = selections + ' <option value=' + response.users[i]['id'] + '>' + email + '</option>'
+                }
+                $('#users').html(selections);
+            },
+            error: function(response) {
+                alert("Không thể tải form này!");
+            }
+        });
+    }
     function approve(articleId, r) {
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
@@ -140,6 +185,63 @@
         });
     }
 
+    function add() {
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'add'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            success: function(response) {
+                $('#content').html(response.html);
+                var selections = "";
+                
+                for (i = 0; i < response.users.length; i++) {
+                    email = response.users[i]['email'];
+                    
+                    selections = selections + ' <option value=' + response.users[i]['id'] + '>' + email + '</option>'
+                }
+                $('#users').html(selections);
+            },
+            error: function(response) {
+                alert("Không thể tải form này!");
+            }
+        });
+    }
+  
+    function down(ta){
+        setTimeout(function(){
+            ta.style.cssText = 'height:auto; padding:0';
+            // for box-sizing other than "content-box" use:
+            // el.style.cssText = '-moz-box-sizing:content-box';
+            ta.style.cssText = 'height:' + ta.scrollHeight + 'px';
+        },0);
+    }
+
+    function back() {
+        var url = '<?= $this->Url->build([
+                            'controller' => 'articles',
+                            'action' => 'view'
+                        ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                article_status_id: <?=$type?>,
+            },
+            success: function(response) {
+                $('#content').html(response.html);
+            },
+            error: function(response) {
+                alert("Không thể tải form này!");
+            }
+        });
+    }
 
   
 </script>

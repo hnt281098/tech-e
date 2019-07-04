@@ -1,4 +1,6 @@
-<?php use Cake\Routing\Router; ?>
+<?php use Cake\Routing\Router; 
+use Cake\Log\Log; log::info($data);
+?>
 <!DOCTYPE html>
 <!--
 Item Name: Elisyam - Web App & Admin Dashboard Template
@@ -187,7 +189,7 @@ Author: SAEROX
                                                 <td align="center" style="padding: 25px 0 0 0;" class="padding-copy">
                                                     <table border="0" cellspacing="0" cellpadding="0" class="responsive-table">
                                                         <tr>
-                                                            <td align="center"><a href="<?= Router::url(['controller'=>'users', 'action'=>'update']); ?>" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; text-decoration: none; background-color: #5d5386; border-top: 15px solid #5d5386; border-bottom: 15px solid #5d5386; border-left: 35px solid #5d5386; border-right: 35px solid #5d5386; border-radius: 35px; -webkit-border-radius: 35px; -moz-border-radius: 35px; display: inline-block;" class="mobile-button">Xem bài viết</a></td>
+                                                            <td align="center"><a href="<?= 'localhost/tech-e/articles/details/'.$data['id'] ?>" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #ffffff; text-decoration: none; background-color: #5d5386; border-top: 15px solid #5d5386; border-bottom: 15px solid #5d5386; border-left: 35px solid #5d5386; border-right: 35px solid #5d5386; border-radius: 35px; -webkit-border-radius: 35px; -moz-border-radius: 35px; display: inline-block;" class="mobile-button">Xem bài viết</a></td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -201,7 +203,7 @@ Author: SAEROX
                                         <!-- Begin Content -->
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
                                             <tr>
-                                                <td align="center" style="padding: 20px 0 60px 0; font-size: 16px; line-height: 25px; font-family: Noto Sans, Arial, sans-serif; color: #aea9c3;" class="padding-copy">Thanks!<br>The Elisyam Team</td>
+                                                <td align="center" style="padding: 20px 0 60px 0; font-size: 16px; line-height: 25px; font-family: Noto Sans, Arial, sans-serif; color: #aea9c3;" class="padding-copy">Thanks!<br>Tech-Entrance Team</td>
                                             </tr>
                                         </table>
                                         <!-- End Content -->

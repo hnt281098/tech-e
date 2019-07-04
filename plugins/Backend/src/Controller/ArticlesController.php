@@ -141,15 +141,17 @@ class ArticlesController extends AppController
      */
     public function edit($id = null)
     {
+        $id = $this->request->query('id');
         $article = $this->Articles->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
+            $statusId = $article->status_id;
             if ($this->Articles->save($article)) {
-                $this->Flash->success(__('The article has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->response->body(json_encode(['success' => 'true']));
+                
+                return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'articles', 'statusId' => $statusId]]);
             }
             $this->Flash->error(__('The article could not be saved. Please, try again.'));
         }
