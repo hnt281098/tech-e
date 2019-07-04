@@ -16,6 +16,8 @@ class UsersController extends AppController
         $this->loadComponent('Backend.Role');
         $this->loadComponent('Backend.CheckInputs');
         $this->loadModel('Users');
+        
+        $this->Auth->allow('login');
     }
 
     public function view()
@@ -235,6 +237,8 @@ class UsersController extends AppController
                 return $this->redirect(['action' => 'login']);
             }
         }
+        $something = '';
+        $this->set('something');
     }
 
     public function logout()
