@@ -22,6 +22,7 @@ class ArticlesController extends AppController
         parent::initialize();
         $this->loadModel('Articles');
         $this->loadModel('ArticleStatus');
+        $this->loadComponent('Backend.Email');
     }
 
     /**
@@ -291,7 +292,6 @@ class ArticlesController extends AppController
     
     public function approve() 
     {
-        log::info($this->request->getData());
         $this->response->type('json');
         $this->response->statusCode(200);
         $id = $this->request->getData('id');
@@ -314,16 +314,17 @@ class ArticlesController extends AppController
             $response = [
                 'success' => true,
             ]; 
-            
+            $this->Email->sendMail('boringlife335@gmail.com', 'Bài đăng đã được duyệt', ['id' => $id]);
+
             $this->response->body(json_encode($response));
 
             return $this->response;
         }
 
         $response = [
-                'success' => false,
-                'message' => 'Can not save',
-            ];
+            'success' => false,
+            'message' => 'Can not save',
+        ];
         $this->response->statusCode(500);
         $this->response->body(json_encode($response));
 

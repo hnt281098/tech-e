@@ -42,15 +42,18 @@ class AppController extends BaseController
     public function initialize()
     {
         parent::initialize();
-
-        if (empty($this->Auth->user()) && $this->request->action != "login") {
-
-            return $this->redirect(['controller' => 'users', 'action' => 'login', 'plugin' =>'Backend']);
+        if ($this->request->is('ajax') && empty($this->Auth->user())) {
+            $this->response->type('json');
+            $this->response->body(json_encode(['timeout' => true]));
+            $this->response->statusCode(500);
+            
+            return $this->response;
         }
+
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
-        $this->loadComponent('Flash');
+  
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html

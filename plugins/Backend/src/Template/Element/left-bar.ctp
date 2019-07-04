@@ -1,3 +1,7 @@
+<?php 
+use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
+?>
 <!-- Begin Page Content -->
 <div class="page-content d-flex align-items-stretch">
     <div class="default-sidebar">
@@ -76,8 +80,16 @@
                     hideLoading();
                 },
                 error: function(response) {
-                    alert("Không thể tải form này!");
-                    hideLoading();
+                    
+                    if (response.responseJSON.timeout == true) {
+                        alert("Phiên hết hạn, mời đăng nhập lại");
+                        window.location= '<?= Router::url(['controller' => 'users', 'action' => 'login']) ?>';
+                    }
+
+                    else {
+                        alert("Không thể tải form này!");
+                        hideLoading();
+                    }
                 }
             });
         }

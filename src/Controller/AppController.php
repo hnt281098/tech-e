@@ -65,14 +65,15 @@ class AppController extends Controller
             'loginAction' => [
                 'controller' => 'Users',
                 'action' => 'login',
-                'plugin' => 'backend'
+                'plugin' => 'Backend'
             ],
              // If unauthorized, return them to page they were just on
             'unauthorizedRedirect' => false,
             'checkAuthIn' => 'Controller.initialize',
         ]);
-        $this->Session = $this->request->getSession();
         $this->Auth->allow(['login', 'logout', 'register']);
+
+        $this->Session = $this->request->getSession();
 
         $this->loadModel('Informations');
         $this->loadModel('Categories');

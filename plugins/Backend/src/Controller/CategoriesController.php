@@ -42,7 +42,6 @@ class CategoriesController extends AppController
 
             foreach($categories as $category) {
                 $parentName = $this->Categories->find()->where(['id' => $category['parent_id']])->select('name')->first();
-                log::info($parentName);
                 $category['parent'] = $parentName->name;
                 unset($category['parent_id']);
             }

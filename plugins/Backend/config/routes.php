@@ -54,6 +54,7 @@ Router::plugin(
         
         $routes->scope('/users', ['controller' => 'Users'], function(RouteBuilder $routes) {
             $routes->connect('/login', ['action' => 'login']);
+            // $routes->connect('/json/login', ['action' => 'login']);
             $routes->connect('/add', ['action' => 'add', '[_method]' => 'POST']);
             $routes->connect('/update', ['action' => 'update', '[_method]' => 'PATCH']);
             $routes->connect('/view', ['action' => 'view', '[_method]' => 'GET']);
