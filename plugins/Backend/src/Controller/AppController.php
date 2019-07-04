@@ -43,7 +43,7 @@ class AppController extends BaseController
     {
         parent::initialize();
 
-        if (empty($this->Auth->user()) && $this->request->action != "login") {
+        if (empty($this->Auth->user()) && !(in_array($this->request->action, ['login', 'register']))) {
 
             return $this->redirect(['controller' => 'users', 'action' => 'login', 'plugin' =>'Backend']);
         }
