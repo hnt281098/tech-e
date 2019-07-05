@@ -1,5 +1,6 @@
-<?php use Cake\Routing\Router; 
-use Cake\Log\Log; log::info($data);
+<?php 
+use Cake\Routing\Router; 
+use Cake\Log\Log;
 ?>
 <!DOCTYPE html>
 <!--

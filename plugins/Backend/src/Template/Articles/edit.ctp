@@ -26,7 +26,7 @@
                             <div class="col-lg-9">
                                 <div class="mt-5 mb-5 position-relative">
                                     <div class="group material-input thai">
-                                        <textarea class="thai" cols="120" form="addArticleForm" id="article-content" onkeydown="down(this)"  name="content" required></textarea>
+                                        <textarea class="thai" rows="50" cols="500" form="addArticleForm" id="article-content" onkeydown="down(this)"  name="content" required></textarea>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                     </div>

@@ -32,15 +32,14 @@
                                     <?php } ?>
                                 </tr>
                             </thead>
+                            <?php if ($articles->count() > 0) : ?>
                             <tbody>
                                 <?php foreach ($articles as $article) { ?>
                                     <tr>
                                         <?php foreach ($fields as $field) { 
+                                            $type = 1;
                                             if ($article['status'] == 'Chờ duyệt') {
                                                 $type = 2;
-                                            }    
-                                            else {
-                                                $type = 1;
                                             }
                                         ?>
                                             <td ><?= $article[$field] ?></td>
@@ -50,13 +49,13 @@
                                             <a onclick="submitDelete(<?= $article['id'] ?>,this)" href="#"><i class="la la-close delete"></i></a>
 
                                             <?php if ($article['status'] == "Chờ duyệt") : ?>
-                                                <a onclick="showDetailAprrove(<?= $article['id'] ?>)" href="#"><i class="la la-eye edit"></i></a>
+                                                <a onclick="showDetailApprove(<?= $article['id'] ?>)" href="#"><i class="la la-eye edit"></i></a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
-
                             </tbody>
+                            <?php endif; ?>
                         </table>
                     </div>
                 </div>
@@ -95,7 +94,8 @@
 ?>
 
 <script>
-    function showDetailAprrove(articleId) {
+    function showDetailApprove(articleId) {
+        console.log(articleId);
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
                         'action' => 'edit'
@@ -106,9 +106,10 @@
             type: 'GET',
             cache: false,
             data: {
-                'id' => articleId,
+                id: articleId,
             },
             success: function(response) {
+                console.log(response.article);
                 $('#content').html(response.html);
 
                 document.getElementById("formTitle").innerHTML = "Duyệt đơn";
@@ -117,7 +118,10 @@
                 $("#updateArticleForm").attr("action", "<?= Router::url(['controller'=>'articles', 'action'=>'edit']); ?>");
                 $("#updateArticleForm").attr("method", "POST");
                 $("#updateArticleForm").attr("id", "approveArticleForm");
-                $("#article-content").text("");
+                $("#article-content").val(response.article.content);
+                $(".btn-save").val("Duyệt");
+
+                if (response.article)
 
                 var selections = "";
                 
@@ -133,6 +137,7 @@
             }
         });
     }
+
     function approve(articleId, r) {
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',

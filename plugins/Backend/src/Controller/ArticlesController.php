@@ -142,12 +142,13 @@ class ArticlesController extends AppController
     public function edit($id = null)
     {
         $id = $this->request->query('id');
-        $article = $this->Articles->get($id, [
-            'contain' => []
-        ]);
+        $article = $this->Articles->findById($id)->contain(['Users', 'Categories', 'ArticleStatus'])->toArray();
+        $article = $article[0];
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
             $statusId = $article->status_id;
+
             if ($this->Articles->save($article)) {
                 $this->response->body(json_encode(['success' => 'true']));
                 
@@ -155,9 +156,21 @@ class ArticlesController extends AppController
             }
             $this->Flash->error(__('The article could not be saved. Please, try again.'));
         }
-        $categories = $this->Articles->Categories->find('list', ['limit' => 200]);
-        $authors = $this->Articles->Authors->find('list', ['limit' => 200]);
-        $this->set(compact('article', 'categories', 'authors'));
+        $article['user'] = $article['user']['email'];
+        $article['status'] = $article['article_status']['name'];
+        $article['category'] = $article['category']['name'];
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $html = $view->render('Backend.Articles/edit');
+        
+        $response = [
+            'html' => $html,
+            'article' => $article,
+        ];
+        $this->response->body(json_encode($response));
+
+        return $this->response;
     }
 
     /**
@@ -176,6 +189,7 @@ class ArticlesController extends AppController
         $this->response->type('json');
         $this->response->statusCode(200);
         $article->status_id = 3;
+        
         if ($this->Articles->save($article)) {
             $this->response->body(json_encode(['success' => true]));
 
