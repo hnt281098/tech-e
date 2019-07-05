@@ -18,25 +18,30 @@
             }
         });
         </script>
-        <!-- <style>
-            .inputfile {
-                width: 0.1px;
-                height: 0.1px;
-                opacity: 0;
-                overflow: hidden;
-                position: absolute;
-                z-index: -1;
-            }
+        <?= $this->Html->script(array(
+            '../js/ckeditor/ckeditor',
+            ));
+        ?>
 
-            .inputfile + label {
-                font-size: 1.25em;
-                font-weight: 700;
-                display: inline-block;
-                cursor: pointer;
-            }
+         <!-- <style>
+        //     .inputfile {
+        //         width: 0.1px;
+        //         height: 0.1px;
+        //         opacity: 0;
+        //         overflow: hidden;
+        //         position: absolute;
+        //         z-index: -1;
+        //     }
 
-            .inputfile:focus + label,
-        </style> -->
+        //     .inputfile + label {
+        //         font-size: 1.25em;
+        //         font-weight: 700;
+        //         display: inline-block;
+        //         cursor: pointer;
+        //     }
+
+        //     .inputfile:focus + label,
+        // </style> -->
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="template/img/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="template/img/favicon-32x32.png">

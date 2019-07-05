@@ -34,6 +34,7 @@ use Cake\Routing\Router;
 
     <script>
         $(document).ready(function() {
+            CKEDITOR.replace('edit-request');
 
             if ('<?= $message ?>' != '') {
                 alert('<?= $message ?>');

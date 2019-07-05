@@ -6,6 +6,7 @@
     <div class="loading" style="display: none">
         <div class="lds-hourglass"></div>
     </div>
+    
     <div class="page">
         <?= $this->element('header'); ?>
         <?= $this->element('left-bar'); ?>
@@ -826,6 +827,7 @@
     </div>
     <!-- End Page Content -->
     </div>
+    
     <?php
     echo $this->Html->script(array(
         '../backend/template/vendors/js/base/jquery.min',

@@ -261,6 +261,7 @@
     }
 
     function back(categoryType) {
+        showLoading();
         $('#updateCategoryForm').empty();
         var url = '<?= $this->Url->build([
                             'controller' => 'categories',
@@ -283,6 +284,10 @@
             }
         });
     }
+
+    $(document).ready(function() {
+        hideLoading();
+    });
 
 </script>
 </body>

@@ -32,7 +32,7 @@
                                     <?php } ?>
                                 </tr>
                             </thead>
-                            <?php if ($articles->count() > 0) : ?>
+                            <?php if ($articles->toArray()[0]->toArray()['id'] != null) : ?>
                             <tbody>
                                 <?php foreach ($articles as $article) { ?>
                                     <tr>
@@ -95,7 +95,6 @@
 
 <script>
     function showDetailApprove(articleId) {
-        console.log(articleId);
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
                         'action' => 'edit'
@@ -109,7 +108,6 @@
                 id: articleId,
             },
             success: function(response) {
-                console.log(response.article);
                 $('#content').html(response.html);
 
                 document.getElementById("formTitle").innerHTML = "Duyệt đơn";
@@ -119,6 +117,7 @@
                 $("#updateArticleForm").attr("method", "POST");
                 $("#updateArticleForm").attr("id", "approveArticleForm");
                 $("#article-content").val(response.article.content);
+                $("#edit-request").val(response.article.content);
                 $(".btn-save").val("Duyệt");
 
                 if (response.article)
@@ -138,7 +137,7 @@
         });
     }
 
-    function approve(articleId, r) {
+    function approve(articleId) {
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
                         'action' => 'approve'
@@ -227,6 +226,7 @@
     }
 
     function back() {
+        showLoading();
         var url = '<?= $this->Url->build([
                             'controller' => 'articles',
                             'action' => 'view'
@@ -248,6 +248,10 @@
         });
     }
 
-  
+    $(document).ready(function() {
+        hideLoading();
+        
+    });
+    
 </script>
 </body>

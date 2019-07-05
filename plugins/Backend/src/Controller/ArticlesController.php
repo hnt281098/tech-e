@@ -58,6 +58,11 @@ class ArticlesController extends AppController
             unset($article['category_id']);
             unset($article['source']);
         }
+        
+        if ($articles->count() == 0) {
+            $articles[] = $this->Articles->newEntity();
+        }
+        log::info($article);
 
         $view = new \Cake\View\View();
         $view->setLayout(false);
@@ -141,11 +146,11 @@ class ArticlesController extends AppController
      */
     public function edit($id = null)
     {
-        $id = $this->request->query('id');
-        $article = $this->Articles->findById($id)->contain(['Users', 'Categories', 'ArticleStatus'])->toArray();
-        $article = $article[0];
+        
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $id = $this->request->data('id');
+            $article = $this->Articles->get($id);
             $article = $this->Articles->patchEntity($article, $this->request->getData());
             $statusId = $article->status_id;
 
@@ -156,6 +161,9 @@ class ArticlesController extends AppController
             }
             $this->Flash->error(__('The article could not be saved. Please, try again.'));
         }
+        $id = $this->request->query('id');
+        $article = $this->Articles->findById($id)->contain(['Users', 'Categories', 'ArticleStatus'])->toArray();
+        $article = $article[0];
         $article['user'] = $article['user']['email'];
         $article['status'] = $article['article_status']['name'];
         $article['category'] = $article['category']['name'];

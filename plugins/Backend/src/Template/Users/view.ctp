@@ -253,6 +253,7 @@
     }
 
     function back() {
+        showLoading();
         var url = '<?= $this->Url->build([
                             'controller' => 'users',
                             'action' => 'view'
@@ -271,5 +272,9 @@
             }
         });
     }
+
+    $(document).ready(function() {
+        hideLoading();
+    });
 </script>
 </body>
