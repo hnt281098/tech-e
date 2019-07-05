@@ -42,6 +42,9 @@ class AppController extends BaseController
     public function initialize()
     {
         parent::initialize();
+        if ($this->request->is('ajax')) {
+            $this->response->disableCache();
+        }
         if ($this->request->is('ajax') && empty($this->Auth->user())) {
             $this->response->type('json');
             $this->response->body(json_encode(['timeout' => true]));

@@ -32,19 +32,31 @@ class ArticlesController extends AppController
      */
     public function view($statusId = 1)
     {
-        $this->paginate = [
-            'contain' => ['Categories','Users', 'ArticleStatus']
-        ];
+        if (empty($this->request->query('pageIndex'))) {
+            $pageIndex = 1;
+        }
+        else {
+            $pageIndex = $this->request->query('pageIndex');
+        }
         
         if (!empty($this->request->query('article_status_id'))) {
             $statusId = $this->request->query('article_status_id');
-            $articles = $this->paginate($this->Articles->find()->where(['status_id' => $statusId]));
+            $articles = $this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex)->where(['status_id' => $statusId])->contain(['Categories','Users', 'ArticleStatus']);
+            
+            if (empty($this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where(['status_id' => $statusId])->contain(['Categories','Users', 'ArticleStatus'])->toArray())) {
+                $end = true;
+            }
+            else {
+                $end = false;
+            }
         }
         else {
             $articles = $this->paginate($this->Articles);
         }
-            
+        
+    
         foreach ($articles as $article) {
+            log::info($article->id);
             unset($article['content']);
             unset($article['description']);
             $article['user'] = $article['user']['email'];
@@ -62,14 +74,13 @@ class ArticlesController extends AppController
         if ($articles->count() == 0) {
             $articles[] = $this->Articles->newEntity();
         }
-        log::info($article);
 
         $view = new \Cake\View\View();
         $view->setLayout(false);
-        $view->set(compact('articles'));
+        $view->set(compact(['articles', 'pageIndex']));
         $html = $view->render('Backend.Articles/view');
         
-        $this->response->body(json_encode(['html' => $html]));
+        $this->response->body(json_encode(['html' => $html, 'end' => $end]));
         
         return $this->response;
     }

@@ -61,6 +61,22 @@
                 </div>
             </div>
             <!-- End Sorting -->
+            <div class="row">
+                <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="sorting-table_info" role="status" aria-live="polite"></div>
+                </div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="sorting-table_paginate">
+                        <ul class="pagination">
+                            <li class="paginate_button page-item previous disabled" id="previous"><a onclick="list(<?=$pageIndex - 1?>)" href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
+                            <li class="paginate_button page-item active"><a id="now-page" href="#" aria-controls="sorting-table" data-dt-idx="1" class="page-link">1</a></li>
+                            <li class="paginate_button page-item "><a id="next-page" onclick="list(<?=$pageIndex + 1 ?>)" href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
+                            <li class="paginate_button page-item next" id="next"><a onclick="list(<?=$pageIndex + 1 ?>)" href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>  
         </div>
     </div>
     <!-- End Row -->
@@ -94,6 +110,58 @@
 ?>
 
 <script>
+    function list(pageIndex) {
+            showLoading();
+            var url = '<?= $this->Url->build([
+                            'controller' => 'users',
+                            'action' => 'view'
+                        ]); ?>';
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                type: 'GET',
+                cache: false,
+                data: {
+                    pageIndex: pageIndex,
+                    article_status_id: 1,
+                },
+
+                success: function(response) {
+                    $('#content').empty();
+                    $('#content').html(response.html);
+                    
+
+                    if (pageIndex == 1) {
+                        $('#next').removeClass("disabled");
+                        $('#previous').addClass("disabled");
+                    }
+                    $('#now-page').text(pageIndex);
+                    $('#next-page').text(pageIndex + 1);
+
+                    if (response.end == false) {
+                        $('#next-page').text(pageIndex + 1);
+                    }
+                    else {
+                        $('#next-page').addClass("disabled");;
+                        $('#next').addClass("disabled");
+                    }
+                    hideLoading();
+                },
+                error: function(response) {
+                    
+                    if (response.responseJSON.timeout == true) {
+                        alert("Phiên hết hạn, mời đăng nhập lại");
+                        window.location= '<?= Router::url(['controller' => 'users', 'action' => 'login']) ?>';
+                    }
+
+                    else {
+                        alert("Không thể tải form này!");
+                        hideLoading();
+                    }
+                }
+            });
+        }
+
     function showDetailApprove(articleId) {
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
@@ -119,8 +187,6 @@
                 $("#article-content").val(response.article.content);
                 $("#edit-request").val(response.article.content);
                 $(".btn-save").val("Duyệt");
-
-                if (response.article)
 
                 var selections = "";
                 
@@ -249,8 +315,8 @@
     }
 
     $(document).ready(function() {
+        $('#now-page').addClass('disabled');
         hideLoading();
-        
     });
     
 </script>
