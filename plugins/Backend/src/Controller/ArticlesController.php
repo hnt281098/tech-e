@@ -32,6 +32,7 @@ class ArticlesController extends AppController
      */
     public function view($statusId = 1)
     {
+        
         if (empty($this->request->query('pageIndex'))) {
             $pageIndex = 1;
         }
@@ -53,10 +54,8 @@ class ArticlesController extends AppController
         else {
             $articles = $this->paginate($this->Articles);
         }
-        
     
         foreach ($articles as $article) {
-            log::info($article->id);
             unset($article['content']);
             unset($article['description']);
             $article['user'] = $article['user']['email'];
@@ -346,14 +345,13 @@ class ArticlesController extends AppController
         $article->status_id = 1;
 
         if ($this->Articles->save($article)) {
-            $response = [
-                'success' => true,
-            ]; 
             $this->Email->sendMail('boringlife335@gmail.com', 'Bài đăng đã được duyệt', ['id' => $id]);
 
-            $this->response->body(json_encode($response));
+            // $this->response->body(json_encode($response));
 
-            return $this->response;
+            // $this->response->body(json_encode(['success' => 'true']));
+                
+            return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'articles', 'statusId' => 2, 'message' => 'Đã duyệt bài đăng']]);
         }
 
         $response = [

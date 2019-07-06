@@ -113,7 +113,7 @@
     function list(pageIndex) {
             showLoading();
             var url = '<?= $this->Url->build([
-                            'controller' => 'users',
+                            'controller' => 'articles',
                             'action' => 'view'
                         ]); ?>';
             $.ajax({
@@ -135,14 +135,16 @@
                         $('#next').removeClass("disabled");
                         $('#previous').addClass("disabled");
                     }
+                    else {
+                        $('#previous').removeClass("disabled");
+                    }
                     $('#now-page').text(pageIndex);
-                    $('#next-page').text(pageIndex + 1);
-
+                    
                     if (response.end == false) {
                         $('#next-page').text(pageIndex + 1);
                     }
                     else {
-                        $('#next-page').addClass("disabled");;
+                        $('#next-page').remove();
                         $('#next').addClass("disabled");
                     }
                     hideLoading();
@@ -155,7 +157,7 @@
                     }
 
                     else {
-                        alert("Không thể tải form này!");
+                        alert("Không thể tải trang này!");
                         hideLoading();
                     }
                 }
@@ -181,21 +183,16 @@
                 document.getElementById("formTitle").innerHTML = "Duyệt đơn";
                 $('#id').attr("name", "id");
                 $('#id').val(articleId);
-                $("#updateArticleForm").attr("action", "<?= Router::url(['controller'=>'articles', 'action'=>'edit']); ?>");
+                $("#updateArticleForm").attr("action", "<?= Router::url(['controller'=>'articles', 'action'=>'approve']); ?>");
                 $("#updateArticleForm").attr("method", "POST");
                 $("#updateArticleForm").attr("id", "approveArticleForm");
                 $("#article-content").val(response.article.content);
                 $("#edit-request").val(response.article.content);
                 $(".btn-save").val("Duyệt");
+                $("#title").val(response.article.title);
+                $("#user-email").val(response.article.user);
 
-                var selections = "";
                 
-                for (i = 0; i < response.users.length; i++) {
-                    email = response.users[i]['email'];
-                    
-                    selections = selections + ' <option value=' + response.users[i]['id'] + '>' + email + '</option>'
-                }
-                $('#users').html(selections);
             },
             error: function(response) {
                 alert("Không thể tải form này!");
@@ -204,6 +201,7 @@
     }
 
     function approve(articleId) {
+        showLoading();
         var url = '<?= $this->Url->build([
                         'controller' => 'articles',
                         'action' => 'approve'

@@ -23,12 +23,18 @@ use Cake\Routing\Router; ?>
             <div class="widget has-shadow">
                 <div class="widget-body">
                     <form id="updateArticleForm" class="form-horizontal">
+                        <div class="form-group row d-flex align-items-center mb-5">
+                            <label class="col-lg-3 form-control-label">Title</label>
+                            <div class="col-lg-9">
+                                <input id="title" name="title" type="text" class="form-control" readonly>
+                            </div>
+                        </div>
                         <div class="row d-flex align-items-center mb-5 thai">
                             <label id="signinInfo" class="col-lg-3 form-control-label">Nội dung</label>
                             <div class="col-lg-9">
                                 <div class="mt-5 mb-5 position-relative">
                                     <div class="group material-input thai">
-                                        <textarea class="thai" rows=50 form="addArticleForm" id="article-content" onkeydown="down(this)" name="content" required></textarea>
+                                        <textarea class="thai" rows=50 form="addArticleForm" id="article-content" onkeydown="down(this)" name="content" readonly></textarea>
                                         <span class="highlight"></span>
                                         <span class="bar"></span>
                                     </div>
@@ -37,39 +43,21 @@ use Cake\Routing\Router; ?>
                         </div>
                         <input type="hidden" id="id">
                         <div class="form-group row d-flex align-items-center mb-5">
-                            <label class="col-lg-3 form-control-label">Trạng thái</label>
-                            <div class="col-sm-9">
-                                <div class="mb-3">
-                                    <div class="styled-radio">
-                                        <input type="radio" value=1 name="status_id" id="radDaduyet">
-                                        <label for="radDaduyet">Đã duyệt</label>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="styled-radio">
-                                        <input type="radio" value=2 name="status_id" id="radChoDuyet">
-                                        <label for="radChoDuyet">Chờ duyệt</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row mb-5">
                             <label class="col-lg-3 form-control-label">Người đăng</label>
-                            <div class="col-lg-9 select mb-3">
-                                <select id="users" name="user_id" class="custom-select form-control">
-                                </select>
+                            <div class="col-lg-9">
+                                <input id="user-email" name="user" type="text" class="form-control" readonly>
                             </div>
                         </div>
 
                         <!-- Begin Auto Close Modal -->
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
-                                <button type="submit" class="btn btn-secondary ripple mr-1 mb-2" style="padding: 22px 50px; left: 50%;"><i class="la la-check"></i>Duyệt</button> &nbsp;&nbsp;&nbsp;
-                                <button type="submit" class="btn btn-outline-danger mr-1 mb-2 ripple" style="padding: 22px 50px; left: 50%;"><i class="la la-ban"></i>Hủy bài</button>&nbsp;&nbsp;&nbsp;
+                                <button onclick="showLoading()" type="submit" class="btn btn-secondary ripple mr-1 mb-2 ripple" style="padding: 22px 50px; left: 50%;"><i class="la la-check"></i>Duyệt</button> &nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-secondary mr-1 mb-2 ripple" style="padding: 22px 50px; left: 50%;"><i class="la la-ban"></i>Hủy bài</button>&nbsp;&nbsp;&nbsp;
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
                             </div>
                         </div>
-                        <div id="need-edit" class="row d-flex align-items-center mb-5 thai">
+                        <!-- <div id="need-edit" class="row d-flex align-items-center mb-5 thai">
                             <label id="signinInfo" class="col-lg-3 form-control-label">Yêu cầu chỉnh sửa</label>
                             <div class="col-lg-9">
                                 <div class="mt-5 mb-5 position-relative">
@@ -88,12 +76,12 @@ use Cake\Routing\Router; ?>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
+                        </div> -->
+                        <!-- <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
                                 <button type="submit" class="btn btn-secondary ripple mr-1 mb-2" style="padding: 22px 50px; left: 50%;"><i class="la la-pencil"></i>Yêu cầu chỉnh sửa</button>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- End Auto Close Modal -->
                     </form>
                 </div>
