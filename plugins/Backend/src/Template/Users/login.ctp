@@ -35,7 +35,7 @@
                             <?= $this->Html->image('Backend.logo.png', ["alt" => "logo"]); ?>   
                         </a>
                     </div>
-                    <h3>Welcome back !!!</h3>
+                    <h3>Welcome back</h3>
                     <form method="post" action="login">
                         <div class="group material-input" >
 						    <input type="text" name="email" required>

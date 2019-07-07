@@ -108,6 +108,7 @@ class CategoriesController extends AppController
 
                 return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, "message" => "Thêm thành công"]]);
             }
+            log::info($category->errors());
 
             return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, "message" => "Thêm thất bại"]]);
         }

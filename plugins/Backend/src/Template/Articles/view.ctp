@@ -191,6 +191,7 @@
                 $(".btn-save").val("Duyệt");
                 $("#title").val(response.article.title);
                 $("#user-email").val(response.article.user);
+                $("#btnCancel").attr('articleId', articleId);
 
                 
             },
@@ -206,6 +207,8 @@
                         'controller' => 'articles',
                         'action' => 'approve'
                     ]); ?>';
+
+
         $.ajax({
             url: url,
             dataType: 'json',
@@ -224,6 +227,37 @@
             error: function(response) {
                 alert("Không thể duyệt!");
             }
+
+        });
+    }
+
+    function cancel() {
+        showLoading();
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'cancel'
+                    ]); ?>';
+
+        var articleId = $('#btnCancel').attr('articleId');
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+                id: articleId,
+            },
+            cache: false,
+
+            success: function(response) {
+                alert("Đã hủy bài đăng");
+                back();
+            },
+            error: function(response) {
+                alert("Không thể hủy!");
+                back();
+            }
+
         });
     }
 

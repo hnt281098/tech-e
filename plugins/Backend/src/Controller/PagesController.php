@@ -56,7 +56,7 @@ class PagesController extends AppController
     //     }
     // }
 
-    public function index($currentPage = '', $type = 'children', $action ='', $statusId = 1, $message = '')
+    public function index($currentPage = 'users', $type = 'children', $action ='', $statusId = 1, $message = '')
     {
         if (!empty($this->request->query('currentPage'))) {
             $currentPage = $this->request->query('currentPage');

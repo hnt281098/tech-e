@@ -35,14 +35,14 @@
                                 <?= $this->Html->image('Backend.logo.png', ["alt" => "logo"]); ?>   
                             </a>
                         </div>
-                        <h3>Welcome to TechE-Magazine !!!</h3>
+                        <h3>Welcome to TechE-Magazine</h3>
                         <!-- <form method="post" action="google.com" enctype="multipart/form-data"> -->
                         <?= $this->Form->create('register', ['url'=>['controller'=>'users', 'action'=>'register'], 'enctype'=>'multipart/form-data', 'type'=>'file']) ?>
                             <!-- <img src="" id="img" width="90" height="90"> -->
                             <!-- <label onclick="uploadAvatar()" class="btn btn-info mr-1 mb-2">Tải ảnh lên</label> -->
-                            <div class="group material-input">
+                            <!-- <div class="group material-input">
                                 <input name="avatar" type="file" id="avatar" class="inputfile">
-                            </div>
+                            </div> -->
                             <div class="group material-input">
                                 <!-- <input name="email" type="text" required> -->
                                 <?= $this->Form->text('email', ['required', 'pattern'=>'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$', 'id'=>'email']) ?>

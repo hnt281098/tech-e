@@ -40,7 +40,7 @@ use Cake\Routing\Router;
                 alert('<?= $message ?>');
             }
 
-            if ('<?= $currentPage ?>' == 'users') {
+            if ('<?= $currentPage ?>' == 'users' || '<?= $currentPage ?>' == null) {
                 viewUser();
             }
             
