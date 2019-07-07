@@ -21,7 +21,22 @@
                 </div>
                 <div class="widget-body">
                     <div class="table-responsive">
-                        <table id="sorting-table" class="table mb-0 thai">
+                        <table id="sorting-table" class="table mb-0 thai no-footer">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <label style="color: black;">Search By
+                                    <select style="display:inline; border-style: none;">
+                                        <option value="category"><b>Category</b></option>
+                                        <option value="title" style="text-align:center;">Title</option>
+                                        <option value="id">Id</option>
+                                        <option value="user_id">User</option>
+                                        <option value="status">Status</option>
+                                    </select>
+                                    <input style="margin-top: 7px;" id="instagram" name="instagram" type="text" class="form-control">
+                                    </label> 
+                                    &nbsp; <a class="btn" href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
+                                </div>
+                            </div>
                             <thead>
                                 <tr>
                                     <?php
@@ -69,10 +84,10 @@
                 <div class="col-sm-12 col-md-7">
                     <div class="dataTables_paginate paging_simple_numbers" id="sorting-table_paginate">
                         <ul class="pagination">
-                            <li class="paginate_button page-item previous" id="previous"><a href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
-                            <li class="paginate_button page-item active"><a href="#" aria-controls="sorting-table" data-dt-idx="1" class="page-link">1</a></li>
-                            <li class="paginate_button page-item "><a href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
-                            <li class="paginate_button page-item next disabled" id="next"><a href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
+                            <li class="paginate_button page-item previous disabled" id="previous"><a onclick="list(<?=$pageIndex - 1?>,'<?= $type ?>')" href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
+                            <li class="paginate_button page-item active"><a id="now-page" href="#" aria-controls="sorting-table" data-dt-idx="1" class="page-link">1</a></li>
+                            <li class="paginate_button page-item" id="next-page-li"><a id="next-page" onclick="list(<?=$pageIndex + 1?>,'<?= $type ?>')" href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
+                            <li class="paginate_button page-item next" id="next"><a onclick="list(<?=$pageIndex + 1?> ,'<?= $type ?>')" href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
                         </ul>
                     </div>
                 </div>
@@ -137,6 +152,58 @@
 ?>
 
 <script>
+    function list(pageIndex, type) {
+        showLoading();
+        if (type == 'Danh mục lớn') {
+            type = "parent";
+        }
+        else {
+            type = "children";
+        }
+        var url = '<?= $this->Url->build([
+                        'controller' => 'categories',
+                        'action' => 'view'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                pageIndex: pageIndex,
+                type: type,
+            },
+
+            success: function(response) {
+                $('#content').empty();
+                $('#content').html(response.html);
+                
+
+                if (pageIndex == 1) {
+                    $('#next').removeClass("disabled");
+                    $('#previous').addClass("disabled");
+                }
+                else {
+                    $('#previous').removeClass("disabled");
+                }
+                $('#now-page').text(pageIndex);
+                
+                if (response.end == false) {
+                    $('#next-page').text(pageIndex + 1);
+                }
+                else {
+                    $('#next-page').remove();
+                    $('#next').addClass("disabled");
+                }
+                hideLoading();
+            },
+            error: function(response) {
+                alert("Không thể tải trang này!");
+                hideLoading();
+            }
+        });
+    }
+
     function submitDelete(categoryId, r) {
         var url = '<?= $this->Url->build([
                         'controller' => 'categories',
@@ -287,6 +354,7 @@
 
     $(document).ready(function() {
         hideLoading();
+        $('#page').attr('style', 'font-size:0.8rem;');
     });
 
 </script>

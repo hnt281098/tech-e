@@ -30,13 +30,9 @@ class ArticlesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function view($statusId = 1)
+    public function view($statusId = 1, $pageIndex = 1)
     {
-        
-        if (empty($this->request->query('pageIndex'))) {
-            $pageIndex = 1;
-        }
-        else {
+        if (!empty($this->request->query('pageIndex'))) {
             $pageIndex = $this->request->query('pageIndex');
         }
         
@@ -44,15 +40,22 @@ class ArticlesController extends AppController
             $statusId = $this->request->query('article_status_id');
             $articles = $this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex)->where(['status_id' => $statusId])->contain(['Categories','Users', 'ArticleStatus']);
             
-            if (empty($this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where(['status_id' => $statusId])->contain(['Categories','Users', 'ArticleStatus'])->toArray())) {
+            if (empty($this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where(['status_id' => $statusId])->toArray())) {
                 $end = true;
             }
-            else {
+            else { 
                 $end = false;
             }
         }
         else {
             $articles = $this->paginate($this->Articles);
+
+            if (empty($this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex+1)->toArray())) {
+                $end = true;
+            }
+            else { 
+                $end = false;
+            }
         }
     
         foreach ($articles as $article) {

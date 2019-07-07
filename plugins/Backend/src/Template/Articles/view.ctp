@@ -1,4 +1,6 @@
-<?php use Cake\Routing\Router; ?>
+<?php use Cake\Routing\Router; 
+$fields = array_keys($articles->toArray()[0]->toArray());
+?>
 <div class="container-fluid">
     <!-- Begin Page Header-->
     <div class="row">
@@ -19,43 +21,29 @@
                 <!-- <div class="widget-header bordered no-actions d-flex align-items-center">
                     <h4>Sorting</h4>
                 </div> -->
-                
                 <div class="widget-body">
-                    
                     <div class="table-responsive">
-                        
-                        <table id="sorting-table" class="table mb-0">
-
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="dataTables_length" id="sorting-table_length">
-                                    <!-- <label>Show 
-                                        <select name="sorting-table_length" aria-controls="sorting-table" class="form-control form-control-sm">
-                                            <option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="-1">All</option>
-                                        </select> entries
-                                    </label> -->
-                                    <label for="search-input">Search:
-                                        <!-- <select name="sorting-table_length" aria-controls="sorting-table" class="form-control form-control-sm"  style="display:inline;">
-                                            <option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="-1">All</option>
-                                        </select> -->
-
-                                        <input id="search-input" type="search"  style="display:inline-block;" class="form-control form-control-sm" placeholder="" aria-controls="sorting-table" >
-                                    </label> By
-
-                                </div>
-                                
-                            </div>
-
-                            <div class="col-sm-12 col-md-6">
-                                <div style="text-align:right" id="sorting-table_filter" class="dataTables_filter thai">
+                        <table id="sorting-table" class="table mb-0 thai">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <label style="color: black;">Search By
+                                    <select style="display:inline; border-style: none;">
+                                        <option value="category"><b>Category</b></option>
+                                        <option value="title" style="text-align:center;">Title</option>
+                                        <option value="id">Id</option>
+                                        <option value="user">User</option>
+                                        <option value="status">Status</option>
+                                    </select>
+                                    <input style="margin-top: 7px;" id="instagram" name="instagram" type="text" class="form-control">
+                                    </label> 
+                                    
+                                    &nbsp; <a class="btn" href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
                                 </div>
                             </div>
-                        </div>
                             
                             <thead>
                                 <tr>
                                     <?php
-                                    $fields = array_keys($articles->toArray()[0]->toArray());
                                     foreach ($fields as $field) {
                                     ?>
                                         <th style="text-align:center;"><?= str_replace('_', ' ', ucwords($field)) ?></th>
@@ -98,10 +86,10 @@
                 <div class="col-sm-12 col-md-7">
                     <div class="dataTables_paginate paging_simple_numbers" id="sorting-table_paginate">
                         <ul class="pagination">
-                            <li class="paginate_button page-item previous disabled" id="previous"><a onclick="list(<?=$pageIndex - 1?>)" href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
+                            <li class="paginate_button page-item previous disabled" id="previous"><a onclick="list(<?=$pageIndex - 1 .','.$type?>)" href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
                             <li class="paginate_button page-item active"><a id="now-page" href="#" aria-controls="sorting-table" data-dt-idx="1" class="page-link">1</a></li>
-                            <li class="paginate_button page-item "><a id="next-page" onclick="list(<?=$pageIndex + 1 ?>)" href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
-                            <li class="paginate_button page-item next" id="next"><a onclick="list(<?=$pageIndex + 1 ?>)" href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
+                            <li class="paginate_button page-item" id="next-page-li"><a id="next-page" onclick="list(<?=$pageIndex + 1 .','.$type?>)" href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
+                            <li class="paginate_button page-item next" id="next"><a onclick="list(<?=$pageIndex + 1 .','.$type ?>)" href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
                         </ul>
                     </div>
                 </div>
@@ -140,59 +128,51 @@
 ?>
 
 <script>
-    function list(pageIndex) {
-            showLoading();
-            var url = '<?= $this->Url->build([
-                            'controller' => 'articles',
-                            'action' => 'view'
-                        ]); ?>';
-            $.ajax({
-                url: url,
-                dataType: 'json',
-                type: 'GET',
-                cache: false,
-                data: {
-                    pageIndex: pageIndex,
-                    article_status_id: 1,
-                },
+    function list(pageIndex, articleId) {
+        showLoading();
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'view'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                pageIndex: pageIndex,
+                article_status_id: articleId,
+            },
 
-                success: function(response) {
-                    $('#content').empty();
-                    $('#content').html(response.html);
-                    
+            success: function(response) {
+                $('#content').empty();
+                $('#content').html(response.html);
+                
 
-                    if (pageIndex == 1) {
-                        $('#next').removeClass("disabled");
-                        $('#previous').addClass("disabled");
-                    }
-                    else {
-                        $('#previous').removeClass("disabled");
-                    }
-                    $('#now-page').text(pageIndex);
-                    
-                    if (response.end == false) {
-                        $('#next-page').text(pageIndex + 1);
-                    }
-                    else {
-                        $('#next-page').remove();
-                        $('#next').addClass("disabled");
-                    }
-                    hideLoading();
-                },
-                error: function(response) {
-                    
-                    if (response.responseJSON.timeout == true) {
-                        alert("Phiên hết hạn, mời đăng nhập lại");
-                        window.location= '<?= Router::url(['controller' => 'users', 'action' => 'login']) ?>';
-                    }
-
-                    else {
-                        alert("Không thể tải trang này!");
-                        hideLoading();
-                    }
+                if (pageIndex == 1) {
+                    $('#next').removeClass("disabled");
+                    $('#previous').addClass("disabled");
                 }
-            });
-        }
+                else {
+                    $('#previous').removeClass("disabled");
+                }
+                $('#now-page').text(pageIndex);
+                
+                if (response.end == false) {
+                    $('#next-page').text(pageIndex + 1);
+                }
+                else {
+                    $('#next-page').remove();
+                    $('#next').addClass("disabled");
+                }
+                hideLoading();
+            },
+            error: function(response) {
+                alert("Không thể tải trang này!");
+                hideLoading();
+            }
+        });
+    }
 
     function showDetailApprove(articleId) {
         var url = '<?= $this->Url->build([
@@ -379,6 +359,7 @@
     $(document).ready(function() {
         $('#now-page').addClass('disabled');
         hideLoading();
+        $('#page').attr('style', 'font-size:0.7rem;');
     });
     
 </script>

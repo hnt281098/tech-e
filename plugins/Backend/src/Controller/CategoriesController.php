@@ -24,21 +24,32 @@ class CategoriesController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function view()
+    public function view($pageIndex = 1)
     {
+        if (!empty($this->request->query('pageIndex'))) {
+            $pageIndex = $this->request->query('pageIndex');
+        }
+
         $this->response->type('json');
         $this->response->statusCode(200);   
+
         if ($this->request->query('type') == 'parent' ) {
-            $categories = $this->paginate($this->Categories->find()->where(['parent_id = 0']));
+            $categories = $this->Categories->find()->order(['Categories.id' => 'ASC'])->limit(7)->page($pageIndex)->where(['parent_id = 0']);
 
             foreach($categories as $category) {
                 unset($category['parent_id']);
             }
             $type = "Danh mục lớn";
-        }
 
+            if (empty($this->Categories->find()->order(['Categories.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where(['parent_id = 0'])->toArray())) {
+                $end = true;
+            }
+            else {
+                $end = false;
+            }
+        }
         else {
-            $categories = $this->paginate($this->Categories->find()->where(['parent_id != 0']));
+            $categories = $this->Categories->find()->order(['Categories.id' => 'ASC'])->limit(7)->page($pageIndex)->where(['parent_id != 0']);
 
             foreach($categories as $category) {
                 $parentName = $this->Categories->find()->where(['id' => $category['parent_id']])->select('name')->first();
@@ -46,13 +57,20 @@ class CategoriesController extends AppController
                 unset($category['parent_id']);
             }
             $type = "Danh mục nhỏ";
+
+            if (empty($this->Categories->find()->order(['Categories.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where(['parent_id != 0'])->toArray())) {
+                $end = true;
+            }
+            else {
+                $end = false;
+            }
         }
 
         $view = new \Cake\View\View();
         $view->setLayout(false);
-        $view->set(compact(['categories', 'type']));
+        $view->set(compact(['categories', 'type', 'pageIndex']));
         $html = $view->render('Backend.Categories/view');
-        $this->response->body(json_encode(['html' => $html]));
+        $this->response->body(json_encode(['html' => $html, 'end' => $end]));
         
         return $this->response;
     }
@@ -108,7 +126,6 @@ class CategoriesController extends AppController
 
                 return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, "message" => "Thêm thành công"]]);
             }
-            log::info($category->errors());
 
             return $this->redirect(['controller' => 'Pages', 'action' => 'index', '?' => ['currentPage' => 'categories', 'type' => $type, "message" => "Thêm thất bại"]]);
         }

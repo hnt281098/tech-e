@@ -16,12 +16,27 @@
 
             <!-- Sorting -->
             <div class="widget has-shadow">
-                <div class="widget-header bordered no-actions d-flex align-items-center">
-                    <h4>Sorting</h4>
-                </div>
-                <div class="widget-body">
+               <div class="widget-body">
                     <div class="table-responsive">
                         <table id="sorting-table" class="table mb-0 thai">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <label style="color: black;">Search By
+                                    <select id="search-field" style="display:inline; border-style: none;">
+                                        <option value="fullname">Full name</option>
+                                        <option value="email">Email</option>
+                                        <option value="gender">Gender</option>
+                                        <option value="status">Status</option>
+                                        <option value="role">Role</option>
+                                        <option value="facebook">Facebook</option>
+                                        <option value="instagram">Instagram</option>
+                                    </select>
+                                    <input style="margin-top: 7px;" id="input-search" name="input-search" type="text" class="form-control">
+                                    </label> 
+                                    
+                                    <a class="btn" href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
+                                </div>
+                            </div>
                             <thead>
                                 <tr>
                                     <?php
@@ -111,33 +126,22 @@
 <!-- end div for left-bar element -->
 </div>
 <!-- Begin Vendor Js -->
-<?= $this->Html->script(array(
-    '../backend/template/vendors/js/base/jquery.min',
-    '../backend/template/vendors/js/base/core.min',
+<?php echo $this->Html->script(array(
+        '../backend/template/vendors/js/base/jquery.min',
+        '../backend/template/vendors/js/base/core.min',
 
-    '../backend/template/vendors/js/datatables/datatables.min',
-    '../backend/template/vendors/js/datatables/dataTables.buttons.min',
-    '../backend/template/vendors/js/datatables/jszip.min',
-    '../backend/template/vendors/js/datatables/buttons.html5.min',
-
-    '../backend/template/vendors/js/datatables/vfs_fonts',
-
-    '../backend/template/vendors/js/nicescroll/nicescroll.min',
-    '../backend/template/vendors/js/datepicker/moment.min',
-    '../backend/template/vendors/js/datepicker/daterangepicker',
-
-    '../backend/template/vendors/js/app/app.min',
-    '../backend/template/js/components/tables/tables',
-
-
-    '../backend/template/js/components/datepicker/datepicker',
-    '../backend/template/vendors/js/datepicker/moment.min',
-    '../backend/template/vendors/js/datepicker/daterangepicker',
-    '../backend/template/js/components/datepicker/datepicker',
-));
+        '../backend/template/vendors/js/nicescroll/nicescroll.min',
+        '../backend/template/vendors/js/chart/chart.min',
+        '../backend/template/vendors/js/owl-carousel/owl.carousel.min',
+        '../backend/template/vendors/js/progress/circle-progress.min',
+        '../backend/template/js/components/widgets/widgets.min',
+        '../backend/template/vendors/js/app/app.min',
+    ));
 ?>
 
 <script>
+    
+
     function list(pageIndex) {
             showLoading();
             var url = '<?= $this->Url->build([
@@ -206,12 +210,12 @@
             cache: false,
 
             success: function(response) {
-                alert("User deleted");
+                alert("Đã vô hiệu hóa tài khoản");
                 var i = r.parentNode.parentNode.rowIndex;
                 document.getElementById("sorting-table").deleteRow(i);
             },
             error: function(response) {
-                alert("Delete fail");
+                alert("Không thể vô hiệu hóa tài khoản này!");
             }
         });
     }
