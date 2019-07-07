@@ -29,7 +29,7 @@
                                     $fields = array_keys($categories[0]->toArray());
                                     foreach ($fields as $field) {
                                         ?>
-                                        <th><?= str_replace('_', ' ', ucwords($field)) ?></th>
+                                        <th style="text-align:center;"><?= str_replace('_', ' ', ucwords($field)) ?></th>
                                     <?php } ?>
                                 </tr>
                             </thead>

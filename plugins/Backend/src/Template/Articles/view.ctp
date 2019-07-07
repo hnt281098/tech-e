@@ -19,16 +19,46 @@
                 <!-- <div class="widget-header bordered no-actions d-flex align-items-center">
                     <h4>Sorting</h4>
                 </div> -->
+                
                 <div class="widget-body">
+                    
                     <div class="table-responsive">
-                        <table id="sorting-table" class="table mb-0 thai">
+                        
+                        <table id="sorting-table" class="table mb-0">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="dataTables_length" id="sorting-table_length">
+                                    <!-- <label>Show 
+                                        <select name="sorting-table_length" aria-controls="sorting-table" class="form-control form-control-sm">
+                                            <option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="-1">All</option>
+                                        </select> entries
+                                    </label> -->
+                                    <label for="search-input">Search:
+                                        <!-- <select name="sorting-table_length" aria-controls="sorting-table" class="form-control form-control-sm"  style="display:inline;">
+                                            <option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="-1">All</option>
+                                        </select> -->
+
+                                        <input id="search-input" type="search"  style="display:inline-block;" class="form-control form-control-sm" placeholder="" aria-controls="sorting-table" >
+                                    </label> By
+
+                                </div>
+                                
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <div style="text-align:right" id="sorting-table_filter" class="dataTables_filter thai">
+                                </div>
+                            </div>
+                        </div>
+                            
                             <thead>
                                 <tr>
                                     <?php
                                     $fields = array_keys($articles->toArray()[0]->toArray());
                                     foreach ($fields as $field) {
-                                        ?>
-                                        <th ><?= str_replace('_', ' ', ucwords($field)) ?></th>
+                                    ?>
+                                        <th style="text-align:center;"><?= str_replace('_', ' ', ucwords($field)) ?></th>
                                     <?php } ?>
                                 </tr>
                             </thead>

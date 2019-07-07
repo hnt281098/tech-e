@@ -23,3 +23,9 @@ textarea{
   border-radius:10px;
   border:6px solid #556677;
 }
+
+#sorting-table_filter {
+    right:0px !important;
+    text-align:right; box-sizing: border-box;
+
+}
