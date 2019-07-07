@@ -70,10 +70,10 @@
                 <div class="col-sm-12 col-md-7">
                     <div class="dataTables_paginate paging_simple_numbers" id="sorting-table_paginate">
                         <ul class="pagination">
-                            <li class="paginate_button page-item previous" id="previous"><a href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
-                            <li class="paginate_button page-item active"><a href="#" aria-controls="sorting-table" data-dt-idx="1" class="page-link">1</a></li>
-                            <li class="paginate_button page-item "><a href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
-                            <li class="paginate_button page-item next disabled" id="next"><a href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
+                            <li class="paginate_button page-item previous disabled" id="previous"><a onclick="list(<?=$pageIndex - 1?>)" href="#" aria-controls="sorting-table" data-dt-idx="0" class="page-link">Previous</a></li>
+                            <li class="paginate_button page-item active"><a id="now-page" href="#" aria-controls="sorting-table" data-dt-idx="1" class="page-link">1</a></li>
+                            <li class="paginate_button page-item "><a id="next-page" onclick="list(<?=$pageIndex + 1 ?>)" href="#" aria-controls="sorting-table" data-dt-idx="2" class="page-link">2</a></li>
+                            <li class="paginate_button page-item next" id="next"><a onclick="list(<?=$pageIndex + 1 ?>)" href="#" aria-controls="sorting-table" data-dt-idx="3" class="page-link">Next</a></li>
                         </ul>
                     </div>
                 </div>
@@ -138,6 +138,59 @@
 ?>
 
 <script>
+    function list(pageIndex) {
+            showLoading();
+            var url = '<?= $this->Url->build([
+                            'controller' => 'users',
+                            'action' => 'view'
+                        ]); ?>';
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                type: 'GET',
+                cache: false,
+                data: {
+                    pageIndex: pageIndex,
+                },
+
+                success: function(response) {
+                    $('#content').empty();
+                    $('#content').html(response.html);
+                    
+
+                    if (pageIndex == 1) {
+                        $('#next').removeClass("disabled");
+                        $('#previous').addClass("disabled");
+                    }
+                    else {
+                        $('#previous').removeClass("disabled");
+                    }
+                    $('#now-page').text(pageIndex);
+                    
+                    if (response.end == false) {
+                        $('#next-page').text(pageIndex + 1);
+                    }
+                    else {
+                        $('#next-page').remove();
+                        $('#next').addClass("disabled");
+                    }
+                    hideLoading();
+                },
+                error: function(response) {
+                    
+                    if (response.responseJSON.timeout == true) {
+                        alert("Phiên hết hạn, mời đăng nhập lại");
+                        window.location= '<?= Router::url(['controller' => 'users', 'action' => 'login']) ?>';
+                    }
+
+                    else {
+                        alert("Không thể tải trang này!");
+                        hideLoading();
+                    }
+                }
+            });
+        }
+
     function submitDelete(userId, r) {
         var url = '<?= $this->Url->build([
                         'controller' => 'users',

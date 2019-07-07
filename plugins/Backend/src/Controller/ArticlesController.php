@@ -85,22 +85,6 @@ class ArticlesController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Article id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function viewDetail($id = null)
-    {
-        $article = $this->Articles->get($id, [
-            'contain' => ['Categories', 'Authors', 'Comments']
-        ]);
-
-        $this->set('article', $article);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -220,109 +204,6 @@ class ArticlesController extends AppController
             return $this->response;
         }
     }
-
-    public function articlesDetails($id=null)
-    {
-        $this->loadModel('Users');
-        $this->loadModel('Comments');
-        $data['articleDetails'] = $this->Articles->findAllById($id);
-        $data['userList'] = $this->Articles->find(
-            'all',
-            ['fields'=>['id', 'fullname', 'avatar']]
-         );
-        
-        foreach($data['articleDetails'] as $value){
-            $data['authorDetails'] = $this->Articles->findAllById($value['user_id']);
-
-
-            $data['amountComment'] = $this->Comments->findAllByArticleId($value['id'])->count();
-            $this->paginate = [
-                'conditions'=>['article_id'=>$value['id'], 'status'=>1], 
-                'order'=>['comment_date'=>'DESC', 'id'=>'DESC'],
-                'limit'=>5
-            ];
-            $data['commentDetails'] = $this->paginate($this->Comments);
-        };
-
-        $this->set('data', $data);
-    }
-
-    public function articlesNew()
-    {
-        $list = $this->Articles->find(
-            'all', 
-            ['fields'=>['id', 'title', 'posting_date', 'image'], 'conditions'=>['status=1'], 'order'=>['posting_date DESC'], 'limit'=>5]
-        );
-        $this->set('articlesNew', $list);
-    }
-
-    public function articlesMostView()
-    {
-        $list = $this->Articles->find(
-            'all', 
-            ['fields'=>['id', 'title', 'posting_date', 'image'], 'conditions'=>['status=1'], 'order'=>['view DESC'], 'limit'=>5]
-        );
-        $this->set('articlesMostView', $list);
-    }
-
-    public function articlesSearch($tag = null)
-    {
-        if($tag == '*'){
-            if($this->request->is('post')){
-                $keyword = $this->request->getData('keyword');
-                if(!empty($keyword)){
-                    $this->loadModel('Searches');
-                    $result = $this->Searches->findAllByKeyword($keyword);
-                    if($result->count() > 0){
-                        foreach ($result as $value) {
-                            $search = $this->Searches->get($value['id']);
-                            $newTimes = $value['times'] + 1;
-                            $search = $this->Searches->patchEntity($search, [
-                                'times'=>$newTimes
-                            ]);
-                            $this->Searches->save($search);
-                        }
-                    }else{
-                        $search = $this->Searches->newEntity();
-                        $search = $this->Searches->patchEntity($search, [
-                            'keyword'=>$keyword,
-                            'times'=>1
-                        ]);
-                        $this->Searches->save($search);
-                    }
-
-                    $this->paginate = ['conditions'=>['title LIKE'=>"%$keyword%"], 'order'=>['posting_date'=>'DESC']];
-                    $data['articlesList'] = $this->paginate('Articles');
-                    $this->set('data', $data);
-                }
-            }
-        }else{
-            $this->loadModel('Searches');
-            $result = $this->Searches->findAllByKeyword($tag);
-            if($result->count() > 0){
-                foreach ($result as $value) {
-                    $search = $this->Searches->get($value['id']);
-                    $newTimes = $value['times'] + 1;
-                    $search = $this->Searches->patchEntity($search, [
-                        'times'=>$newTimes
-                    ]);
-                    $this->Searches->save($search);
-                }
-            }else{
-                $search = $this->Searches->newEntity();
-                $search = $this->Searches->patchEntity($search, [
-                    'keyword'=>$tag,
-                    'times'=>1
-                ]);
-                $this->Searches->save($search);
-            }
-
-            $this->paginate = ['conditions'=>['title LIKE'=>"%$tag%"], 'order'=>['posting_date'=>'DESC']];
-            $data['articlesList'] = $this->paginate('Articles');
-            $this->set('data', $data);
-        }
-    }
-
     
     public function approve() 
     {
@@ -363,4 +244,30 @@ class ArticlesController extends AppController
 
         return $this->response;
     } 
+
+    function cancel() {
+        $this->response->type('json');
+        $this->response->statusCode(200);
+
+        $id = $this->request->data('id');
+        $article = $this->Articles->get($id);
+        $article->status_id = 3;
+        
+        if ($this->Articles->save($article)) {
+            $response = [
+                'success' => true,
+            ];
+            $this->response->body(json_encode($response));
+
+            return $this->response;
+        }
+
+        $response = [
+            'success' => false,
+        ];
+        $this->response->body(json_encode($response));
+        $this->response->statusCode(500);
+
+        return $this->response;
+    }
 }

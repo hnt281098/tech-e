@@ -30,21 +30,9 @@ Router::plugin(
         $routes->scope('/articles', ['controller'=>'articles'], function(RouteBuilder $routes){
             $routes->get('/', ['action'=>'view']);
             $routes->get('/view', ['action'=>'view']);
-            $routes->connect('/articles-new', ['action'=>'articlesNew']);
             $routes->post('/add', ['action'=>'add']);
             $routes->post('/approve', ['action' => 'approve']);
             $routes->post('/delete', ['action' => 'delete']);
-            $routes->connect('/articles-most-view', ['action'=>'articlesMostView']);
-            $routes->connect(
-                '/:id',
-                ['action'=>'articlesDetails'],
-                ['pass'=>['id'], 'id'=>'[0-9]+']
-            );
-            $routes->connect(
-                '/search/:tag', 
-                ['action'=>'articlesSearch'],
-                ['pass'=>['tag']]
-            );
         });
 
         $routes->scope('/categories', ['controller' => 'Categories'], function(RouteBuilder $routes) {

@@ -20,18 +20,28 @@ class UsersController extends AppController
         $this->Auth->allow('login');
     }
 
-    public function view()
+    public function view($pageIndex = 1)
     {
         $this->loadModel('Roles');
         $this->response->type('json');
         $this->response->statusCode(200);
 
-        $users = $this->Users->find()->order(['id'])->toArray();
+        if (!empty($this->request->query('pageIndex'))) {
+            $pageIndex = $this->request->query('pageIndex');
+        }
+        
+        $users = $this->Users->find()->order(['Users.id' => 'ASC'])->limit(7)->page($pageIndex)->toArray();
+        
+        if (empty($this->Users->find()->order(['Users.id' => 'ASC'])->limit(7)->page($pageIndex+1)->toArray())) {
+            $end = true;
+        }
+        else {
+            $end = false;
+        }
 
         foreach ($users as $user) {
             unset($user['password']);
             unset($user['confirm_expired_time']);
-
             $user['Role'] = $this->Roles->get($user['role_id'])->name;
             unset($user['role_id']);
             unset($user['avatar']);
@@ -41,10 +51,10 @@ class UsersController extends AppController
 
         $view = new \Cake\View\View();
         $view->setLayout(false);
-        $view->set(compact('users'));
+        $view->set(compact(['users', 'pageIndex']));
         $html = $view->render('Backend.Users/view');
         
-        $this->response->body(json_encode(['html' => $html]));
+        $this->response->body(json_encode(['html' => $html, 'end' => $end]));
         
         return $this->response;
     }
@@ -292,14 +302,14 @@ class UsersController extends AppController
             $user->birthday = $birthday;
 
             //Upload avatar
-            $file = $this->request->getData('avatar');
-            $filename = null;
-            if(!empty($file['tmp_name'])){
-                $filename = $file['name'];
-                if(move_uploaded_file($file['tmp_name'], WWW_ROOT . 'uploads' . DS . 'avatar' . DS . $filename)){
-                    $user->avatar = $filename;
-                }
-            }
+            // $file = $this->request->getData('avatar');
+            // $filename = null;
+            // if(!empty($file['tmp_name'])){
+            //     $filename = $file['name'];
+            //     if(move_uploaded_file($file['tmp_name'], WWW_ROOT . 'uploads' . DS . 'avatar' . DS . $filename)){
+            //         $user->avatar = $filename;
+            //     }
+            // }
 
             if($this->Users->save($user)){
                 $this->redirect(['action'=>'login']);

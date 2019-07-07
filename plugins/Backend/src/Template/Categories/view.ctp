@@ -152,12 +152,12 @@
             cache: false,
 
             success: function(response) {
-                alert("Category deleted");
+                alert("Đã xóa danh mục");
                 var i = r.parentNode.parentNode.rowIndex;
                 document.getElementById("sorting-table").deleteRow(i);
             },
             error: function(response) {
-                alert("Delete fail");
+                alert("Xóa thất bại");
             }
         });
     }
@@ -197,7 +197,7 @@
 
             },
             error: function(response) {
-                alert("Can not load form!");
+                alert("Không thể tải form này!");
             },
         });
     }
@@ -255,7 +255,7 @@
                 }
             },
             error: function(response) {
-                alert("Không thể load form này!");
+                alert("Không thể tải form này!");
             }
         });
     }

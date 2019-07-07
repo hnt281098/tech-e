@@ -53,7 +53,7 @@ use Cake\Routing\Router; ?>
                         <div class="row">
                             <div class="col-xl-8 d-flex align-items-center mb-3">
                                 <button onclick="showLoading()" type="submit" class="btn btn-secondary ripple mr-1 mb-2 ripple" style="padding: 22px 50px; left: 50%;"><i class="la la-check"></i>Duyệt</button> &nbsp;&nbsp;&nbsp;
-                                <button type="submit" class="btn btn-secondary mr-1 mb-2 ripple" style="padding: 22px 50px; left: 50%;"><i class="la la-ban"></i>Hủy bài</button>&nbsp;&nbsp;&nbsp;
+                                <a id="btnCancel" onclick="cancel()" class="btn btn-secondary mr-1 mb-2 ripple" style="padding: 22px 50px; left: 50%;"><i class="la la-ban"></i>Hủy bài</a>&nbsp;&nbsp;&nbsp;
                                 <button id="showModal" type="button" class="btn btn-gradient-01" data-toggle="modal" data-target="#delay-modal" style="display: none;"></button>
                             </div>
                         </div>
