@@ -213,8 +213,8 @@ return [
         'gmail' => [
             'host' => 'ssl://smtp.gmail.com',
             'port' => 465,
-            'username' => 'phuongthai228@gmail.com',
-            'password' => 'thaijr98',
+            'username' => 'hnt281098@gmail.com',
+            'password' => 'Huynhngoctan2810',
             'className' => 'Smtp'
         ],
     ],
@@ -237,7 +237,7 @@ return [
         ],
         'gmail' => [
             'transport' => 'gmail',
-            'from' => 'phuongthai228@gmail.com',
+            'from' => 'hnt281098@gmail.com',
             'charset' => 'utf-8',
             'headerCharset' => 'utf-8',
             'emailFormat' => 'html',

@@ -229,7 +229,7 @@ class ArticlesController extends AppController
         $article->status_id = 1;
 
         if ($this->Articles->save($article)) {
-            $this->Email->sendMail('boringlife335@gmail.com', 'Bài đăng đã được duyệt', ['id' => $id]);
+            $this->Email->sendMail('oigioioi1998@gmail.com', 'Bài đăng đã được duyệt', ['id' => $id]);
 
             // $this->response->body(json_encode($response));
 

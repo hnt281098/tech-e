@@ -189,10 +189,7 @@ use Cake\Routing\Router;
                     ]); ?>';
             id = cmtId;
         }else if(type == 'user'){
-            url = '<?= $this->Url->build([
-                        'controller' => 'users',
-                        'action' => 'blockUser',
-                    ]); ?>';
+            url = "<?= Router::url(['controller' => 'Users', 'action' => 'blockUser', 'plugin'=>'Backend']) ?>";
             id = userId;
         }
         $.ajax({

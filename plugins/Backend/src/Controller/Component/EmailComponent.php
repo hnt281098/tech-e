@@ -15,4 +15,13 @@ class EmailComponent extends Component
             ->template('Backend.approved')
             ->send();
     }
+
+    public function sendMailBlockUser($destEmail, $subject) {
+        $email = new Email('gmail');
+        $email
+            ->to($destEmail)
+            ->subject($subject)
+            ->template('Backend.block_user')
+            ->send();
+    }
 }

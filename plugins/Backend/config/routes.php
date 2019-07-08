@@ -41,6 +41,7 @@ Router::plugin(
         });
         
         $routes->scope('/users', ['controller' => 'Users'], function(RouteBuilder $routes) {
+            $routes->post('/block-user', ['action'=>'blockUser']);
             $routes->connect('/login', ['action' => 'login']);
             // $routes->connect('/json/login', ['action' => 'login']);
             $routes->connect('/add', ['action' => 'add', '[_method]' => 'POST']);

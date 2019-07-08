@@ -16,6 +16,7 @@ class UsersController extends AppController
         $this->loadComponent('Backend.Role');
         $this->loadComponent('Backend.CheckInputs');
         $this->loadModel('Users');
+        $this->loadComponent('Backend.Email');
         
         $this->Auth->allow('login');
     }
@@ -408,6 +409,26 @@ class UsersController extends AppController
         
         $this->response->body(json_encode(['html' => $html, 'end' => $end]));
         
+        return $this->response;
+    }
+
+    public function blockUser()
+    {
+        $this->response->statusCode(200);
+        $this->response->type('json');
+        $this->response->body(json_encode(['success' => true]));
+
+        $id = $this->request->getData('id');
+        $user = $this->Users->get($id);
+        $user->status = 0;
+
+        if ($this->Users->save($user)) {
+            $this->Email->sendMailBlockUser('oigioioi1998@gmail.com', 'Tài khoản của bạn đã bị khóa.');
+            return $this->response;
+        }
+        
+        $this->response->statusCode(500);
+        $this->response->body(json_encode(['success' => false]));
         return $this->response;
     }
 }
