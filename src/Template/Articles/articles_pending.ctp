@@ -5,7 +5,6 @@
             <th>Tiêu đề</th>
             <th>Ngày đăng</th>
             <th>Trạng thái</th>
-            <th>Gỡ</th>
         </tr>
     </thead>
     <tbody>
@@ -15,7 +14,6 @@
                 <td><?= $value['title'] ?></td>
                 <td><?= $value['posting_date']->format('d-M-Y') ?></td>
                 <td><span class="badge badge-warning">Đang chờ</span></td>
-                <td><a><i class="fa fa-trash"></i></a></td>
             </tr>
         <?php } ?>
     </tbody>

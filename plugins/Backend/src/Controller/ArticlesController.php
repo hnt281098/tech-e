@@ -273,4 +273,80 @@ class ArticlesController extends AppController
 
         return $this->response;
     }
+
+    public function search($statusId = 1, $pageIndex = 1)
+    {
+        $this->loadModel('Users');
+        $this->loadModel('Categories');
+        $query = $this->request->query();
+        
+        if (!empty($query['type'])) {
+            $statusId = $query['type'];
+        }
+
+        if (!empty($query['pageIndex'])) {
+            $pageIndex = $query['pageIndex'];
+        }
+        
+        if ($query['field'] == 'category') {
+            $category = $this->Categories->find()->where(["Categories.name LIKE N'%".$query['input']."%'"])->select('id')->first();
+            $conditions = [
+                'category_id' => $category->id,
+                'status_id' => $statusId,
+            ];
+        }
+        else if ($query['field'] == 'user') {
+            $user = $this->Users->find()->where(["Users.email LIKE N'%".$query['input']."%'"])->select('id')->first();
+            log::info($user);
+            $conditions = [
+                'user_id' => $user->id,
+                'status_id' => $statusId,
+            ];
+        }
+        else {
+            $conditions = [
+                $query['field']." LIKE N'%". $query['input']. "%'",
+                'status_id' => $statusId,
+            ];
+        }
+
+        $articles = $this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex)->where($conditions)->contain(['Categories','Users', 'ArticleStatus']);
+            
+        if (empty($this->Articles->find()->order(['Articles.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where($conditions)->toArray())) {
+            $end = true;
+        }
+        else { 
+            $end = false;
+        }
+
+        
+    
+        foreach ($articles as $article) {
+            unset($article['content']);
+            unset($article['description']);
+            $article['user'] = $article['user']['email'];
+            $article['status'] = $article['article_status']['name'];
+            $article['category'] = $article['category']['name'];
+            unset($article['article_status']);
+            unset($article['status_id']);
+            unset($article['user_id']);
+            unset($article['category_id']);
+            unset($article['image']);
+            unset($article['category_id']);
+            unset($article['source']);
+        }
+        
+        if ($articles->count() == 0) {
+            $articles[] = $this->Articles->newEntity();
+        }
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $view->set(compact(['articles', 'pageIndex']));
+        $html = $view->render('Backend.Articles/view');
+        
+        $this->response->body(json_encode(['html' => $html, 'end' => $end]));
+        
+        return $this->response;
+    }
 }

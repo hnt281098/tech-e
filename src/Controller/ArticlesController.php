@@ -400,6 +400,7 @@ class ArticlesController extends AppController
         $user = $this->Auth->user();
         $data['amountArticlesApproved'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 1]])->count();
         $data['amountArticlesPending'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 2]])->count();
+        $data['amountArticlesRemove'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 4]])->count();
         $this->set('data', $data);
     }
 
@@ -453,5 +454,69 @@ class ArticlesController extends AppController
         $data['articlesList'] = $result;
 
         $this->set('data', $data);
+    }
+
+    public function articlesRemove()
+    {
+        $articlePage = $this->request->query('articlePage');
+        $user = $this->Auth->user();
+        $articlesList = $this->Articles->find(
+            'all',
+            [
+                'conditions' => ['user_id' => $user['id'], 'status_id' => 4],
+                'order'=>['Articles.posting_date' => 'desc', 'Articles.id' => 'desc'],
+                'contain' => 'Users'
+            ]
+        )->toArray();
+        $data['amountArticles'] = $this->Articles->find('all', ['conditions'=>['user_id' => $user['id'], 'status_id' => 4]])->count();
+
+        $result = [];
+
+        foreach ($articlesList as $key => $article) {
+            if (($key >= ($articlePage-1)*10) && ($key <= ($articlePage*10-1))) {
+                $result[] = $article;
+            }
+        }
+        $data['articlesList'] = $result;
+
+        $this->set('data', $data);
+    }
+
+    public function remove()
+    {
+        $this->response->statusCode(200);
+        $this->response->type('json');
+        $this->response->body(json_encode(['success' => true]));
+
+        $id = $this->request->getData('id');
+        $article = $this->Articles->get($id);
+        $article->status_id = 4;
+
+        if ($this->Articles->save($article)) {
+            return $this->response;
+        }
+        
+        $this->response->statusCode(500);
+        $this->response->body(json_encode(['success' => false]));
+        return $this->response;
+    }
+
+    public function show()
+    {
+        $this->response->statusCode(200);
+        $this->response->type('json');
+        $this->response->body(json_encode(['success' => true]));
+
+        $id = $this->request->getData('id');
+        $article = $this->Articles->get($id);
+        $article->status_id = 1;
+
+        if ($this->Articles->save($article)) {
+            return $this->response;
+        }
+        
+        $this->response->statusCode(500);
+        $this->response->body(json_encode(['success' => false]));
+        return $this->response;
     }
 }

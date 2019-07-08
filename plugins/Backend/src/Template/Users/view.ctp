@@ -128,7 +128,6 @@
 <?php echo $this->Html->script(array(
         '../backend/template/vendors/js/base/jquery.min',
         '../backend/template/vendors/js/base/core.min',
-
         '../backend/template/vendors/js/datatables/datatables.min',
         '../backend/template/vendors/js/datatables/dataTables.buttons.min',
         '../backend/template/vendors/js/datatables/jszip.min',
@@ -137,9 +136,7 @@
         '../backend/template/vendors/js/nicescroll/nicescroll.min',
         '../backend/template/vendors/js/datepicker/moment.min',
         '../backend/template/vendors/js/datepicker/daterangepicker',
-
         '../backend/template/vendors/js/app/app.min',
-
         '../backend/template/js/components/tables/tables',
         '../backend/template/js/components/datepicker/datepicker',
         '../backend/template/vendors/js/datepicker/moment.min',
@@ -158,7 +155,6 @@
             alert('Nhập thông tin cần tìm!');
             return false;
         }
-
         var field = $('#search-field').val();
         showLoading();
         var url = '<?= $this->Url->build([
@@ -175,12 +171,10 @@
                 field: field,
                 pageIndex: pageIndex,
             },
-
             success: function(response) {
                 $('#content').empty();
                 $('#content').html(response.html);
                 $('#search-field').val(field);
-
                 if (pageIndex == 1) {
                     $('#next').removeClass("disabled");
                     $('#previous').addClass("disabled");
@@ -207,7 +201,6 @@
             }
         });
     });
-
     function list(pageIndex) {
             showLoading();
             var url = '<?= $this->Url->build([
@@ -222,12 +215,10 @@
                 data: {
                     pageIndex: pageIndex,
                 },
-
                 success: function(response) {
                     $('#content').empty();
                     $('#content').html(response.html);
                     
-
                     if (pageIndex == 1) {
                         $('#next').removeClass("disabled");
                         $('#previous').addClass("disabled");
@@ -252,7 +243,6 @@
                         alert("Phiên hết hạn, mời đăng nhập lại");
                         window.location= '<?= Router::url(['controller' => 'users', 'action' => 'login']) ?>';
                     }
-
                     else {
                         alert("Không thể tải trang này!");
                         hideLoading();
@@ -260,7 +250,6 @@
                 }
             });
         }
-
     function submitDelete(userId, r) {
         var url = '<?= $this->Url->build([
                         'controller' => 'users',
@@ -274,7 +263,6 @@
                 id: userId
             },
             cache: false,
-
             success: function(response) {
                 alert("Đã vô hiệu hóa tài khoản");
                 var i = r.parentNode.parentNode.rowIndex;
@@ -285,7 +273,6 @@
             }
         });
     }
-
     function addUser() {
         var url = '<?= $this->Url->build([
                         'controller' => 'users',
@@ -296,11 +283,9 @@
             dataType: 'json',
             type: 'GET',
             cache: false,
-
             success: function(response) {
                 $('#content').html(response.html);
                 var selections = "";
-
                 for (i = 0; i < response.roles.length; i++) {
                     name = response.roles[i].name;
                     name = name.charAt(0).toUpperCase() + name.slice(1);
@@ -313,7 +298,6 @@
             }
         });
     }
-
     function updateUser(userId) {
         var url = '<?= $this->Url->build([
                         'controller' => 'users',
@@ -330,14 +314,12 @@
             success: function(response) {
                 $('#content').html(response.html);
                 var selections = "";
-
                 for (i = 0; i < response.roles.length; i++) {
                     name = response.roles[i].name;
                     name = name.charAt(0).toUpperCase() + name.slice(1);
                     selections = selections + ' <option value=' + response.roles[i].id + '>' + name + '</option>'
                 }
                 $('#role').html(selections);
-
                 document.getElementById("formTitle").innerHTML = "Sửa thông tin người dùng";
                 $('#id').attr("name", "id");
                 $('#id').val(userId);
@@ -358,7 +340,6 @@
                 } else {
                     $('#radFemale').attr("checked", "checked");
                 }
-
                 if (response.user.status == 1) {
                     $('#radActive').attr("checked", "checked");
                 } else {
@@ -367,14 +348,12 @@
                 if (response.user.birthday != null) {
                     $('input[name=birthday]').val(response.user.birthday);
                 }
-
             },
             error: function(response) {
                 alert("Không thể tải form này!");
             }
         });
     }
-
     function back() {
         showLoading();
         var url = '<?= $this->Url->build([
@@ -386,7 +365,6 @@
             dataType: 'json',
             type: 'GET',
             cache: false,
-
             success: function(response) {
                 $('#content').html(response.html);
             },
@@ -395,7 +373,6 @@
             }
         });
     }
-
     $(document).ready(function() {
         hideLoading();
     });

@@ -23,21 +23,21 @@ $fields = array_keys($articles->toArray()[0]->toArray());
                 </div> -->
                 <div class="widget-body">
                     <div class="table-responsive">
-                        <table id="sorting-table" class="table mb-0 thai">
+                        <table id="sorting-table" class="table mb-0 ">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
                                     <label style="color: black;">Search By
-                                    <select style="display:inline; border-style: none;">
+                                    <select id="search-field" style="display:inline; border-style: none;">
                                         <option value="category"><b>Category</b></option>
                                         <option value="title" style="text-align:center;">Title</option>
                                         <option value="id">Id</option>
-                                        <option value="user">User</option>
+                                        <option value="user">User(email)</option>
                                         <option value="status">Status</option>
                                     </select>
-                                    <input style="margin-top: 7px;" id="instagram" name="instagram" type="text" class="form-control">
+                                    <input style="margin-top: 7px;" id="search-input" type="text" class="form-control">
                                     </label> 
                                     
-                                    &nbsp; <a class="btn" href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
+                                    &nbsp; <a id="btnSearch" class="btn" href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
                                 </div>
                             </div>
                             
@@ -130,6 +130,66 @@ $fields = array_keys($articles->toArray()[0]->toArray());
 ?>
 
 <script>
+
+    $('#btnSearch').on('click', function(pageIndex=1) {
+        localStorage.clear();
+        var input = $('#search-input').val();
+        
+        if (input == null) {
+            alert('Nhập thông tin cần tìm!');
+            return false;
+        }
+
+        var field = $('#search-field').val();
+        showLoading();
+        var url = '<?= $this->Url->build([
+                        'controller' => 'articles',
+                        'action' => 'search'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                type: <?=$type?>,
+                input: input,
+                field: field,
+                pageIndex: pageIndex,
+            },
+
+            success: function(response) {
+                $('#content').empty();
+                $('#content').html(response.html);
+                $('#search-field').val(field);
+
+                if (pageIndex == 1) {
+                    $('#next').removeClass("disabled");
+                    $('#previous').addClass("disabled");
+                }
+                else {
+                    $('#previous').removeClass("disabled");
+                }
+                $('#now-page').text(pageIndex);
+                
+                if (response.end == false) {
+                    $('#next-page').text(pageIndex + 1);
+                }
+                else {
+                    $('#next-page').remove();
+                    $('#next').addClass("disabled");
+                }
+                hideLoading();
+                localStorage.clear();
+            },
+            error: function(response) {
+                alert("Không có kết quả!");
+                hideLoading();
+                localStorage.clear();
+            }
+        });
+    });
+
     function list(pageIndex, articleId) {
         showLoading();
         var url = '<?= $this->Url->build([

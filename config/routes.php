@@ -97,6 +97,9 @@ Router::scope('/articles', ['controller'=>'articles'], function(RouteBuilder $ro
 	$routes->connect('/new-more', ['action'=>'articlesNewMore']);
 	$routes->connect('/apprpved', ['action'=>'articlesApproved']);
 	$routes->connect('/pending', ['action'=>'articlesPending']);
+	$routes->connect('/remove', ['action'=>'articlesRemove']);
+	$routes->connect('/remove/article', ['action'=>'remove']);
+	$routes->connect('/show/article', ['action'=>'show']);
 	$routes->connect('/list', ['action'=>'articlesList']);
 	$routes->connect(
 		'/details/:id',
@@ -131,6 +134,7 @@ Router::scope('/comments', ['controller'=>'comments'], function(RouteBuilder $ro
 		['action'=>'writeComment']
 	);
 	$routes->connect('/commentList', ['action' => 'commentList']);
+	$routes->connect('/blockComment', ['action' => 'blockComment']);
 });
 
 //Tạo router feedbacks

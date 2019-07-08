@@ -121,6 +121,7 @@ use Cake\Routing\Router;
 
 
 <script>
+    
     function goCommentPage(articleId, commentPage) {
         $('#commentList').html('<?= $this->Html->image('loading.gif'); ?>');
         if(<?= $data['amountComment'] ?> > 5){

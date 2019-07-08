@@ -66,4 +66,23 @@ class CommentsController extends AppController
         $amountComment = $this->Comments->findAllByArticleId($articleId)->count();
         $this->set(['data'=>$result, 'amountComment'=>$amountComment]);
     }
+
+    public function blockComment() {
+        $this->response->statusCode(200);
+        $this->response->type('json');
+        $this->response->body(json_encode(['success' => true]));
+
+        $id = $this->request->getData('id');
+        $cmt = $this->Comments->get($id);
+        $cmt->status = 0;
+
+        if ($this->Comments->save($cmt)) {
+            
+            return $this->response;
+        }
+        
+        $this->response->statusCode(500);
+        $this->response->body(json_encode(['success' => false]));
+        return $this->response;
+    }
 }

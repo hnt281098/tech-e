@@ -10,11 +10,17 @@
     if($data['amountArticlesPending'] % 10 != 0){
         $totalArticlePagePending += 1;
     }
+    $articlePageRemove = 1;
+    $totalArticlePageRemove = (integer)($data['amountArticlesRemove'] / 10);
+    if($data['amountArticlesRemove'] % 10 != 0){
+        $totalArticlePageRemove += 1;
+    }
 ?>
 <script>
     window.onload = function(){
-        articlesApproved(<?= $articlePageApproved ?>);
-        articlesPending(<?= $articlePageApproved ?>);
+        articlesApproved(1);
+        articlesPending(1);
+        articlesRemove(1);
     };
 </script>
 <div class="layer-stretch">
@@ -28,6 +34,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#pending" role="tab" data-toggle="tab" aria-selected="false">Đang chờ duyệt</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#remove" role="tab" data-toggle="tab" aria-selected="false">Đã gỡ</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -51,8 +60,21 @@
                                 <?php if($data['amountArticlesPending'] > 10){ ?>
                                         <ul class="theme-pagination">
                                             <?php while ($articlePagePending <= $totalArticlePagePending) { ?>
-                                                <li><a id="articlePageApproved<?= $articlePageApproved ?>" onclick="articlesPending(<?= $articlePagePending ?>)"><?= $articlePagePending; ?></a></li>
+                                                <li><a id="articlePagePending<?= $articlePagePending ?>" onclick="articlesPending(<?= $articlePagePending ?>)"><?= $articlePagePending; ?></a></li>
                                             <?php $articlePagePending += 1; } ?>
+                                        </ul>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="remove">
+                            <div class="p-2">
+                                <p class="font-20" style="color: red">Đã gỡ</p>
+                                <div id="articlesRemove"></div>
+                                <?php if($data['amountArticlesRemove'] > 10){ ?>
+                                        <ul class="theme-pagination">
+                                            <?php while ($articlePageRemove <= $totalArticlePageRemove) { ?>
+                                                <li><a id="articlePageRemove<?= $articlePageRemove ?>" onclick="articlesRemove(<?= $articlePageRemove ?>)"><?= $articlePageRemove; ?></a></li>
+                                            <?php $articlePageRemove += 1; } ?>
                                         </ul>
                                 <?php } ?>
                             </div>
@@ -112,5 +134,30 @@
                 alert("Lỗi...");
             }
         });
-    }
+    };
+
+    function articlesRemove(articlePageRemove){
+        $("body,html").animate({scrollTop: 0}, "slow");
+        $('#articlesRemove').html('<?= $this->Html->image('loading.gif'); ?>');
+        if(<?= $data['amountArticlesRemove'] ?> > 10){
+            $('a').removeClass("active");
+            document.getElementById('articlePageRemove' + articlePageRemove).classList.add("active");
+        };
+        $.ajax({
+            url: '<?= Router::url(['controller' => 'articles', 'action' => 'articlesRemove']) ?>',
+            type: 'GET',
+            data: {
+                articlePage : articlePageRemove
+            },
+            
+            success: function (response) {
+                setTimeout(function(){
+                    $('#articlesRemove').html(response);
+                }, 1000);
+            },
+            error: function (response) {
+                alert("Lỗi...");
+            }
+        });
+    };
 </script>

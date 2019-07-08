@@ -88,7 +88,7 @@ use Cake\Routing\Router;
             <div class="tbl">
                 <div class="tbl-row">
                     <!-- Start Header Logo Section -->
-                    <div class="tbl-cell hdr-logo">
+                    <div class="">
                         <a href='<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>false]) ?>'>
                             <?= $this->Html->image($value['logo']); ?>
                         </a>

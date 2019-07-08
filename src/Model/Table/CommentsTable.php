@@ -66,9 +66,7 @@ class CommentsTable extends Table
             ->date('comment_date')
             ->allowEmptyDate('comment_date');
 
-        $validator
-            ->scalar('status')
-            ->allowEmptyString('status');
+       
 
         return $validator;
     }
