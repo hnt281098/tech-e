@@ -21,20 +21,21 @@
                         <table id="sorting-table" class="table mb-0 thai">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
-                                    <label style="color: black;">Search By
+                                    <label style="color: black;">Tìm kiếm theo
                                     <select id="search-field" style="display:inline; border-style: none;">
                                         <option value="fullname">Full name</option>
                                         <option value="email">Email</option>
+                                        <option value="id">Id</option>
                                         <option value="gender">Gender</option>
                                         <option value="status">Status</option>
                                         <option value="role">Role</option>
                                         <option value="facebook">Facebook</option>
                                         <option value="instagram">Instagram</option>
                                     </select>
-                                    <input style="margin-top: 7px;" id="input-search" name="input-search" type="text" class="form-control">
+                                    <input style="margin-top: 7px;" id="search-input" name="search-input" type="text" class="form-control">
                                     </label> 
                                     
-                                    <a class="btn" href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
+                                    <a class="btn" id="btnSearch"  href="#"><i style="top: 50px;" class="la la-search la-2x"></i></a>
                                 </div>
                             </div>
                             <thead>
@@ -113,9 +114,7 @@
                         <div class="sa-placeholder"></div>
                         <div class="sa-fix"></div>
                     </div>
-                    <!--                     <div class="section-title mt-5 mb-2">
-                            <h2 class="text-gradient-01">Add success!</h2>
-                        </div> -->
+         
                     <p class="mb-5">Add success!</p>
                 </div>
             </div>
@@ -130,17 +129,84 @@
         '../backend/template/vendors/js/base/jquery.min',
         '../backend/template/vendors/js/base/core.min',
 
+        '../backend/template/vendors/js/datatables/datatables.min',
+        '../backend/template/vendors/js/datatables/dataTables.buttons.min',
+        '../backend/template/vendors/js/datatables/jszip.min',
+        '../backend/template/vendors/js/datatables/buttons.html5.min',
+        '../backend/template/vendors/js/datatables/vfs_fonts',
         '../backend/template/vendors/js/nicescroll/nicescroll.min',
-        '../backend/template/vendors/js/chart/chart.min',
-        '../backend/template/vendors/js/owl-carousel/owl.carousel.min',
-        '../backend/template/vendors/js/progress/circle-progress.min',
-        '../backend/template/js/components/widgets/widgets.min',
+        '../backend/template/vendors/js/datepicker/moment.min',
+        '../backend/template/vendors/js/datepicker/daterangepicker',
+
         '../backend/template/vendors/js/app/app.min',
+
+        '../backend/template/js/components/tables/tables',
+        '../backend/template/js/components/datepicker/datepicker',
+        '../backend/template/vendors/js/datepicker/moment.min',
+        '../backend/template/vendors/js/datepicker/daterangepicker',
+        '../backend/template/js/components/datepicker/datepicker',
     ));
 ?>
 
 <script>
     
+    $('#btnSearch').on('click', function(pageIndex=1) {
+        localStorage.clear();
+        var input = $('#search-input').val();
+        
+        if (input == null) {
+            alert('Nhập thông tin cần tìm!');
+            return false;
+        }
+
+        var field = $('#search-field').val();
+        showLoading();
+        var url = '<?= $this->Url->build([
+                        'controller' => 'users',
+                        'action' => 'search'
+                    ]); ?>';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            data: {
+                input: input,
+                field: field,
+                pageIndex: pageIndex,
+            },
+
+            success: function(response) {
+                $('#content').empty();
+                $('#content').html(response.html);
+                $('#search-field').val(field);
+
+                if (pageIndex == 1) {
+                    $('#next').removeClass("disabled");
+                    $('#previous').addClass("disabled");
+                }
+                else {
+                    $('#previous').removeClass("disabled");
+                }
+                $('#now-page').text(pageIndex);
+                
+                if (response.end == false) {
+                    $('#next-page').text(pageIndex + 1);
+                }
+                else {
+                    $('#next-page').remove();
+                    $('#next').addClass("disabled");
+                }
+                hideLoading();
+                localStorage.clear();
+            },
+            error: function(response) {
+                alert("Không có kết quả!");
+                hideLoading();
+                localStorage.clear();
+            }
+        });
+    });
 
     function list(pageIndex) {
             showLoading();
@@ -243,7 +309,7 @@
                 $('#role').html(selections);
             },
             error: function(response) {
-                alert("Can not load form!");
+                alert("Không thể tải form này!");
             }
         });
     }

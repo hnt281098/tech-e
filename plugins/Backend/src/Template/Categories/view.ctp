@@ -24,7 +24,7 @@
                         <table id="sorting-table" class="table mb-0 thai no-footer">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
-                                    <label style="color: black;">Search By
+                                    <label style="color: black;">Tìm kiếm theo
                                     <select style="display:inline; border-style: none;">
                                         <option value="category"><b>Category</b></option>
                                         <option value="title" style="text-align:center;">Title</option>

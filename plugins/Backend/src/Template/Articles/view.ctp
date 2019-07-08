@@ -68,6 +68,8 @@ $fields = array_keys($articles->toArray()[0]->toArray());
 
                                             <?php if ($article['status'] == "Chờ duyệt") : ?>
                                                 <a onclick="showDetailApprove(<?= $article['id'] ?>)" href="#"><i class="la la-eye edit"></i></a>
+                                            <?php else : ?>
+                                                <a href="<?= Router::url(['controller'=>'articles', 'action'=>'articlesDetails', 'id'=> $article['id'], 'plugin' => false]) ?>" target="_blank"><i class="la la-eye edit"></i></a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -286,13 +288,13 @@ $fields = array_keys($articles->toArray()[0]->toArray());
             cache: false,
 
             success: function(response) {
-                alert("Bài đăng đã được xóa");
+                alert("Bài đăng đã được hủy");
                 var i = r.parentNode.parentNode.rowIndex;
                 document.getElementById("sorting-table").deleteRow(i);
 
             },
             error: function(response) {
-                alert("Xóa thất bại!");
+                alert("Không thể hủy bài đăng!");
             }
         });
     }

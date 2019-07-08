@@ -236,7 +236,9 @@ class CategoriesController extends AppController
         $this->response->type('json');
         $this->response->statusCode(200);
 
-        if ($this->Categories->delete($category)) {
+        $category->status = 0;
+
+        if ($this->Categories->save($category)) {
             $this->response->body(json_encode(['success' => true]));
 
             return $this->response;

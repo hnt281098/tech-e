@@ -216,8 +216,8 @@ class UsersController extends AppController
         $this->response->type('json');
         $this->response->body(json_encode(['succcess' => true]));
         $this->response->statusCode(200);
-
-        if ($this->Users->delete($user)) {
+        $user->status = 0;
+        if ($this->Users->save($user)) {
 
             return $this->response;
         } else {
@@ -358,5 +358,56 @@ class UsersController extends AppController
         }
 
         $this->set('data', $data);
+    }
+    
+    public function search($pageIndex = 1)
+    {
+        $this->loadModel('Roles');
+        $this->response->type('json');
+        $this->response->statusCode(200);
+        $query = $this->request->query();
+
+        if (!empty($query['pageIndex'])) {
+            $pageIndex = $this->request->query['pageIndex'];
+        }
+
+        if ($query['field'] == 'role') {
+            $role = $this->Roles->find()->where(["Roles.name LIKE N'%".$query['input']."%'"])->select('id')->first();
+            $conditions = [
+                'role_id' => $role->id,
+            ];
+        }
+        else {
+            $conditions = [
+                $query['field']." LIKE N'%". $query['input']. "%'",
+            ];
+        }
+        $users = $this->Users->find()->order(['Users.id' => 'ASC'])->limit(7)->page($pageIndex)->where([$conditions])->toArray();
+        
+        if (empty($this->Users->find()->order(['Users.id' => 'ASC'])->limit(7)->page($pageIndex+1)->where([$conditions])->toArray())) {
+            $end = true;
+        }
+        else {
+            $end = false;
+        }
+
+        foreach ($users as $user) {
+            unset($user['password']);
+            unset($user['confirm_expired_time']);
+            $user['Role'] = $this->Roles->get($user['role_id'])->name;
+            unset($user['role_id']);
+            unset($user['avatar']);
+            unset($user['facebook']);
+            unset($user['instagram']);
+        }
+
+        $view = new \Cake\View\View();
+        $view->setLayout(false);
+        $view->set(compact(['users', 'pageIndex']));
+        $html = $view->render('Backend.Users/view');
+        
+        $this->response->body(json_encode(['html' => $html, 'end' => $end]));
+        
+        return $this->response;
     }
 }
