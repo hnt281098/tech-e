@@ -29,16 +29,20 @@
                     <?= $this->requestAction('/articles/index/new'); ?>
                 </div>
                 <div class="theme-material-card">
-                    <div class="sub-ttl"><a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>14]) ?>">Laptop</a></div>
-                    <?= $this->requestAction('/articles/index/laptop'); ?>
+                    <div class="sub-ttl"><a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>4]) ?>">Nghe</a></div>
+                    <?= $this->requestAction('/articles/index/listen'); ?>
+                </div>
+                <div class="theme-material-card">
+                    <div class="sub-ttl"><a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>5]) ?>">Nhìn</a></div>
+                    <?= $this->requestAction('/articles/index/watch'); ?>
+                </div>
+                <div class="theme-material-card">
+                    <div class="sub-ttl"><a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>6]) ?>">Phụ kiện số</a></div>
+                    <?= $this->requestAction('/articles/index/item'); ?>
                 </div>
                 <div class="theme-material-card">
                     <div class="sub-ttl"><a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>7]) ?>">Đồ chơi công nghệ</a></div>
                     <?= $this->requestAction('/articles/index/tech_toy'); ?>
-                </div>
-                <div class="theme-material-card">
-                    <div class="sub-ttl"><a href="<?= Router::url(['controller'=>'categories', 'action'=>'articlesByCategory', 'id'=>12]) ?>">VSmart</a></div>
-                    <?= $this->requestAction('/articles/index/vsmart'); ?>
                 </div>
             </div>
             <!-- Right Bar -->

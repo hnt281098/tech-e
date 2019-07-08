@@ -19,7 +19,7 @@
     <div class="layer-wrapper">
         <div class="layer-container row">
             <div class="col-md-5 hm-service-left">
-                <img class="" src="<?= $value['thumbnail1'] ?>" alt="">
+                <?= $this->Html->image($value['thumbnail1']); ?>
             </div>
             <div class="col-md-7 hm-service-right">
                 <p class="paragraph-medium paragraph-black"><?= $value['introduce'] ?></p>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <img class="" src="<?= $value['thumbnail2'] ?>" alt="">
+                    <?= $this->Html->image($value['thumbnail2']); ?>
                 </div>
                 <div class="row about-mission-vission text-center">
                     <div class="col-md-6 about-mission">

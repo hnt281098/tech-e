@@ -17,48 +17,23 @@
                 </div>
                 <div class='col-10 comment-detail text-left'>
                     <div class='comment-meta'>
-
                         <span><?= $value['user']['fullname'] ?></span>
                         <span><?= $value['comment_date']->format('d M Y') ?></span>
                     </div>
-                    <div class='comment-post'><?= $value['content'] ?></div>
-                </div>
-                <?php if(!empty($currentUser)){
-                        if($currentUser['role_id'] == 1){ ?>
-                    <div class='col-10 comment-detail text-left'>
-                        <select name="block" id="block">
-                            <option value="blockCmt">Khóa bình luận</option>
-                            <option value="blockUser">Khóa tài khoản</option>
-                        </select>
-                        <a onclick="block(<?= $value['id'] ?>)" href="#"><i class="fa fa-close"></i></a>
+                    <div class='comment-post'>
+                        <?= $value['content'] ?>
+                        <?php if(!empty($currentUser)){
+                            if($currentUser['role_id'] == 1){ ?>
+                            <select id="block<?= $value['id'] ?>">
+                                <option value="cmt">Khóa bình luận</option>
+                                <option value="user">Khóa tài khoản</option>
+                            </select>
+                            <a onclick="block(<?= $value['id'] ?>, <?= $value['user']['id'] ?>)"><i class="fa fa-close"></i></a>
+                        <?php }
+                        } ?>
                     </div>
-                <?php }
-                } ?>
+                </div>
             </div>
         </li>
 <?php } ?>            
 </ul>
-<script>
-    function block(id) {
-        var url = '<?= $this->Url->build([
-                        'controller' => 'comments',
-                        'action' => 'blockComment',
-                    ]); ?>';
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'POST',
-            cache: false,
-            data: {
-                id: id,
-            },
-
-            success: function (response) {
-                alert("Dung");
-            },
-            error: function (response) {    
-                alert("SFDS");
-            }
-        });
-    }
-</script>

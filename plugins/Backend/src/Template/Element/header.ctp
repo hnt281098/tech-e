@@ -7,7 +7,7 @@
                     <div class="navbar-holder d-flex align-items-center align-middle justify-content-between">
                         <!-- Begin Logo -->
                         <div class="navbar-header">
-                            <a href="/tech-e/backend/pages/index" class="navbar-brand">
+                            <a href="<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>false]) ?>" class="navbar-brand">
                                 <div class="brand-image brand-big">
                                     <?= $this->Html->image("Backend.logo.png", ["alt"=>"logo", "class"=>"logo-small"]); ?>
                                 </div>

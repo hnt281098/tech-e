@@ -158,21 +158,31 @@ class ArticlesController extends AppController
                     'contain' => ['Users']
                 ]
             );
-        }elseif($standard == "laptop"){
+        }elseif($standard == "listen"){
             $data = $this->Articles->find(
                 'all', 
                 [
-                    'conditions'=>['status_id'=>1, 'category_id'=>14],
+                    'conditions'=>['status_id'=>1, 'category_id'=>4],
                     'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
                     'limit'=>3,
                     'contain' => ['Users']
                 ]
             );
-        }elseif($standard == "vsmart"){
+        }elseif($standard == "watch"){
             $data = $this->Articles->find(
                 'all', 
                 [
-                    'conditions'=>['status_id'=>1, 'category_id'=>12],
+                    'conditions'=>['status_id'=>1, 'category_id'=>5],
+                    'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
+                    'limit'=>3,
+                    'contain' => ['Users']
+                ]
+            );
+        }elseif($standard == "item"){
+            $data = $this->Articles->find(
+                'all', 
+                [
+                    'conditions'=>['status_id'=>1, 'category_id'=>6],
                     'order'=>['posting_date'=>'desc', 'Articles.id'=>'desc'], 
                     'limit'=>3,
                     'contain' => ['Users']

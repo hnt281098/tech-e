@@ -177,4 +177,40 @@ use Cake\Routing\Router;
             window.location = '<?= Router::url(['controller' => 'users', 'action' => 'login', 'plugin'=>'Backend']) ?>';
         }
     };
-</script> 
+
+    function block(cmtId, userId) {
+        var type = $('#block' + cmtId).val();
+        var url = '';
+        var id = 0;
+        if(type == 'cmt'){
+            url = '<?= $this->Url->build([
+                        'controller' => 'comments',
+                        'action' => 'blockComment',
+                    ]); ?>';
+            id = cmtId;
+        }else if(type == 'user'){
+            url = '<?= $this->Url->build([
+                        'controller' => 'users',
+                        'action' => 'blockUser',
+                    ]); ?>';
+            id = userId;
+        }
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'POST',
+            cache: false,
+            data: {
+                id: id,
+            },
+
+            success: function (response) {
+                alert("Khóa thành công");
+                goCommentPage(<?= $value['id'] ?>, 1);
+            },
+            error: function (response) {    
+                alert("Lỗi");
+            }
+        });
+    };
+</script>

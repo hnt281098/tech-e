@@ -102,4 +102,24 @@ class UsersController extends AppController
 
         $this->set(['data' => $data, 'amountArticles' => $amountArticles]);
     }
+
+    public function blockUser()
+    {
+        $this->response->statusCode(200);
+        $this->response->type('json');
+        $this->response->body(json_encode(['success' => true]));
+
+        $id = $this->request->getData('id');
+        $user = $this->Users->get($id);
+        $user->status = 0;
+
+        if ($this->Users->save($user)) {
+            
+            return $this->response;
+        }
+        
+        $this->response->statusCode(500);
+        $this->response->body(json_encode(['success' => false]));
+        return $this->response;
+    }
 }

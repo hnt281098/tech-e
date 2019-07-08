@@ -49,7 +49,7 @@ class CommentsController extends AppController
         $comments = $this->Comments->find(
             'all',
             [
-                'conditions'=>['article_id' => $articleId],
+                'conditions'=>['article_id' => $articleId, 'Comments.status' => 1],
                 'order' => ['comment_date'=>'desc', 'Comments.id'=>'desc'],
                 'contain' => 'Users'
             ]
@@ -63,7 +63,7 @@ class CommentsController extends AppController
             }
         }
 
-        $amountComment = $this->Comments->findAllByArticleId($articleId)->count();
+        $amountComment = count($comments);
         $this->set(['data'=>$result, 'amountComment'=>$amountComment]);
     }
 

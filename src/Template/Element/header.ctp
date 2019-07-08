@@ -90,7 +90,7 @@ use Cake\Routing\Router;
                     <!-- Start Header Logo Section -->
                     <div class="">
                         <a href='<?= Router::url(['controller'=>'pages', 'action'=>'index', 'plugin'=>false]) ?>'>
-                            <?= $this->Html->image($value['logo']); ?>
+                            <?= $this->Html->image($value['logo'], ['style'=>['width: 70px; height: 70px']]); ?>
                         </a>
                     </div><!-- End Header Logo Section -->
                     <div class="tbl-cell hdr-menu">

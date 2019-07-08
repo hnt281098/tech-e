@@ -51,6 +51,7 @@ Router::scope('/users', ['controller'=>'users'], function(RouteBuilder $routes){
 	$routes->connect('/register', ['action'=>'register', 'plugin' => 'backend']);
 	$routes->connect('/logout', ['action'=>'logout', 'plugin' => 'backend']);
 	$routes->connect('/forgot-password', ['action'=>'forgotPassword']);
+	$routes->connect('block-user', ['action'=>'blockUser']);
 	$routes->connect(
 		'/my-profile', 
 		['action'=>'myProfile']
