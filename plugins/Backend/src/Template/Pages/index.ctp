@@ -838,6 +838,5 @@
         '../backend/template/js/components/widgets/widgets.min',
         '../backend/template/vendors/js/app/app.min',
     ));
-
     ?>
 </body>
